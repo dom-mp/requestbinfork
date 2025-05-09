@@ -1,7 +1,9 @@
+import Nav from "./components/Nav";
+
 function App() {
   return (
     <>
-      <h2>RequestBin</h2>
+      <Nav />
     </>
   );
 }
