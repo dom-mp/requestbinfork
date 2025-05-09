@@ -1,9 +1,9 @@
 export interface Request {
   id: number;
-  basket_id: number;
+  basketId: number;
   method: string;
-  sent_at: string;
+  sentAt: string;
   headers: string;
-  request_body_content_type: string;
-  request_body: string;
+  requestBodyContentType: string;
+  requestBody: string;
 }

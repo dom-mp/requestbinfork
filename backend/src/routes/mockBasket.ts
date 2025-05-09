@@ -8,9 +8,9 @@ let baskets: string[] = ["78ugqjy", "x06skz4", "5ce2eoa"];
 const requests: RequestType[]= [
   {
     id: 456,
-    basket_id: 123,
+    basketId: 123,
     method: "POST",
-    sent_at: "2025-05-08T05:45:50.361+10:00",
+    sentAt: "2025-05-08T05:45:50.361+10:00",
     headers: `
       Accept: */*
       Accept-Encoding: gzip, deflate
@@ -26,8 +26,8 @@ const requests: RequestType[]= [
       X-Real-Ip: 204.62.114.248
       X-Request-Id: fa4ebfb0-4285-4e8c-869f-a0bcabc00bb9
     `,
-    request_body_content_type: "application/json",
-    request_body: `
+    requestBodyContentType: "application/json",
+    requestBody: `
       {
         "id": 14140437567,
         "kind": "todo_uncompleted",
@@ -116,9 +116,9 @@ const requests: RequestType[]= [
   },
   {
     id: 789,
-    basket_id: 234,
+    basketId: 234,
     method: "POST",
-    sent_at: "2025-03-10T06:50:30.361+10:00",
+    sentAt: "2025-03-10T06:50:30.361+10:00",
     headers: `
       Accept: */*
       Connection: close
@@ -134,8 +134,8 @@ const requests: RequestType[]= [
       X-Github-Hook-Installation-Target-Type: repository
       X-Real-Ip: 140.82.115.41
     `,
-    request_body_content_type: "application/json",
-    request_body: `
+    requestBodyContentType: "application/json",
+    requestBody: `
       {
         "zen": "Half measures are as bad as nothing at all.",
         "hook_id": 545206700,
@@ -291,17 +291,17 @@ const requests: RequestType[]= [
   },
   {
     id: 248,
-    basket_id: 357,
+    basketId: 357,
     method: "POST",
-    sent_at: "2025-03-10T06:50:30.361+10:00",
+    sentAt: "2025-03-10T06:50:30.361+10:00",
     headers: `
       POST /login HTTP/1.1
       Host: example.com
       Content-Type: application/x-www-form-urlencoded
       Content-Length: 38
     `,
-    request_body_content_type: "application/json",
-    request_body: "username=johndoe&password=123456"
+    requestBodyContentType: "application/x-www-form-urlencoded",
+    requestBody: "username=johndoe&password=123456"
   }
 ]
 
