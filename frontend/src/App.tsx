@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 import Nav from "./components/Nav";
 import Baskets from "./components/Baskets";
+import CreateBasket from "./components/CreateBasket";
 
 function App() {
   const [baskets, setBaskets] = useState<Array<string>>([]);
@@ -15,6 +16,7 @@ function App() {
     <>
       <Nav />
       <Baskets baskets={baskets} />
+      <CreateBasket />
     </>
   );
 }
