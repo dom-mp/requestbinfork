@@ -288,6 +288,20 @@ const requests: RequestType[]= [
         }
       }
     `
+  },
+  {
+    id: 248,
+    basket_id: 357,
+    method: "POST",
+    sent_at: "2025-03-10T06:50:30.361+10:00",
+    headers: `
+      POST /login HTTP/1.1
+      Host: example.com
+      Content-Type: application/x-www-form-urlencoded
+      Content-Length: 38
+    `,
+    request_body_content_type: "application/json",
+    request_body: "username=johndoe&password=123456"
   }
 ]
 
