@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
+import apiService from "./services/requestBinAPI";
 import Nav from "./components/Nav";
 import Baskets from "./components/Baskets";
 import CreateBasket from "./components/CreateBasket";
@@ -9,10 +10,16 @@ const Basket = () => <></>;
 
 function App() {
   const [baskets, setBaskets] = useState<Array<string>>([]);
+  const [generatedName, setGeneratedName] = useState<string>("");
 
   useEffect(() => {
-    const mockBaskets = ["9dj210f", "dt2u38h", "nlg23ed"];
-    setBaskets(mockBaskets);
+    apiService.getBaskets().then((mockBaskets) => {
+      setBaskets(mockBaskets);
+    });
+
+    apiService.generateName().then((basketName) => {
+      setGeneratedName(basketName);
+    });
   }, []);
 
   return (
@@ -21,7 +28,7 @@ function App() {
       <Baskets baskets={baskets} />
 
       <Routes>
-        <Route path="/" element={<CreateBasket />} />
+        <Route path="/" element={<CreateBasket basketName={generatedName} />} />
         <Route path="baskets">
           <Route path=":basketName" element={<Basket />} />
         </Route>
