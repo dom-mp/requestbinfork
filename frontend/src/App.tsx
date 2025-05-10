@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+import { BrowserRouter, Routes, Route, Link } from "react-router";
 import Nav from "./components/Nav";
 import Baskets from "./components/Baskets";
 import CreateBasket from "./components/CreateBasket";
@@ -13,11 +13,11 @@ function App() {
   }, []);
 
   return (
-    <>
+    <BrowserRouter>
       <Nav />
       <Baskets baskets={baskets} />
       <CreateBasket />
-    </>
+    </BrowserRouter>
   );
 }
 
