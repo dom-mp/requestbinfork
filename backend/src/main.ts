@@ -1,5 +1,6 @@
 import express from 'express';
-import mockRouter from './routes/mockBasket';
+import mockApiRouter from './routes/mockApi';
+import apiRouter from './routes/api';
 const app = express();
 app.use(express.json());
 
@@ -10,7 +11,8 @@ app.get('/ping', (_req, res) => {
   res.send('pong');
 });
 
-app.use('/api/mockBaskets', mockRouter);
+app.use('/mockApi', mockApiRouter);
+app.use('/api', apiRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

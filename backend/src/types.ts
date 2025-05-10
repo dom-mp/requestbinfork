@@ -1,6 +1,5 @@
 export interface Request {
-  id: number;
-  basketId: number;
+  basketName: string;
   method: string;
   sentAt: string;
   headers: string;

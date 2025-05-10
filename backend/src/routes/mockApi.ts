@@ -1,14 +1,12 @@
 import express, { Request, Response } from 'express';
-import { Request as RequestType } from '../types';
+import type { Request as RequestType } from '../types';
 
 const router = express.Router();
 
 let baskets: string[] = ["78ugqjy", "x06skz4", "5ce2eoa"];
 
-const requests: RequestType[]= [
+const requests: Omit<RequestType, "basketName">[]= [
   {
-    id: 456,
-    basketId: 123,
     method: "POST",
     sentAt: "2025-05-08T05:45:50.361+10:00",
     headers: `
@@ -115,8 +113,6 @@ const requests: RequestType[]= [
     `
   },
   {
-    id: 789,
-    basketId: 234,
     method: "POST",
     sentAt: "2025-03-10T06:50:30.361+10:00",
     headers: `
@@ -290,8 +286,6 @@ const requests: RequestType[]= [
     `
   },
   {
-    id: 248,
-    basketId: 357,
     method: "POST",
     sentAt: "2025-03-10T06:50:30.361+10:00",
     headers: `
@@ -305,7 +299,7 @@ const requests: RequestType[]= [
   }
 ]
 
-router.get('/', (_req: Request, res: Response) => {
+router.get('/baskets', (_req: Request, res: Response) => {
   res.status(200).json({ baskets });
 });
 
@@ -314,7 +308,7 @@ router.get('/generate_name', (_req: Request, res: Response) => {
   res.status(200).json({ name });
 });
 
-router.post('/:name', (req: Request<{ name: string }>, res: Response) => {
+router.post('/baskets/:name', (req: Request<{ name: string }>, res: Response) => {
   const { name } = req.params;
 
   if (baskets.includes(name)) {
@@ -326,7 +320,7 @@ router.post('/:name', (req: Request<{ name: string }>, res: Response) => {
   res.status(201).json({ message: `Basket ${name} created.`})
 });
 
-router.delete('/:name', (req: Request<{ name: string }>, res: Response) => {
+router.delete('/baskets/:name', (req: Request<{ name: string }>, res: Response) => {
   const { name } = req.params;
 
   if (!baskets.includes(name)) {
@@ -338,7 +332,7 @@ router.delete('/:name', (req: Request<{ name: string }>, res: Response) => {
   res.status(204).json();
 });
 
-router.get('/:name/requests', (req: Request<{ name: string }>, res: Response) => {
+router.get('/baskets/:name/requests', (req: Request<{ name: string }>, res: Response) => {
   const { name } = req.params;
 
   if (!baskets.includes(name)) {
@@ -346,10 +340,16 @@ router.get('/:name/requests', (req: Request<{ name: string }>, res: Response) =>
     return;
   }
 
-  res.status(200).json({ requests });
+  let requestsResponse: RequestType[] = requests.map((request) => {
+    let typedRequest = request as RequestType;
+    typedRequest.basketName = name;
+    return typedRequest;
+  });
+
+  res.status(200).json({ requests: requestsResponse });
 });
 
-router.delete('/:name/requests', (req: Request<{ name: string }>, res: Response) => {
+router.delete('/baskets/:name/requests', (req: Request<{ name: string }>, res: Response) => {
   const { name } = req.params;
 
   if (!baskets.includes(name)) {
