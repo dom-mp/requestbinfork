@@ -15,7 +15,7 @@ const CreateBasket = ({ setBaskets }: CreateBasketProps) => {
       .then((generatedName) => setBasketName(generatedName));
   }, []);
 
-  // TODO: We should refactore error handling after `utils.handleAPIError` is on main
+  // TODO: We should refactor error handling after `utils.handleAPIError` is on main
   // TODO: message notification should be handled in react, if we want it
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
