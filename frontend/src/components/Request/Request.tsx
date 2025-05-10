@@ -1,4 +1,6 @@
 import type { Request as RequestProps } from "../../types";
+import { JSONTree } from "react-json-tree";
+import { useState } from "react";
 
 const Request = ({
   basketName,
@@ -8,6 +10,12 @@ const Request = ({
   requestBodyContentType,
   requestBody,
 }: RequestProps) => {
+  const [showJSON, setShowJSON] = useState(false);
+
+  const showJSONToggle = () => {
+    setShowJSON(!showJSON);
+  };
+
   return (
     <div className="request">
       <section>
@@ -22,12 +30,12 @@ const Request = ({
         </details>
         <details>
           <summary>Body</summary>
-          {requestBody}
-          {requestBodyContentType === "application/json" ? (
-            <button>Format</button>
+          {requestBodyContentType === "application/json" && showJSON ? (
+            <JSONTree data={JSON.parse(requestBody)} />
           ) : (
-            ""
+            requestBody
           )}
+          <button onClick={showJSONToggle}>JSONify</button>
         </details>
       </section>
     </div>
