@@ -10,25 +10,35 @@ export async function generate_token(): Promise<string> {
   let token: string = '';
   const query: string = 'SELECT * FROM tokens WHERE token_value = ($1)';
   let result: QueryResult<any>;
+  try {
+    do {
+      const segments: string[] = Array.from({ length: 3 }, () => generate_random_string());
+      token= segments.join('');
 
-  do {
-    const segments: string[] = Array.from({ length: 3 }, () => generate_random_string());
-    token= segments.join('');
-
-    result = await pool.query(query, [token]);
-  } while ((result.rowCount ?? 0) > 0)
-  return token;
+      result = await pool.query(query, [token]);
+    } while ((result.rowCount ?? 0) > 0)
+    return token;
+  } catch(err) {
+    console.error('Error generating token:', err);
+    throw new Error('Failed to generate token');
+  }
 }
 
-export async function storeToken(token: string): Promise<Token | null> {
+export async function storeToken(token: string): Promise<Token> {
   const query: string = 'INSERT INTO tokens (token_value) VALUES ($1) RETURNING *'
 
   try {
-    const result = await pool.query(query, [token]);
+    const result: QueryResult<any> = await pool.query(query, [token]);
     console.log('Inserted token:', result.rows[0]);
     return result.rows[0];
   } catch (err) {
     console.error('Error inserting token:', token);
-    return null;
+    throw new Error('Failed to store token');
   }
+}
+
+export async function isBasketNameUnique(name: string): Promise<boolean> {
+  const query: string = 'SELECT * FROM baskets WHERE name = ($1)';
+  let result: QueryResult<any> = await pool.query(query, [name]);
+  return (result.rowCount ?? 0) === 0;
 }

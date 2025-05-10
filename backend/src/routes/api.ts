@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import {
+  isBasketNameUnique,
   generate_random_string,
   generate_token,
   storeToken
@@ -13,8 +14,13 @@ router.get('/', (_req: Request, _res: Response) => {
 });
 
 router.get('/generate_name', (_req: Request, res: Response) => {
-  const name: string = generate_random_string().substring(2, 9);
-  res.status(200).json({ name });
+  let basketName: string = '';
+
+  do {
+    basketName = generate_random_string().substring(2, 9);
+  } while (!isBasketNameUnique(basketName))
+
+  res.status(200).json({ basketName });
 });
 
 router.get('/generate_token', async (_req: Request, res: Response) => {
