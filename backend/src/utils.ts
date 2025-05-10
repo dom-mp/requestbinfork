@@ -1,5 +1,5 @@
 import pool from './controllers/postgresql';
-import type { Token } from "./types";
+import type { Token, Basket } from "./types";
 import { QueryResult } from 'pg'
 
 export function generate_random_string() {
@@ -9,7 +9,7 @@ export function generate_random_string() {
 export async function generate_token(): Promise<string> {
   let token: string = '';
   const query: string = 'SELECT * FROM tokens WHERE token_value = ($1)';
-  let result: QueryResult<any>;
+  let result: QueryResult<Token>;
   try {
     do {
       const segments: string[] = Array.from({ length: 3 }, () => generate_random_string());
@@ -28,7 +28,7 @@ export async function storeToken(token: string): Promise<Token> {
   const query: string = 'INSERT INTO tokens (token_value) VALUES ($1) RETURNING *'
 
   try {
-    const result: QueryResult<any> = await pool.query(query, [token]);
+    const result: QueryResult<Token> = await pool.query(query, [token]);
     console.log('Inserted token:', result.rows[0]);
     return result.rows[0];
   } catch (err) {
@@ -39,6 +39,6 @@ export async function storeToken(token: string): Promise<Token> {
 
 export async function isBasketNameUnique(name: string): Promise<boolean> {
   const query: string = 'SELECT * FROM baskets WHERE name = ($1)';
-  let result: QueryResult<any> = await pool.query(query, [name]);
+  let result: QueryResult<Basket> = await pool.query(query, [name]);
   return (result.rowCount ?? 0) === 0;
 }

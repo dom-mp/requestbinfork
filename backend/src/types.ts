@@ -11,3 +11,9 @@ export interface Token {
   id: number;
   tokenValue: string;
 }
+
+export interface Basket {
+  id: number;
+  name: string;
+  token_id: number;
+}
