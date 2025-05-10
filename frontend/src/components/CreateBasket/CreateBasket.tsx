@@ -1,6 +1,10 @@
 import "./CreateBasket.css";
 
-const CreateBasket = () => {
+interface CreateBasketProps {
+  basketName: string;
+}
+
+const CreateBasket = ({ basketName }: CreateBasketProps) => {
   return (
     <div>
       <h1>New Basket</h1>
@@ -8,7 +12,7 @@ const CreateBasket = () => {
       <form>
         <div>
           <label htmlFor="createBasket">placeholder.com/</label>
-          <input type="text" id="createBasket" placeholder="Create Tag" />
+          <input type="text" id="createBasket" value={basketName} />
           <button type="submit" className="">
             Button
           </button>

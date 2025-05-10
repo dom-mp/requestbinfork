@@ -12,7 +12,7 @@ const Baskets = ({ baskets }: BasketsProps) => {
 
         <ul className="basket-list">
           {baskets.map((basketName) => (
-            <li>
+            <li key={basketName}>
               <Link to={`/baskets/${basketName}`}>{basketName}</Link>
             </li>
           ))}
