@@ -8,17 +8,10 @@ import CreateBasket from "./components/CreateBasket";
 
 function App() {
   const [baskets, setBaskets] = useState<Array<string>>([]);
-  const [generatedName, setGeneratedName] = useState<string>("");
 
   // load initial state
   useEffect(() => {
-    apiService.getBaskets().then((mockBaskets) => {
-      setBaskets(mockBaskets);
-    });
-
-    apiService.generateName().then((basketName) => {
-      setGeneratedName(basketName);
-    });
+    apiService.getBaskets().then((baskets) => setBaskets(baskets));
   }, []);
 
   return (
@@ -27,7 +20,7 @@ function App() {
       <Baskets baskets={baskets} />
 
       <Routes>
-        <Route path="/" element={<CreateBasket basketName={generatedName} />} />
+        <Route path="/" element={<CreateBasket setBaskets={setBaskets} />} />
         <Route path="baskets">
           <Route path=":basketName" element={<Basket />} />
         </Route>
