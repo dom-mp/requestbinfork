@@ -5,6 +5,7 @@ import Nav from "./components/Nav";
 import Basket from "./components/Basket";
 import Baskets from "./components/Baskets";
 import CreateBasket from "./components/CreateBasket";
+import "./App.css";
 
 function App() {
   const [baskets, setBaskets] = useState<Array<string>>([]);
