@@ -31,9 +31,17 @@ const Basket = () => {
           Basket: <code>/{basketName}</code>
         </h2>
         <section className="requests">
-          {requests.map((request, i) => (
-            <Request key={i} {...request} />
-          ))}
+          {requests.length === 0 ? (
+            <div className="emptyBasket">
+              <h3>Empty Basket!</h3>
+              <p>
+                This basket is empty, send requests to url/{basketName} and they
+                will appear here.
+              </p>
+            </div>
+          ) : (
+            requests.map((request, i) => <Request key={i} {...request} />)
+          )}
         </section>
       </div>
     </>
