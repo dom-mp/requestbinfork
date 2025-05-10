@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 interface BasketsProps {
   baskets: Array<string>;
 }
@@ -10,7 +12,9 @@ const Baskets = ({ baskets }: BasketsProps) => {
 
         <ul className="basket-list">
           {baskets.map((basketName) => (
-            <li>{basketName}</li>
+            <li>
+              <Link to={`/baskets/${basketName}`}>{basketName}</Link>
+            </li>
           ))}
         </ul>
       </div>
