@@ -6,21 +6,19 @@ export function generate_random_string() {
   return Math.random().toString(36).substring(2);
 }
 
-// export async function generate_token(): Promise<string> {
-  // let token: string = '';
+export async function generate_token(): Promise<string> {
+  let token: string = '';
+  const query: string = 'SELECT * FROM tokens WHERE token_value = ($1)';
+  let result: QueryResult<any>;
 
-  // do {
-  //   const segments: string[] = Array.from({ length: 3 }, () => generate_random_string());
-  //   token= segments.join('');
+  do {
+    const segments: string[] = Array.from({ length: 3 }, () => generate_random_string());
+    token= segments.join('');
 
-  //   result = await pool.query('SELECT * FROM tokens WHERE token_value = ($1)',
-  //     [token]
-  //   );
-
-  // } while (result.rowCount > 0)
-
-  // return token;
-// }
+    result = await pool.query(query, [token]);
+  } while ((result.rowCount ?? 0) > 0)
+  return token;
+}
 
 export async function storeToken(token: string): Promise<Token | null> {
   const query: string = 'INSERT INTO tokens (token_value) VALUES ($1) RETURNING *'
