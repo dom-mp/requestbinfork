@@ -309,15 +309,15 @@ router.get('/generate_name', (_req: Request, res: Response) => {
 });
 
 router.post('/baskets/:name', (req: Request<{ name: string }>, res: Response) => {
-  const { name } = req.params;
+  const basketName = req.params.name;
 
-  if (baskets.includes(name)) {
+  if (baskets.includes(basketName)) {
     res.status(409).json({ message: "Basket already exists"});
     return;
   }
 
-  baskets.push(name);
-  res.status(201).json({ message: `Basket ${name} created.`})
+  baskets.push(basketName);
+  res.status(201).json({ basketName })
 });
 
 router.delete('/baskets/:name', (req: Request<{ name: string }>, res: Response) => {
