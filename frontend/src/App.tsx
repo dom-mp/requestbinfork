@@ -6,13 +6,11 @@ import Basket from "./components/Basket";
 import Baskets from "./components/Baskets";
 import CreateBasket from "./components/CreateBasket";
 
-// temporary Basket component placeholder
-// const Basket = () => <></>;
-
 function App() {
   const [baskets, setBaskets] = useState<Array<string>>([]);
   const [generatedName, setGeneratedName] = useState<string>("");
 
+  // load initial state
   useEffect(() => {
     apiService.getBaskets().then((mockBaskets) => {
       setBaskets(mockBaskets);

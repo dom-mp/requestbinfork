@@ -1,36 +1,40 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
-// import Request from "./components/Request";
+import type { Request as RequestType } from "../../types";
+import Request from "../../components/Request";
 import apiService from "../../services/requestBinAPI";
-import type { Request } from "../../types";
+import { handleAPIError } from "../../utils";
 import "./Basket.css";
 
 const Basket = () => {
-  // temporary RequestProp type placeholder
-  interface RequestProp {
-    request: Request;
-  }
-  // temporary Request component placeholder
-  const Request = ({ request }: RequestProp) => <>{request}</>;
+  const basketName = useParams().basketName ?? "";
+  const [requests, setRequests] = useState<Array<RequestType>>([]);
 
-  const [requests, setRequests] = useState<Array<Request>>([]);
-  const { basketName } = useParams();
+  const populateBasket = (basketName: string) => {
+    try {
+      apiService.getRequests(basketName).then((mockBaskets) => {
+        setRequests(mockBaskets);
+      });
+    } catch (error: unknown) {
+      handleAPIError(error);
+    }
+  };
 
   useEffect(() => {
-    apiService.getRequests(basketName as string).then((mockBaskets) => {
-      setRequests(mockBaskets);
-    });
-  }, []);
+    populateBasket(basketName);
+  }, [basketName]);
 
   return (
     <>
-      <div>
-        <h1>Basket: {basketName}</h1>
-      </div>
-      <div>
-        {requests.map((request) => (
-          <Request key={"d"} request={request} />
-        ))}
+      <div className="basket">
+        <h2>
+          Basket: <code>/{basketName}</code>
+        </h2>
+        <section className="requests">
+          {requests.map((request, i) => (
+            <Request key={i} {...request} />
+          ))}
+        </section>
       </div>
     </>
   );
