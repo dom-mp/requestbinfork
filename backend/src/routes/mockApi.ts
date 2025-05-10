@@ -317,7 +317,7 @@ router.post('/baskets/:name', (req: Request<{ name: string }>, res: Response) =>
   }
 
   baskets.push(name);
-  res.status(201).json({ message: `Basket ${name} created.`})
+  res.status(201).json({ basketName: name})
 });
 
 router.delete('/baskets/:name', (req: Request<{ name: string }>, res: Response) => {
