@@ -1,5 +1,10 @@
 import express, { Request, Response } from 'express';
-// import { Request as RequestType } from '../types';
+import {
+  generate_random_string,
+  generate_token,
+  storeToken
+} from '../utils';
+// import type { Request as RequestType } from '../types';
 
 const router = express.Router();
 
@@ -7,8 +12,16 @@ router.get('/', (_req: Request, _res: Response) => {
 
 });
 
-router.get('/generate_name', (_req: Request, _res: Response) => {
+router.get('/generate_name', (_req: Request, res: Response) => {
+  const name: string = generate_random_string().substring(2, 9);
+  res.status(200).json({ name });
+});
 
+router.get('/generate_token', async (_req: Request, res: Response) => {
+  let token: string = await generate_token();
+  await storeToken(token);
+
+  res.status(200).json({ token });
 });
 
 router.post('/:name', (_req: Request<{ name: string }>, _res: Response) => {

@@ -6,3 +6,8 @@ export interface Request {
   requestBodyContentType: string;
   requestBody: string;
 }
+
+export interface Token {
+  id: number;
+  tokenValue: string;
+}
