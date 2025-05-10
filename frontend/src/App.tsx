@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
 import apiService from "./services/requestBinAPI";
 import Nav from "./components/Nav";
+import Basket from "./components/Basket";
 import Baskets from "./components/Baskets";
 import CreateBasket from "./components/CreateBasket";
 
 // temporary Basket component placeholder
-const Basket = () => <></>;
+// const Basket = () => <></>;
 
 function App() {
   const [baskets, setBaskets] = useState<Array<string>>([]);
