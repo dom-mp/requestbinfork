@@ -1,29 +1,26 @@
-const pool = require('./controllers/postgresql');
+import pool from './controllers/postgresql';
 import type { Token } from "./types";
+import { QueryResult } from 'pg'
 
 export function generate_random_string() {
   return Math.random().toString(36).substring(2);
 }
 
-export async function generate_token(): Promise<string> {
-  let uniqueToken = false;
-  let token: string = '';
+// export async function generate_token(): Promise<string> {
+  // let token: string = '';
 
-  while (!uniqueToken) {
-    const segments: string[] = Array.from({ length: 3 }, () => generate_random_string());
-    token= segments.join('');
+  // do {
+  //   const segments: string[] = Array.from({ length: 3 }, () => generate_random_string());
+  //   token= segments.join('');
 
-    const queryTokens = await pool.query('SELECT * FROM tokens WHERE token_value = ($1)',
-      [token]
-    );
+  //   result = await pool.query('SELECT * FROM tokens WHERE token_value = ($1)',
+  //     [token]
+  //   );
 
-    if (queryTokens.rowCount === 0) {
-      uniqueToken = true;
-    }
-  }
+  // } while (result.rowCount > 0)
 
-  return token;
-}
+  // return token;
+// }
 
 export async function storeToken(token: string): Promise<Token | null> {
   const query: string = 'INSERT INTO tokens (token_value) VALUES ($1) RETURNING *'
