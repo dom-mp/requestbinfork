@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const databaseUrl = 'mongodb://localhost:27017/requestBodies?'
+const databaseUrl = 'mongodb://localhost:27017/requestBodies'
 
 mongoose.set('strictQuery', false)
 
