@@ -24,7 +24,7 @@ const deleteBasket = async (basketName: string): Promise<void> => {
 
 const getRequests = async (basketName: string): Promise<Array<Request>> => {
   const response = await axios.get(
-    `${API_BASE}/baskets/${basketName}/requests`,
+    `${API_BASE}/baskets/${basketName}/requests`
   );
   return response.data.requests;
 };
