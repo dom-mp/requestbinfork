@@ -6,6 +6,8 @@ import {
   saveRequest,
 } from "../utils";
 
+import { Request as RequestType } from "../types";
+
 const router = express.Router();
 
 router.all("/:name", async (req: Request<{ name: string }>, res: Response) => {
@@ -13,16 +15,19 @@ router.all("/:name", async (req: Request<{ name: string }>, res: Response) => {
   const basketId: number | null = await getBasketId(basketName);
 
   if (basketId) {
-    const sentAt: string = new Date().toISOString();
-    const method: string = req.method;
-    const headers: string = headersToString(req.headers);
-    let mongoBodyId: string | null = null;
-    if (req.body) {
-      console.log('here');
-      mongoBodyId = await saveRequestBody(req.body);
+    const request: RequestType = {
+      basketId,
+      sentAt: new Date().toISOString(),
+      method: req.method,
+      headers: headersToString(req.headers),
+      mongoBodyId: null,
     }
 
-    saveRequest({ basketId, sentAt, method, headers, mongoBodyId });
+    if (req.body) {
+      request.mongoBodyId = await saveRequestBody(req.body);
+    }
+
+    saveRequest(request);
     res.status(204).json();
   } else {
     res.status(404).json({ message: "Basket not found" });
