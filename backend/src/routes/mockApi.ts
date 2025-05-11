@@ -1,11 +1,11 @@
-import express, { Request, Response } from 'express';
-import type { Request as RequestType } from '../types';
+import express, { Request, Response } from "express";
+import type { MockRequest } from "../types";
 
 const router = express.Router();
 
 let baskets: string[] = ["78ugqjy", "x06skz4", "5ce2eoa"];
 
-const requests: Omit<RequestType, "basketName">[]= [
+const requests: Omit<MockRequest, "basketName">[] = [
   {
     method: "POST",
     sentAt: "2025-05-08T05:45:50.361+10:00",
@@ -110,7 +110,7 @@ const requests: Omit<RequestType, "basketName">[]= [
           "can_access_hill_charts": true
         }
       }
-    `
+    `,
   },
   {
     method: "POST",
@@ -283,7 +283,7 @@ const requests: Omit<RequestType, "basketName">[]= [
           "site_admin": false
         }
       }
-    `
+    `,
   },
   {
     method: "POST",
@@ -295,69 +295,81 @@ const requests: Omit<RequestType, "basketName">[]= [
       Content-Length: 38
     `,
     requestBodyContentType: "application/x-www-form-urlencoded",
-    requestBody: "username=johndoe&password=123456"
-  }
-]
+    requestBody: "username=johndoe&password=123456",
+  },
+];
 
-router.get('/baskets', (_req: Request, res: Response) => {
+router.get("/baskets", (_req: Request, res: Response) => {
   res.status(200).json({ baskets });
 });
 
-router.get('/generate_name', (_req: Request, res: Response) => {
+router.get("/generate_name", (_req: Request, res: Response) => {
   const name: string = Math.random().toString(36).substring(2, 9);
   res.status(200).json({ name });
 });
 
-router.post('/baskets/:name', (req: Request<{ name: string }>, res: Response) => {
-  const basketName = req.params.name;
+router.post(
+  "/baskets/:name",
+  (req: Request<{ name: string }>, res: Response) => {
+    const basketName = req.params.name;
 
-  if (baskets.includes(basketName)) {
-    res.status(409).json({ message: "Basket already exists"});
-    return;
+    if (baskets.includes(basketName)) {
+      res.status(409).json({ message: "Basket already exists" });
+      return;
+    }
+
+    baskets.push(basketName);
+    res.status(201).json({ basketName });
   }
+);
 
-  baskets.push(basketName);
-  res.status(201).json({ basketName })
-});
+router.delete(
+  "/baskets/:name",
+  (req: Request<{ name: string }>, res: Response) => {
+    const { name } = req.params;
 
-router.delete('/baskets/:name', (req: Request<{ name: string }>, res: Response) => {
-  const { name } = req.params;
+    if (!baskets.includes(name)) {
+      res.status(404).json({ message: "Basket not found" });
+      return;
+    }
 
-  if (!baskets.includes(name)) {
-    res.status(404).json({ message: "Basket not found"});
-    return;
+    baskets = baskets.filter((basket) => basket != name);
+    res.status(204).json();
   }
+);
 
-  baskets = baskets.filter(basket => basket != name);
-  res.status(204).json();
-});
+router.get(
+  "/baskets/:name/requests",
+  (req: Request<{ name: string }>, res: Response) => {
+    const { name } = req.params;
 
-router.get('/baskets/:name/requests', (req: Request<{ name: string }>, res: Response) => {
-  const { name } = req.params;
+    if (!baskets.includes(name)) {
+      res.status(404).json({ message: "Basket not found" });
+      return;
+    }
 
-  if (!baskets.includes(name)) {
-    res.status(404).json({ message: "Basket not found"});
-    return;
+    let requestsResponse: MockRequest[] = requests.map((request) => {
+      let typedRequest = request as MockRequest;
+      typedRequest.basketName = name;
+      return typedRequest;
+    });
+
+    res.status(200).json({ requests: requestsResponse });
   }
+);
 
-  let requestsResponse: RequestType[] = requests.map((request) => {
-    let typedRequest = request as RequestType;
-    typedRequest.basketName = name;
-    return typedRequest;
-  });
+router.delete(
+  "/baskets/:name/requests",
+  (req: Request<{ name: string }>, res: Response) => {
+    const { name } = req.params;
 
-  res.status(200).json({ requests: requestsResponse });
-});
+    if (!baskets.includes(name)) {
+      res.status(404).json({ message: "Basket not found" });
+      return;
+    }
 
-router.delete('/baskets/:name/requests', (req: Request<{ name: string }>, res: Response) => {
-  const { name } = req.params;
-
-  if (!baskets.includes(name)) {
-    res.status(404).json({ message: "Basket not found"});
-    return;
+    res.status(200).json();
   }
-
-  res.status(200).json();
-});
+);
 
 export default router;
