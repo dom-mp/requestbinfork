@@ -4,7 +4,6 @@ import type { Request as RequestType } from "../../types";
 import Request from "../../components/Request";
 import apiService from "../../services/requestBinAPI";
 import { handleAPIError } from "../../utils";
-import "./Basket.css";
 
 const Basket = () => {
   const basketName = useParams().basketName ?? "";
