@@ -7,15 +7,23 @@ const app = express();
 app.use(express.json());
 
 const PORT = 3000;
+const useMockAPI = process.env.USE_MOCK_API;
+// allows us to run the mock api conditionally with:
+// `API_MODE=mock  ts-node-dev ./src/main.ts`
+// OR `npm run mockAPI`
 
 app.get("/ping", (_req, res) => {
   console.log("someone pinged here");
   res.send("pong");
 });
 
-app.use("/mockApi", mockApiRouter);
-app.use("/api", apiRouter);
-app.use("/hook", hookRouter);
+if (useMockAPI) {
+  console.log("Starting mock API...");
+  app.use("/mockApi", mockApiRouter);
+} else {
+  app.use("/api", apiRouter);
+  app.use("/hook", hookRouter);
+}
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
