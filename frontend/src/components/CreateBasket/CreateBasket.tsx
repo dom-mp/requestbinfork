@@ -1,7 +1,15 @@
 import { useState, useEffect } from "react";
+import type { ChangeEvent } from "react";
 import apiService from "../../services/requestBinAPI";
 import { handleAPIError } from "../../utils";
-import { Box, Typography, Stack } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Stack,
+  TextField,
+  Button,
+  InputAdornment,
+} from "@mui/material";
 
 interface CreateBasketProps {
   setBaskets: React.Dispatch<React.SetStateAction<Array<string>>>;
@@ -29,7 +37,9 @@ const CreateBasket = ({ setBaskets }: CreateBasketProps) => {
     }
   };
 
-  const handleBasketNameChange = (event: React.FormEvent<HTMLInputElement>) => {
+  const handleBasketNameChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setBasketName(event.currentTarget.value);
   };
 
@@ -41,17 +51,28 @@ const CreateBasket = ({ setBaskets }: CreateBasketProps) => {
       </Typography>
 
       <form onSubmit={handleSubmit}>
-        <Stack direction="column" spacing={1}>
-          <label htmlFor="createBasket">placeholder.com/</label>
-          <input
-            type="text"
+        <Stack direction={{ sm: "row", xs: "column" }} spacing={1}>
+          <TextField
+            required
+            variant="standard"
             id="new-basket-name"
             value={basketName}
             onChange={handleBasketNameChange}
+            sx={{ width: "26ch" }}
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    placeholder.com/
+                  </InputAdornment>
+                ),
+              },
+            }}
           />
-          <button type="submit" className="">
+
+          <Button type="submit" variant="contained">
             Create
-          </button>
+          </Button>
         </Stack>
       </form>
     </Box>
