@@ -6,7 +6,8 @@
   "scripts": {
     "tsc": "tsc",
     "dev": "ts-node-dev ./src/main.ts",
-    "start": "node build/main.js"
+    "start": "node build/main.js",
+    "db-init": "createdb requestbin && psql -d requestbin < schema.sql"
   },
   "repository": {
     "type": "git",

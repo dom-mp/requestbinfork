@@ -46,17 +46,13 @@ export async function isBasketNameUnique(name: string): Promise<boolean> {
   return (result.rowCount ?? 0) === 0;
 }
 
-export async function addNewBasket(basketName: string, token: string) {
-  const tokenId = await getTokenId(token);
-  // const query = "INSERT INTO baskets(name, token_id) VALUES ($1, $2)";
+export async function addNewBasket(basketName: string) {
+  const query = "INSERT INTO baskets(name) VALUES ($1)";
 
-  console.log(token, basketName, tokenId);
-}
-
-async function getTokenId(token: string): Promise<number> {
-  console.log(token);
-  const query = "SELECT id from tokens WHERE token_value = $1";
-  let result: QueryResult = await pool.query(query, [token]);
-  console.log(result.rows);
-  return 5;
+  try {
+    await pool.query(query, [basketName]);
+  } catch (err) {
+    console.error("Error creating basket");
+    throw new Error("Failed to create basket");
+  }
 }

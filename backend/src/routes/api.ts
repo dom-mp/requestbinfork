@@ -27,12 +27,12 @@ router.get("/baskets", async (_req: Request, res: Response) => {
   }
 });
 
-router.get("/generate_name", (_req: Request, res: Response) => {
+router.get("/generate_name", async (_req: Request, res: Response) => {
   let basketName: string = "";
 
   do {
     basketName = generate_random_string().substring(2, 9);
-  } while (!isBasketNameUnique(basketName));
+  } while ((await isBasketNameUnique(basketName)) === false);
 
   res.status(200).json({ basketName });
 });
@@ -44,29 +44,28 @@ router.get("/generate_token", async (_req: Request, res: Response) => {
   res.status(200).json({ token });
 });
 
-router.post(
-  "/baskets/:name",
-  async (req: Request<{ name: string }>, res: Response) => {
-    const basketName = req.params.name;
-    const tokenValue = req.headers.authorization;
+router.post("/baskets/:name", async (req: Request, res: Response) => {
+  const basketName = req.params.name;
 
-    if (!typeof tokenValue !== "string") {
-      res.status(401).json("not Authorized");
-      return;
-    }
-
-    const isUniqueName = await isBasketNameUnique(basketName);
-
-    if (!isUniqueName) {
-      res.status(409).json("Basket name taken");
-      return;
-    }
-
-    let mychecker = await addNewBasket(basketName, tokenValue);
-
-    res.send(mychecker);
+  if ((await isBasketNameUnique(basketName)) === false) {
+    res.status(409).json("Basket name taken");
+    return;
   }
-);
+
+  try {
+    await addNewBasket(basketName);
+  } catch (err) {
+    let message = "";
+
+    if (err instanceof Error) {
+      message = err.message;
+    }
+
+    res.status(500).json(message);
+    return;
+  }
+  res.status(200).send();
+});
 
 router.delete(
   "/baskets/:name",
