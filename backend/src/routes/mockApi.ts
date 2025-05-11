@@ -1,11 +1,11 @@
 import express, { Request, Response } from "express";
-import type { Request as RequestType } from "../types";
+import type { MockRequest } from "../types";
 
 const router = express.Router();
 
 interface Basket {
   name: string;
-  requests: Omit<RequestType, "basketName">[];
+  requests: Omit<MockRequest, "basketName">[];
 }
 
 let allBaskets: Basket[] = [
