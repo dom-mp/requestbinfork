@@ -1,64 +1,51 @@
 import { Link } from "react-router";
-import { useMediaQuery, Typography, Box } from "@mui/material";
-import theme from "../../theme";
+import { Paper, List, ListItem, ListItemIcon, Typography } from "@mui/material";
+import { Archive } from "@mui/icons-material";
 
 interface BasketsProps {
   baskets: Array<string>;
 }
 
 const Baskets = ({ baskets }: BasketsProps) => {
-  // Simulates responsive UI by having Baskets disappear if screen too small
-  const isLargeScreen = useMediaQuery(theme.breakpoints.up("md"));
-
-  if (!isLargeScreen) return null;
-
   return (
-    <Box
+    // Paper element creates a new "elevation layer",
+    // which automatically applies box shadow.
+    // AppBar default elevation is 4.
+    <Paper
+      elevation={4}
       sx={{
+        padding: 2,
         width: 200,
-        color: "white",
+        color: "primary.contrastText",
         boxSizing: "border-box",
-        display: "flex",
-        flexDirection: "column",
-        alignSelf: "flex-start",
-        alignItems: "center",
-        padding: 3,
-        paddingRight: "6em",
-        boxShadow: theme.shadows[5],
         borderRadius: 1,
-        backgroundColor: `${theme.palette.primary.main}`,
+        backgroundColor: "primary.main",
       }}
     >
-      <Typography variant="h6">Baskets</Typography>
+      <Typography variant="h6">My Baskets</Typography>
 
-      <Box
-        component="ul"
-        sx={{
-          listStyle: "none",
-          padding: 0,
-          margin: 0,
-          paddingTop: "1.5em",
-        }}
-      >
+      <List dense={true}>
         {baskets.map((basketName) => (
-          <li key={basketName}>
-            <Box
-              component={Link}
-              to={`/baskets/${basketName}`}
-              sx={{
-                color: "#FFFFFF",
-                "&:hover": {
-                  color: theme.palette.secondary.main,
-                  textDecoration: "underline",
-                },
-              }}
-            >
-              {basketName}
-            </Box>
-          </li>
+          <ListItem
+            key={basketName}
+            component={Link}
+            to={`/baskets/${basketName}`}
+            sx={{
+              color: "primary.contrastText",
+              "&:hover": {
+                color: "secondary.main",
+                textDecoration: "underline",
+              },
+            }}
+          >
+            <ListItemIcon>
+              <Archive sx={{ color: "primary.contrastText" }} />
+            </ListItemIcon>
+            {basketName}
+          </ListItem>
         ))}
-      </Box>
-    </Box>
+      </List>
+    </Paper>
   );
 };
 
