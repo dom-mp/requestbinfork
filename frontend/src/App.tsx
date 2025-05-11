@@ -1,17 +1,14 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
 import apiService from "./services/requestBinAPI";
+import { Container, Stack } from "@mui/material";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "./theme";
+import CssBaseline from "@mui/material/CssBaseline";
 import Nav from "./components/Nav";
 import Basket from "./components/Basket";
 import Baskets from "./components/Baskets";
 import CreateBasket from "./components/CreateBasket";
-import "./App.css";
-import { Container } from "@mui/material";
-import CssBaseline from "@mui/material/CssBaseline";
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
 
 function App() {
   const [baskets, setBaskets] = useState<Array<string>>([]);
@@ -22,20 +19,27 @@ function App() {
   }, []);
 
   return (
-    <Container maxWidth="sm">
-      <CssBaseline />
+    <ThemeProvider theme={theme}>
       <BrowserRouter>
-        <Nav />
-        <Baskets baskets={baskets} />
+        <Container maxWidth="md">
+          <CssBaseline />
+          <Nav />
+          <Stack direction={{ md: "row", xs: "column" }} spacing={2}>
+            <Routes>
+              <Route
+                path="/"
+                element={<CreateBasket setBaskets={setBaskets} />}
+              />
+              <Route path="baskets">
+                <Route path=":basketName" element={<Basket />} />
+              </Route>
+            </Routes>
 
-        <Routes>
-          <Route path="/" element={<CreateBasket setBaskets={setBaskets} />} />
-          <Route path="baskets">
-            <Route path=":basketName" element={<Basket />} />
-          </Route>
-        </Routes>
+            <Baskets baskets={baskets} />
+          </Stack>
+        </Container>
       </BrowserRouter>
-    </Container>
+    </ThemeProvider>
   );
 }
 
