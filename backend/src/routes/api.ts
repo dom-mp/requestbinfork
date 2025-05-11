@@ -1,62 +1,86 @@
-import express, { Request, Response } from 'express';
-import pool from '../controllers/postgresql';
-import { QueryResult } from 'pg'
+import express, { Request, Response } from "express";
+import pool from "../controllers/postgresql";
+import { QueryResult } from "pg";
 import {
   isBasketNameUnique,
   generate_random_string,
   generate_token,
-  storeToken
-} from '../utils';
+  storeToken,
+  addNewBasket,
+} from "../utils";
 import type {
   // Request as RequestType,
-  Basket
-} from '../types';
+  Basket,
+} from "../types";
 
 const router = express.Router();
 
-router.get('/baskets', async (_req: Request, res: Response) => {
-  const query: string = 'SELECT * FROM baskets';
+router.get("/baskets", async (_req: Request, res: Response) => {
+  const query: string = "SELECT * FROM baskets";
   try {
     const response: QueryResult<Basket> = await pool.query(query);
     const baskets = response.rows.map(({ name }) => name);
     res.status(200).json({ baskets });
-  } catch(err) {
-    console.error('Error while getting basket names: ', err);
-    throw new Error('Failed to get basket names');
+  } catch (err) {
+    console.error("Error while getting basket names: ", err);
+    throw new Error("Failed to get basket names");
   }
 });
 
-router.get('/generate_name', (_req: Request, res: Response) => {
-  let basketName: string = '';
+router.get("/generate_name", (_req: Request, res: Response) => {
+  let basketName: string = "";
 
   do {
     basketName = generate_random_string().substring(2, 9);
-  } while (!isBasketNameUnique(basketName))
+  } while (!isBasketNameUnique(basketName));
 
   res.status(200).json({ basketName });
 });
 
-router.get('/generate_token', async (_req: Request, res: Response) => {
+router.get("/generate_token", async (_req: Request, res: Response) => {
   let token: string = await generate_token();
   await storeToken(token);
 
   res.status(200).json({ token });
 });
 
-router.post('/baskets/:name', (_req: Request<{ name: string }>, _res: Response) => {
+router.post(
+  "/baskets/:name",
+  async (req: Request<{ name: string }>, res: Response) => {
+    const basketName = req.params.name;
+    const tokenValue = req.headers.authorization;
 
-});
+    if (!typeof tokenValue !== "string") {
+      res.status(401).json("not Authorized");
+      return;
+    }
 
-router.delete('/baskets/:name', (_req: Request<{ name: string }>, _res: Response) => {
+    const isUniqueName = await isBasketNameUnique(basketName);
 
-});
+    if (!isUniqueName) {
+      res.status(409).json("Basket name taken");
+      return;
+    }
 
-router.get('/baskets/:name/requests', (_req: Request<{ name: string }>, _res: Response) => {
+    let mychecker = await addNewBasket(basketName, tokenValue);
 
-});
+    res.send(mychecker);
+  }
+);
 
-router.delete('/baskets/:name/requests', (_req: Request<{ name: string }>, _res: Response) => {
+router.delete(
+  "/baskets/:name",
+  (_req: Request<{ name: string }>, _res: Response) => {}
+);
 
-});
+router.get(
+  "/baskets/:name/requests",
+  (_req: Request<{ name: string }>, _res: Response) => {}
+);
+
+router.delete(
+  "/baskets/:name/requests",
+  (_req: Request<{ name: string }>, _res: Response) => {}
+);
 
 export default router;

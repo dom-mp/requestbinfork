@@ -1,5 +1,5 @@
 export interface Request {
-  basketName: string;
+  basketName: string,
   method: string;
   sentAt: string;
   headers: string;
