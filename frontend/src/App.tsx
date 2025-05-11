@@ -33,7 +33,11 @@ function App() {
               ...theme.mixins.toolbar,
             }}
           >
-            <Stack direction={{ md: "row", xs: "column" }} spacing={2}>
+            <Stack
+              direction={{ sm: "row", xs: "column" }}
+              sx={{ justifyContent: "space-between" }}
+              spacing={2}
+            >
               <Routes>
                 <Route
                   path="/"

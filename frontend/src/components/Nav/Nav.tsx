@@ -3,7 +3,12 @@ import { AppBar, Toolbar, Button } from "@mui/material";
 
 const Nav = () => {
   return (
-    <AppBar position="static">
+    <AppBar
+      position="static"
+      sx={{
+        borderRadius: 1,
+      }}
+    >
       <Toolbar>
         <Button color="inherit" component={Link} to={"/"}>
           RequestBin
