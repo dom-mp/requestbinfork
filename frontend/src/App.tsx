@@ -34,15 +34,18 @@ function App() {
             }}
           >
             <Stack direction={{ md: "row", xs: "column" }} spacing={2}>
-              <Routes>
-                <Route
-                  path="/"
-                  element={<CreateBasket setBaskets={setBaskets} />}
-                />
-                <Route path="baskets">
-                  <Route path=":basketName" element={<Basket />} />
-                </Route>
-              </Routes>
+              {/* Added Box here to make Baskets stay to the right */}
+              <Box sx={{ flexGrow: 1 }}>
+                <Routes>
+                  <Route
+                    path="/"
+                    element={<CreateBasket setBaskets={setBaskets} />}
+                  />
+                  <Route path="baskets">
+                    <Route path=":basketName" element={<Basket />} />
+                  </Route>
+                </Routes>
+              </Box>
 
               <Baskets baskets={baskets} />
             </Stack>
