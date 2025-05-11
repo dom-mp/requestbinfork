@@ -27,9 +27,19 @@ const Basket = () => {
   return (
     <>
       <div className="basket">
-        <h2>
-          Basket: <code>/{basketName}</code>
-        </h2>
+        {requests.length === 0 ? (
+          <h2>
+            Basket: <code>/{basketName}</code>
+          </h2>
+        ) : (
+          <>
+            <h2>
+              Basket: <code>/{basketName}</code>
+            </h2>
+            <h3># of requests {requests.length}</h3>
+          </>
+        )}
+
         <section className="requests">
           {requests.length === 0 ? (
             <div className="emptyBasket">
@@ -40,7 +50,9 @@ const Basket = () => {
               </p>
             </div>
           ) : (
-            requests.map((request, i) => <Request key={i} {...request} />)
+            requests.map((request, i) => (
+              <Request key={i} {...request} basketName={basketName} />
+            ))
           )}
         </section>
       </div>
