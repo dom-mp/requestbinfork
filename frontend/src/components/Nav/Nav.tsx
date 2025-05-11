@@ -1,25 +1,27 @@
-import "./Nav.css";
 import { Link } from "react-router";
+import { AppBar, Toolbar, Button } from "@mui/material";
 
 const Nav = () => {
   return (
-    <nav>
-      <menu>
-        <li>
-          <Link to={"/"}>RequestBin</Link>
-        </li>
-        <li>
-          <a href="https://github.com/dom-and-the-night-owls/requestbin">
-            github
-          </a>
-        </li>
-        <li>
-          <a href="https://github.com/dom-and-the-night-owls/requestbin/wiki">
-            documentation
-          </a>
-        </li>
-      </menu>
-    </nav>
+    <AppBar position="static">
+      <Toolbar>
+        <Button color="inherit" component={Link} to={"/"}>
+          RequestBin
+        </Button>
+        <Button
+          color="inherit"
+          href="https://github.com/dom-and-the-night-owls/requestbin"
+        >
+          github
+        </Button>
+        <Button
+          color="inherit"
+          href="https://github.com/dom-and-the-night-owls/requestbin/wiki"
+        >
+          documentation
+        </Button>
+      </Toolbar>
+    </AppBar>
   );
 };
 

@@ -1,6 +1,15 @@
 import { useState, useEffect } from "react";
-import "./CreateBasket.css";
+import type { ChangeEvent } from "react";
 import apiService from "../../services/requestBinAPI";
+import { handleAPIError } from "../../utils";
+import {
+  Box,
+  Typography,
+  Stack,
+  TextField,
+  Button,
+  InputAdornment,
+} from "@mui/material";
 
 interface CreateBasketProps {
   setBaskets: React.Dispatch<React.SetStateAction<Array<string>>>;
@@ -15,50 +24,58 @@ const CreateBasket = ({ setBaskets }: CreateBasketProps) => {
       .then((generatedName) => setBasketName(generatedName));
   }, []);
 
-  // TODO: We should refactor error handling after `utils.handleAPIError` is on main
-  // TODO: message notification should be handled in react, if we want it
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const message = await apiService.createBasket(basketName);
-      // Refetch all baskets.
-      // - we don't add the new basket name to our state because
-      //   the server does not return the basketName value so we
-      //   have no way of knowing whether our state aligns with
-      //   the server's state.
+      const verifiedName = await apiService.createBasket(basketName);
+      setBaskets((baskets) => baskets.concat(verifiedName));
 
-      const baskets = await apiService.getBaskets();
-      setBaskets(baskets);
-      alert(message);
+      // TODO: success message notification should be handled in react eventually
+      alert(`Basket ${verifiedName} successfully created.`);
     } catch (error: unknown) {
-      alert(error);
+      handleAPIError(error);
     }
   };
 
-  const handleBasketNameChange = (event: React.FormEvent<HTMLInputElement>) => {
+  const handleBasketNameChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setBasketName(event.currentTarget.value);
   };
 
   return (
-    <div>
-      <h1>New Basket</h1>
-      <p>Create a basket to collect and inspect HTTP Requests</p>
+    <Box>
+      <Typography variant="h3">New Basket</Typography>
+      <Typography variant="body1">
+        Create a basket to collect and inspect HTTP Requests
+      </Typography>
 
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="createBasket">placeholder.com/</label>
-          <input
-            type="text"
+        <Stack direction={{ sm: "row", xs: "column" }} spacing={1}>
+          <TextField
+            required
+            variant="standard"
             id="new-basket-name"
             value={basketName}
             onChange={handleBasketNameChange}
+            sx={{ width: "26ch" }}
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    placeholder.com/
+                  </InputAdornment>
+                ),
+              },
+            }}
           />
-          <button type="submit" className="">
+
+          <Button type="submit" variant="contained">
             Create
-          </button>
-        </div>
+          </Button>
+        </Stack>
       </form>
-    </div>
+    </Box>
   );
 };
 
