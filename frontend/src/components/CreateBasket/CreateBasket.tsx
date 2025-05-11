@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import "./CreateBasket.css";
 import apiService from "../../services/requestBinAPI";
+import { handleAPIError } from "../../utils";
+import { Box, Typography, Stack } from "@mui/material";
 
 interface CreateBasketProps {
   setBaskets: React.Dispatch<React.SetStateAction<Array<string>>>;
@@ -15,23 +16,16 @@ const CreateBasket = ({ setBaskets }: CreateBasketProps) => {
       .then((generatedName) => setBasketName(generatedName));
   }, []);
 
-  // TODO: We should refactor error handling after `utils.handleAPIError` is on main
-  // TODO: message notification should be handled in react, if we want it
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const message = await apiService.createBasket(basketName);
-      // Refetch all baskets.
-      // - we don't add the new basket name to our state because
-      //   the server does not return the basketName value so we
-      //   have no way of knowing whether our state aligns with
-      //   the server's state.
+      const verifiedName = await apiService.createBasket(basketName);
+      setBaskets((baskets) => baskets.concat(verifiedName));
 
-      const baskets = await apiService.getBaskets();
-      setBaskets(baskets);
-      alert(message);
+      // TODO: success message notification should be handled in react eventually
+      alert(`Basket ${verifiedName} successfully created.`);
     } catch (error: unknown) {
-      alert(error);
+      handleAPIError(error);
     }
   };
 
@@ -40,12 +34,14 @@ const CreateBasket = ({ setBaskets }: CreateBasketProps) => {
   };
 
   return (
-    <div>
-      <h1>New Basket</h1>
-      <p>Create a basket to collect and inspect HTTP Requests</p>
+    <Box>
+      <Typography variant="h3">New Basket</Typography>
+      <Typography variant="body1">
+        Create a basket to collect and inspect HTTP Requests
+      </Typography>
 
       <form onSubmit={handleSubmit}>
-        <div>
+        <Stack direction="column" spacing={1}>
           <label htmlFor="createBasket">placeholder.com/</label>
           <input
             type="text"
@@ -56,9 +52,9 @@ const CreateBasket = ({ setBaskets }: CreateBasketProps) => {
           <button type="submit" className="">
             Create
           </button>
-        </div>
+        </Stack>
       </form>
-    </div>
+    </Box>
   );
 };
 
