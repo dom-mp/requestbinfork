@@ -71,9 +71,10 @@ const Request = ({
             Headers
           </AccordionSummary>
           <AccordionDetails>
-            {headers.split("\n").map((headerText) => {
+            {headers.split("\n").map((headerText, i) => {
               return (
                 <Typography
+                  key={i}
                   variant="body1"
                   sx={{ wordBreak: "break-all", textWrap: "wrap" }}
                 >
