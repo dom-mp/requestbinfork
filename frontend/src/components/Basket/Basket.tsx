@@ -63,10 +63,10 @@ const Basket = () => {
             Basket:
             <Tooltip arrow title="Copy basket link" placement="top">
               <Button
-                sx={{ flexGrow: 0, color: "primary.dark" }}
+                sx={{ flexGrow: 0, color: "info.main" }}
                 onClick={handleCopyLinkButtonClick}
               >
-                <Typography variant="h5" sx={{ paddingRight: 3 }}>
+                <Typography variant="h5" sx={{ paddingRight: 1 }}>
                   <code>/{basketName}</code>
                 </Typography>
                 <ContentCopyIcon fontSize="small" />
