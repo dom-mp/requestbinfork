@@ -29,6 +29,14 @@ const Basket = () => {
     }
   };
 
+  const handleCopyLinkButtonClick = async () => {
+    // TODO: fix link
+    await navigator.clipboard.writeText(
+      `https://placeholder.com/hook/${basketName}`,
+    );
+    // TODO: add confirmation toast
+  };
+
   useEffect(() => {
     populateBasket(basketName);
   }, [basketName]);
@@ -51,23 +59,20 @@ const Basket = () => {
             alignItems: "center",
           }}
         >
-          <Typography variant="h4" sx={{ paddingRight: 3 }}>
-            Basket: <code>/{basketName}</code>
+          <Typography variant="h4">
+            Basket:
+            <Tooltip arrow title="Copy basket link" placement="top">
+              <Button
+                sx={{ flexGrow: 0, color: "primary.dark" }}
+                onClick={handleCopyLinkButtonClick}
+              >
+                <Typography variant="h5" sx={{ paddingRight: 3 }}>
+                  <code>/{basketName}</code>
+                </Typography>
+                <ContentCopyIcon fontSize="small" />
+              </Button>
+            </Tooltip>
           </Typography>
-
-          <Tooltip arrow title="Copy basket link" placement="top">
-            <Button
-              sx={{ flexGrow: 0 }}
-              onClick={async () => {
-                // TODO: fix link
-                await navigator.clipboard.writeText(
-                  `https://placeholder.com/hook/${basketName}`,
-                );
-              }}
-            >
-              <ContentCopyIcon />
-            </Button>
-          </Tooltip>
 
           <Typography variant="subtitle2">
             {requests.length} requests
