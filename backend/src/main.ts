@@ -10,7 +10,7 @@ const PORT = 3000;
 const useMockAPI = process.env.USE_MOCK_API;
 // allows us to run the mock api conditionally with:
 // `API_MODE=mock  ts-node-dev ./src/main.ts`
-// OR `npm run mockAPI`
+// OR `npm run mock`
 
 app.get("/ping", (_req, res) => {
   console.log("someone pinged here");

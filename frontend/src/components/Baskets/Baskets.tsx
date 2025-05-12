@@ -14,8 +14,8 @@ const Baskets = ({ baskets }: BasketsProps) => {
     <Paper
       elevation={4}
       sx={{
-        padding: 2,
-        width: 200,
+        flexGrow: 0,
+        padding: 3,
         color: "primary.contrastText",
         boxSizing: "border-box",
         borderRadius: 1,
