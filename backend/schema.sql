@@ -9,5 +9,5 @@ CREATE TABLE requests(
   sent_at timestamp NOT NULL,
   method varchar(16) NOT NULL,
   headers text NOT NULL,
-  body_mongo_id VARCHAR(255) NOT NULL
+  body_mongo_id VARCHAR(255)
 );

@@ -27,6 +27,7 @@ router.get("/baskets", async (_req: Request, res: Response) => {
   }
 });
 
+
 router.get("/generate_name", async (_req: Request, res: Response) => {
   let basketName: string = "";
 
@@ -43,6 +44,7 @@ router.get("/generate_token", async (_req: Request, res: Response) => {
 
   res.status(200).json({ token });
 });
+
 
 router.post("/baskets/:name", async (req: Request, res: Response) => {
   const basketName = req.params.name;
@@ -69,6 +71,11 @@ router.post("/baskets/:name", async (req: Request, res: Response) => {
 
 router.delete(
   "/baskets/:name",
+  (_req: Request<{ name: string }>, _res: Response) => {}
+);
+
+router.delete(
+  "/:name/requests",
   (_req: Request<{ name: string }>, _res: Response) => {}
 );
 

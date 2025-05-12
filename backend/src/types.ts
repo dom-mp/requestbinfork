@@ -1,5 +1,8 @@
-export interface Request {
-  basketName: string,
+
+import { Document } from "mongoose";
+
+export interface MockRequest {
+  basketName: string;
   method: string;
   sentAt: string;
   headers: string;
@@ -16,4 +19,17 @@ export interface Basket {
   id: number;
   name: string;
   token_id: number;
+}
+
+export interface RequestBody extends Document {
+  id: string;
+  request: any;
+}
+
+export interface Request {
+  basketId: number;
+  sentAt: string;
+  method: string;
+  headers: string;
+  mongoBodyId: string | null;
 }

@@ -9,12 +9,14 @@ const Request = ({
   headers,
   requestBodyContentType,
   requestBody,
-}: RequestProps) => {
+}: RequestProps & { basketName: string }) => {
   const [showJSON, setShowJSON] = useState(false);
 
   const showJSONToggle = () => {
     setShowJSON(!showJSON);
   };
+
+  // console.log(basketName);
 
   return (
     <div className="request">
