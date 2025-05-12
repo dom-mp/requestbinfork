@@ -19,7 +19,7 @@ RequestBin is a tool that allows you to capture, log, and inspect HTTP requests 
 
 ### Implementation Details
 
-- Front-end is a single-page web app built with React + TypeScript and [material ui](https://mui.com/).
+- Front-end is a single-page web app built with React + TypeScript + [vite](https://vite.dev/) and [material ui](https://mui.com/).
 - Back-end is implemented with [express.js](https://expressjs.com/).
 - Bin and request metadata are stored in PostgreSQL.
 - Request payload data is stored in MongoDB.
