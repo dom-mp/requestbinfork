@@ -21,7 +21,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
-        <Container maxWidth="md" sx={{ minWidth: "350px" }}>
+        <Container maxWidth="xl" sx={{ minWidth: "350px" }}>
           <CssBaseline />
           <Nav />
           <Box
@@ -34,9 +34,12 @@ function App() {
             }}
           >
             <Stack
-              direction={{ sm: "row", xs: "column" }}
-              sx={{ justifyContent: "space-between" }}
-              spacing={2}
+              direction="row"
+              sx={{
+                gap: 3,
+                flexWrap: "wrap",
+                justifyContent: "space-between",
+              }}
             >
               <Routes>
                 <Route

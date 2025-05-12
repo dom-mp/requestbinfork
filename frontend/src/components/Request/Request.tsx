@@ -28,7 +28,14 @@ const Request = ({
     .endsWith("json");
 
   return (
-    <Stack direction="row">
+    <Stack
+      direction="row"
+      sx={{
+        gap: 3,
+        flexWrap: "wrap",
+        justifyContent: "space-between",
+      }}
+    >
       <Box>
         <Typography variant="h5">{method}</Typography>
         <Typography
@@ -55,7 +62,7 @@ const Request = ({
         <Accordion>
           <AccordionDetails>
             <Typography component="code">
-              placeholder.com/hook/{basketName}
+              PATH: placeholder.com/hook/{basketName}
             </Typography>
           </AccordionDetails>
         </Accordion>
@@ -65,7 +72,14 @@ const Request = ({
           </AccordionSummary>
           <AccordionDetails>
             {headers.split("\n").map((headerText) => {
-              return <Typography variant="body1">{headerText}</Typography>;
+              return (
+                <Typography
+                  variant="body1"
+                  sx={{ wordBreak: "break-all", textWrap: "wrap" }}
+                >
+                  {headerText}
+                </Typography>
+              );
             })}
           </AccordionDetails>
         </Accordion>

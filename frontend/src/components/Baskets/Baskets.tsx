@@ -2,7 +2,6 @@ import { Link } from "react-router";
 import { Paper, List, ListItem, ListItemIcon, Typography } from "@mui/material";
 import { Archive } from "@mui/icons-material";
 
-
 interface BasketsProps {
   baskets: Array<string>;
 }

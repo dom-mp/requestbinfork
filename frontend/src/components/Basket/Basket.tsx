@@ -37,6 +37,7 @@ const Basket = () => {
     <Paper
       elevation={4}
       sx={{
+        maxWidth: "100%",
         flexGrow: 1,
         padding: 2,
       }}
