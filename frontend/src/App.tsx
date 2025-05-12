@@ -35,7 +35,10 @@ function App() {
           >
             <Stack
               direction={{ sm: "row", xs: "column" }}
-              sx={{ justifyContent: "space-between" }}
+              sx={{
+                justifyContent: "space-between",
+                alignItems: { sm: "flex-start", xs: "stretch" },
+              }}
               spacing={2}
             >
               <Routes>
