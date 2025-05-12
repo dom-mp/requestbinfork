@@ -12,12 +12,14 @@ import {
   Divider,
   Typography,
   Tooltip,
+  Snackbar,
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const Basket = () => {
   const basketName = useParams().basketName ?? "";
   const [requests, setRequests] = useState<Array<RequestType>>([]);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const populateBasket = (basketName: string) => {
     try {
@@ -34,7 +36,7 @@ const Basket = () => {
     await navigator.clipboard.writeText(
       `https://placeholder.com/hook/${basketName}`,
     );
-    // TODO: add confirmation toast
+    setSnackbarOpen(true);
   };
 
   useEffect(() => {
@@ -50,6 +52,14 @@ const Basket = () => {
         padding: 2,
       }}
     >
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={() => setSnackbarOpen(false)}
+        message="Basket url copied to clipboard."
+      />
+
       <Container>
         <Stack
           direction="row"
