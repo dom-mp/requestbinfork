@@ -66,10 +66,12 @@ const Request = ({
             </Typography>
           </AccordionDetails>
         </Accordion>
+
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             Headers
           </AccordionSummary>
+
           <AccordionDetails>
             {headers.split("\n").map((headerText, i) => {
               return (
