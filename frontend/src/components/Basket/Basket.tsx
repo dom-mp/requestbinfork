@@ -4,7 +4,16 @@ import type { Request as RequestType } from "../../types";
 import apiService from "../../services/requestBinAPI";
 import { handleAPIError } from "../../utils";
 import RequestList from "../RequestList";
-import { Paper, Container, Stack, Divider, Typography } from "@mui/material";
+import {
+  Button,
+  Paper,
+  Container,
+  Stack,
+  Divider,
+  Typography,
+  Tooltip,
+} from "@mui/material";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const Basket = () => {
   const basketName = useParams().basketName ?? "";
@@ -44,7 +53,21 @@ const Basket = () => {
           <Typography variant="h4" sx={{ paddingRight: 3 }}>
             Basket: <code>/{basketName}</code>
           </Typography>
-          <Divider />
+
+          <Tooltip arrow title="Copy basket link" placement="top">
+            <Button
+              sx={{ flexGrow: 0 }}
+              onClick={async () => {
+                // TODO: fix link
+                await navigator.clipboard.writeText(
+                  `https://placeholder.com/hook/${basketName}`,
+                );
+              }}
+            >
+              <ContentCopyIcon />
+            </Button>
+          </Tooltip>
+
           <Typography variant="subtitle2">
             {requests.length} requests
           </Typography>
