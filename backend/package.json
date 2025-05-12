@@ -7,8 +7,8 @@
     "tsc": "tsc",
     "dev": "ts-node-dev ./src/main.ts",
     "start": "node build/main.js",
-    "db-init": "createdb requestbin && psql -d requestbin < schema.sql"
-    "mock": "USE_MOCK_API=true ts-node-dev ./src/main.ts",
+    "db-init": "createdb requestbin && psql -d requestbin < schema.sql",
+    "mock": "USE_MOCK_API=true ts-node-dev ./src/main.ts"
   },
   "repository": {
     "type": "git",
