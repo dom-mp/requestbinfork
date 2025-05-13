@@ -1,0 +1,40 @@
+# Get all baskets
+GET http://localhost:3000/mockApi/baskets/
+
+# {
+#   "baskets": [
+#     "78ugqjy",
+#     "x06skz4",
+#     "5ce2eoa"
+#   ]
+# }
+
+###
+
+# Generate random basket name
+GET http://localhost:3000/mockApi/generate_name
+
+###
+
+# Create a basket
+POST http://localhost:3000/mockApi/baskets/0nl7f1y
+
+###
+
+# Delete basket
+DELETE  http://localhost:3000/mockApi/baskets/rs2geo9
+
+###
+
+# Get requests for a basket
+GET http://localhost:3000/mockApi/baskets/0nl7f1y/requests
+
+###
+
+# Delete basket requests
+DELETE http://localhost:3000/mockApi/baskets/rs2geo9/requests
+
+###
+
+# Purge basket requests
+DELETE http://localhost:3000/mockApi/baskets/0nl7f1y/purge

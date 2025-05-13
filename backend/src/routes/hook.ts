@@ -1,14 +1,16 @@
 import express, { Request, Response } from "express";
-import {
-  getBasketId,
-  headersToString,
-  saveRequestBody,
-  saveRequest,
-} from "../utils";
-
+import { getBasketId, headersToString, saveRequest } from "../utils";
 import { Request as RequestType } from "../types";
+import MongoController from "../controllers/mongo";
 
 const router = express.Router();
+
+const useMockAPI = process.env.USE_MOCK_API;
+let mongo: MongoController;
+
+if (!useMockAPI) {
+  mongo = new MongoController();
+}
 
 router.all("/:name", async (req: Request<{ name: string }>, res: Response) => {
   const basketName = req.params.name;
@@ -21,10 +23,10 @@ router.all("/:name", async (req: Request<{ name: string }>, res: Response) => {
       method: req.method,
       headers: headersToString(req.headers),
       mongoBodyId: null,
-    }
+    };
 
     if (req.body) {
-      request.mongoBodyId = await saveRequestBody(req.body);
+      request.mongoBodyId = await mongo.saveRequestBody(req.body);
     }
 
     saveRequest(request);

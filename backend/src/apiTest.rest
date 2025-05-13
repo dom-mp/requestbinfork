@@ -1,0 +1,51 @@
+# Get all baskets
+GET http://localhost:3000/api/baskets/
+
+# {
+#   "baskets": [
+#     "78ugqjy",
+#     "x06skz4",
+#     "5ce2eoa"
+#   ]
+# }
+
+###
+
+# Generate random basket name
+GET http://localhost:3000/api/generate_name
+
+###
+
+# Generate token
+GET http://localhost:3000/api/generate_token
+
+###
+
+# Create a basket
+POST http://localhost:3000/api/baskets/rs2geo91
+
+###
+
+# Delete basket
+DELETE  http://localhost:3000/api/baskets/rs2geo9
+
+###
+
+# Get requests for a basket
+GET http://localhost:3000/api/baskets/rs2geo9/requests
+
+###
+
+# Generate random basket name
+DELETE http://localhost:3000/api/baskets/rs2geo9/requests
+
+###
+
+# Webhook
+POST http://localhost:3000/hook/78ugqjy
+content-type: application/json
+
+{
+    "name": "sample",
+    "time": "Wed, 21 Oct 2015 18:27:50 GMT"
+}

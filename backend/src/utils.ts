@@ -1,9 +1,7 @@
 import { IncomingHttpHeaders } from "http";
 import pool from "./controllers/postgresql";
-import RequestBody from "./controllers/mongo";
 import type { Token, Basket, Request } from "./types";
 import { QueryResult } from "pg";
-import mongoose from "mongoose";
 
 export function generate_random_string() {
   return Math.random().toString(36).substring(2);
@@ -78,33 +76,6 @@ export async function getBasketId(name: string): Promise<number | null> {
   } else {
     console.error("Basket not found");
     return null;
-  }
-}
-
-export async function saveRequestBody(requestBody: any): Promise<string> {
-  try {
-    const newRequestBody = new RequestBody({ request: requestBody });
-    const saved = await newRequestBody.save();
-    console.log("MongoDB: Saved request", saved);
-    return saved.toJSON().id;
-  } catch (error) {
-    console.error("Error saving request:", error);
-    throw new Error("Failed to save request body");
-  }
-}
-
-export async function getRequestBody(bodyMongoId: string) {
-  try {
-    const objectId = new mongoose.Types.ObjectId(bodyMongoId);
-    const requestSaved = await RequestBody.findOne({ _id: objectId });
-    if (!requestSaved) {
-      throw new Error("Request not found");
-    }
-    console.log("Request found", requestSaved.request);
-    return requestSaved.request;
-  } catch (err) {
-    console.error("Error fetching request body:", err);
-    throw err;
   }
 }
 
