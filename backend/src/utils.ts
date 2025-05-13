@@ -73,12 +73,12 @@ export function headersToString(headers: IncomingHttpHeaders): string {
   return headerString;
 }
 
-export async function getBasketId(name: string): Promise<number | null> {
-  const query: string = "SELECT id FROM baskets WHERE name = ($1)";
+export async function getBasketName(name: string): Promise<string | null> {
+  const query: string = "SELECT name FROM baskets WHERE name = ($1)";
   const result: QueryResult<Basket> = await pool.query(query, [name]);
 
   if (result.rows.length > 0) {
-    return result.rows[0].id;
+    return result.rows[0].name;
   } else {
     console.error("Basket not found");
     return null;
@@ -86,17 +86,17 @@ export async function getBasketId(name: string): Promise<number | null> {
 }
 
 export async function saveRequest({
-  basketId,
+  basketName,
   sentAt,
   method,
   headers,
   mongoBodyId,
 }: Request) {
-  const query: string = `INSERT INTO notifications (basket_id, sent_at, method, headers, body_mongo_id)
+  const query: string = `INSERT INTO requests (basket_name, sent_at, method, headers, body_mongo_id)
      VALUES ($1, $2, $3, $4, $5) RETURNING *`;
   try {
     const result: QueryResult<Request> = await pool.query(query, [
-      basketId,
+      basketName,
       sentAt,
       method,
       headers,
@@ -106,12 +106,12 @@ export async function saveRequest({
     return result.rows[0];
   } catch (err) {
     console.error("Error inserting request:", {
-      basketId,
+      basketName,
       sentAt,
       method,
       headers,
       mongoBodyId,
-    });
-    throw new Error("Failed to store request");
+    }, err);
+    throw new Error("Failed to store request,");
   }
 }
