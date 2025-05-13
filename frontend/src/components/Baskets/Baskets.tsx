@@ -5,9 +5,9 @@ import {
   ListItemIcon,
   Typography,
   Drawer,
-  Box,
+  Stack,
 } from "@mui/material";
-import { Archive } from "@mui/icons-material";
+import ArchiveIcon from "@mui/icons-material/Archive";
 
 interface BasketsProps {
   baskets: Array<string>;
@@ -16,36 +16,29 @@ interface BasketsProps {
   isMobile: boolean;
 }
 
-const Baskets = ({
-  baskets,
-  drawerState,
-  setDrawerState,
-  isMobile,
-}: BasketsProps) => {
+const Baskets = ({ baskets, drawerState, setDrawerState }: BasketsProps) => {
   return (
     <Drawer
-      anchor={isMobile ? "top" : "left"}
+      anchor="right"
       open={drawerState}
       onClose={() => setDrawerState(false)}
       sx={{
         "& .MuiDrawer-paper": {
-          width: isMobile ? "100%" : 200,
+          width: 200,
           paddingTop: 3,
-          paddingBottom: isMobile ? 5 : 0,
         },
       }}
     >
-      <Box
+      <Stack
+        direction="column"
         sx={{
-          display: "flex",
-          flexDirection: "column",
           alignItems: "center",
           gap: 2,
         }}
       >
         <Typography variant="h6">My Baskets</Typography>
 
-        <List dense={true}>
+        <List dense={true} onClick={() => setDrawerState(false)}>
           {baskets.map((basketName) => (
             <ListItem
               key={basketName}
@@ -60,13 +53,13 @@ const Baskets = ({
               }}
             >
               <ListItemIcon>
-                <Archive sx={{ color: "primary.main" }} />
+                <ArchiveIcon sx={{ color: "primary.main" }} />
               </ListItemIcon>
               {basketName}
             </ListItem>
           ))}
         </List>
-      </Box>
+      </Stack>
     </Drawer>
   );
 };
