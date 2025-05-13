@@ -23,16 +23,6 @@ const Basket = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const navigate = useNavigate();
 
-  const populateBasket = (basketName: string) => {
-    try {
-      apiService.getRequests(basketName).then((mockBaskets) => {
-        setRequests(mockBaskets);
-      });
-    } catch (error: unknown) {
-      handleAPIError(error);
-    }
-  };
-
   const handleCopyLinkButtonClick = async () => {
     // TODO: fix link
     await navigator.clipboard.writeText(
@@ -50,7 +40,15 @@ const Basket = () => {
   };
 
   useEffect(() => {
-    populateBasket(basketName);
+    apiService
+      .getRequests(basketName)
+      .then((mockBaskets) => {
+        setRequests(mockBaskets);
+      })
+      .catch((error: unknown) => {
+        navigate("/");
+        handleAPIError(error);
+      });
   }, [basketName]);
 
   return (
