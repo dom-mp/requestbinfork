@@ -1,17 +1,20 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
 import apiService from "./services/requestBinAPI";
-import { Container, Box, Stack } from "@mui/material";
-import { ThemeProvider } from "@mui/material/styles";
-import theme from "./theme";
+import { Container, Box, Stack, useMediaQuery } from "@mui/material";
+import { ThemeProvider, useTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Nav from "./components/Nav";
 import Basket from "./components/Basket";
 import Baskets from "./components/Baskets";
 import CreateBasket from "./components/CreateBasket";
+import MyBasketsFab from "./components/MyBasketsFab";
 
 function App() {
   const [baskets, setBaskets] = useState<Array<string>>([]);
+  const [drawerState, setDrawerState] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   // load initial state
   useEffect(() => {
@@ -51,11 +54,18 @@ function App() {
                 </Route>
               </Routes>
 
-              <Baskets baskets={baskets} />
+              <Baskets
+                baskets={baskets}
+                drawerState={drawerState}
+                setDrawerState={setDrawerState}
+                isMobile={isMobile}
+              />
             </Stack>
           </Box>
         </Container>
       </BrowserRouter>
+
+      <MyBasketsFab setDrawerState={setDrawerState} isMobile={isMobile} />
     </ThemeProvider>
   );
 }
