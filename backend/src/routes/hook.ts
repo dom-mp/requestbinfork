@@ -5,13 +5,6 @@ import MongoController from "../controllers/mongo";
 
 const router = express.Router();
 
-const useMockAPI = process.env.USE_MOCK_API;
-let mongo: MongoController;
-
-if (!useMockAPI) {
-  mongo = new MongoController();
-}
-
 router.all("/:name", async (req: Request<{ name: string }>, res: Response) => {
   const basketName = req.params.name;
   const basketId: number | null = await getBasketId(basketName);
@@ -25,12 +18,15 @@ router.all("/:name", async (req: Request<{ name: string }>, res: Response) => {
       mongoBodyId: null,
     };
 
+    let mongo: MongoController;
+
     if (req.body) {
+      mongo = new MongoController();
       request.mongoBodyId = await mongo.saveRequestBody(req.body);
+      await mongo.closeConnection();
     }
 
     saveRequest(request);
-    await mongo.closeConnection();
     res.status(204).json();
   } else {
     res.status(404).json({ message: "Basket not found" });
