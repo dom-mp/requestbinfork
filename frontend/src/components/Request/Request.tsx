@@ -1,5 +1,5 @@
 import type { Request as RequestProps } from "../../types";
-import { JSONTree } from "react-json-tree";
+import StyledJSONTree from "../StyledJSONTree";
 import { useState } from "react";
 import {
   Box,
@@ -27,6 +27,16 @@ const Request = ({
     .toLowerCase()
     .endsWith("json");
 
+  const rawJSON = (
+    <Box>
+      <Typography
+        component="pre"
+        sx={{ wordBreak: "break-all", textWrap: "wrap" }}
+      >
+        {requestBody}
+      </Typography>
+    </Box>
+  );
   return (
     <Stack
       direction="row"
@@ -94,16 +104,9 @@ const Request = ({
 
           <AccordionDetails>
             {isJSON && showJSON ? (
-              <JSONTree data={JSON.parse(requestBody)} />
+              <StyledJSONTree json={requestBody} />
             ) : (
-              <Box>
-                <Typography
-                  component="pre"
-                  sx={{ wordBreak: "break-all", textWrap: "wrap" }}
-                >
-                  {requestBody}
-                </Typography>
-              </Box>
+              rawJSON
             )}
           </AccordionDetails>
         </Accordion>
