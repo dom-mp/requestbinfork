@@ -3,8 +3,8 @@ import pool from "../controllers/postgresql";
 import { QueryResult } from "pg";
 import {
   isBasketNameUnique,
-  generate_random_string,
-  generate_token,
+  generateRandomString,
+  generateToken,
   storeToken,
   addNewBasket,
 } from "../utils";
@@ -27,24 +27,32 @@ router.get("/baskets", async (_req: Request, res: Response) => {
   }
 });
 
-
 router.get("/generate_name", async (_req: Request, res: Response) => {
   let basketName: string = "";
 
   do {
-    basketName = generate_random_string().substring(2, 9);
+    basketName = generateRandomString().substring(2, 9);
   } while ((await isBasketNameUnique(basketName)) === false);
 
   res.status(200).json({ basketName });
 });
 
-router.get("/generate_token", async (_req: Request, res: Response) => {
-  let token: string = await generate_token();
-  await storeToken(token);
+router.get("/generate_token", async (req: Request, res: Response) => {
+  const basketName = req.query.name;
+
+  if (typeof basketName !== "string") {
+    res.status(422).send("missing basket name");
+    return;
+  } else if (await isBasketNameUnique(basketName)) {
+    res.status(422).send("basket does not exist");
+    return;
+  }
+
+  let token: string = await generateToken();
+  await storeToken(token, basketName);
 
   res.status(200).json({ token });
 });
-
 
 router.post("/baskets/:name", async (req: Request, res: Response) => {
   const basketName = req.params.name;
