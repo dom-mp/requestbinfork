@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import ClearAllIcon from "@mui/icons-material/ClearAll";
 
 const Basket = () => {
   const basketName = useParams().basketName ?? "";
@@ -25,8 +26,8 @@ const Basket = () => {
 
   const populateBasket = (basketName: string) => {
     try {
-      apiService.getRequests(basketName).then((mockBaskets) => {
-        setRequests(mockBaskets);
+      apiService.getRequests(basketName).then((baskets) => {
+        setRequests(baskets);
       });
     } catch (error: unknown) {
       handleAPIError(error);
@@ -47,6 +48,14 @@ const Basket = () => {
     await apiService.deleteBasket(basketName);
     navigate("/");
     alert(`Basket "${basketName}" successfully deleted.`);
+  };
+
+  const handleClearBasketButtonClick = async () => {
+    if (!confirm(`Delete all requests in basket "${basketName}"?`)) return;
+
+    await apiService.clearBasket(basketName);
+    setRequests(await apiService.getRequests(basketName));
+    alert(`Basket "${basketName}" successfully cleared.`);
   };
 
   useEffect(() => {
@@ -93,6 +102,12 @@ const Basket = () => {
               </Button>
             </Tooltip>
           </Typography>
+
+          <Tooltip arrow title="Clear basket" placement="top">
+            <Button color="warning" onClick={handleClearBasketButtonClick}>
+              <ClearAllIcon />
+            </Button>
+          </Tooltip>
 
           <Tooltip arrow title="Delete basket" placement="top">
             <Button color="error" onClick={handleDeleteBasketButtonClick}>
