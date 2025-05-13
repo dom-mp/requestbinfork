@@ -1,4 +1,3 @@
-
 import { Document } from "mongoose";
 
 export interface MockRequest {
@@ -10,15 +9,9 @@ export interface MockRequest {
   requestBody: string;
 }
 
-export interface Token {
-  id: number;
-  tokenValue: string;
-}
-
 export interface Basket {
-  id: number;
   name: string;
-  token_id: number;
+  token: string;
 }
 
 export interface RequestBody extends Document {
@@ -31,5 +24,5 @@ export interface Request {
   sentAt: string;
   method: string;
   headers: string;
-  mongoBodyId: string | null;
+  bodyMongoId: string | null;
 }

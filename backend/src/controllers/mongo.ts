@@ -56,7 +56,7 @@ class MongoController {
   public async saveRequestBody(requestBody: any): Promise<string> {
     try {
       const newRequestBody = new this.requestBodyModel({
-        requestBody,
+        request: requestBody,
       });
       const saved = await newRequestBody.save();
       console.log("MongoDB: Saved request", saved);
