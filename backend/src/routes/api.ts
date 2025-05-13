@@ -74,11 +74,6 @@ router.delete(
   }
 );
 
-router.delete(
-  "/:name/requests",
-  (_req: Request<{ name: string }>, _res: Response) => {}
-);
-
 router.get(
   "/baskets/:name/requests",
   (_req: Request<{ name: string }>, _res: Response) => {}
