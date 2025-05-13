@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import type { Request as RequestType } from "../../types";
 import apiService from "../../services/requestBinAPI";
 import { handleAPIError } from "../../utils";
@@ -15,11 +15,13 @@ import {
   Snackbar,
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 const Basket = () => {
   const basketName = useParams().basketName ?? "";
   const [requests, setRequests] = useState<Array<RequestType>>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const navigate = useNavigate();
 
   const populateBasket = (basketName: string) => {
     try {
@@ -37,6 +39,14 @@ const Basket = () => {
       `https://placeholder.com/hook/${basketName}`,
     );
     setSnackbarOpen(true);
+  };
+
+  const handleDeleteBasketButtonClick = async () => {
+    if (!confirm(`Delete basket "${basketName}"?`)) return;
+
+    await apiService.deleteBasket(basketName);
+    navigate("/");
+    alert(`Basket "${basketName}" successfully deleted.`);
   };
 
   useEffect(() => {
@@ -83,6 +93,12 @@ const Basket = () => {
               </Button>
             </Tooltip>
           </Typography>
+
+          <Tooltip arrow title="Delete basket" placement="top">
+            <Button color="error" onClick={handleDeleteBasketButtonClick}>
+              <DeleteForeverIcon />
+            </Button>
+          </Tooltip>
 
           <Typography variant="subtitle2">
             {requests.length} requests
