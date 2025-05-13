@@ -39,7 +39,7 @@ const Baskets = ({ baskets, drawerState, setDrawerState }: BasketsProps) => {
         <Typography variant="h6">My Baskets</Typography>
 
         <List dense={true} onClick={() => setDrawerState(false)}>
-          {baskets.map((basketName) => (
+          {baskets.toReversed().map((basketName) => (
             <ListItem
               key={basketName}
               component={Link}
