@@ -1,51 +1,66 @@
 import { Link } from "react-router";
-import { Paper, List, ListItem, ListItemIcon, Typography } from "@mui/material";
-import { Archive } from "@mui/icons-material";
+import {
+  List,
+  ListItem,
+  ListItemIcon,
+  Typography,
+  Drawer,
+  Stack,
+} from "@mui/material";
+import ArchiveIcon from "@mui/icons-material/Archive";
 
 interface BasketsProps {
   baskets: Array<string>;
+  drawerState: boolean;
+  setDrawerState: (boolean: boolean) => void;
+  isMobile: boolean;
 }
 
-const Baskets = ({ baskets }: BasketsProps) => {
+const Baskets = ({ baskets, drawerState, setDrawerState }: BasketsProps) => {
   return (
-    // Paper element creates a new "elevation layer",
-    // which automatically applies box shadow.
-    // AppBar default elevation is 4.
-    <Paper
-      elevation={4}
+    <Drawer
+      anchor="right"
+      open={drawerState}
+      onClose={() => setDrawerState(false)}
       sx={{
-        flexGrow: 0,
-        padding: 3,
-        color: "primary.contrastText",
-        boxSizing: "border-box",
-        borderRadius: 1,
-        backgroundColor: "primary.main",
+        "& .MuiDrawer-paper": {
+          width: 200,
+          paddingTop: 3,
+        },
       }}
     >
-      <Typography variant="h6">My Baskets</Typography>
+      <Stack
+        direction="column"
+        sx={{
+          alignItems: "center",
+          gap: 2,
+        }}
+      >
+        <Typography variant="h6">My Baskets</Typography>
 
-      <List dense={true}>
-        {baskets.map((basketName) => (
-          <ListItem
-            key={basketName}
-            component={Link}
-            to={`/baskets/${basketName}`}
-            sx={{
-              color: "primary.contrastText",
-              "&:hover": {
-                color: "secondary.main",
-                textDecoration: "underline",
-              },
-            }}
-          >
-            <ListItemIcon>
-              <Archive sx={{ color: "primary.contrastText" }} />
-            </ListItemIcon>
-            {basketName}
-          </ListItem>
-        ))}
-      </List>
-    </Paper>
+        <List dense={true} onClick={() => setDrawerState(false)}>
+          {baskets.map((basketName) => (
+            <ListItem
+              key={basketName}
+              component={Link}
+              to={`/baskets/${basketName}`}
+              sx={{
+                color: "primary.main",
+                "&:hover": {
+                  color: "secondary.main",
+                  textDecoration: "underline",
+                },
+              }}
+            >
+              <ListItemIcon>
+                <ArchiveIcon sx={{ color: "primary.main" }} />
+              </ListItemIcon>
+              {basketName}
+            </ListItem>
+          ))}
+        </List>
+      </Stack>
+    </Drawer>
   );
 };
 
