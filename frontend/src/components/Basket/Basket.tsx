@@ -12,12 +12,14 @@ import {
   Divider,
   Typography,
   Tooltip,
+  Snackbar,
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const Basket = () => {
   const basketName = useParams().basketName ?? "";
   const [requests, setRequests] = useState<Array<RequestType>>([]);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const populateBasket = (basketName: string) => {
     try {
@@ -27,6 +29,14 @@ const Basket = () => {
     } catch (error: unknown) {
       handleAPIError(error);
     }
+  };
+
+  const handleCopyLinkButtonClick = async () => {
+    // TODO: fix link
+    await navigator.clipboard.writeText(
+      `https://placeholder.com/hook/${basketName}`,
+    );
+    setSnackbarOpen(true);
   };
 
   useEffect(() => {
@@ -42,6 +52,14 @@ const Basket = () => {
         padding: 2,
       }}
     >
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={() => setSnackbarOpen(false)}
+        message="Basket url copied to clipboard."
+      />
+
       <Container>
         <Stack
           direction="row"
@@ -51,23 +69,20 @@ const Basket = () => {
             alignItems: "center",
           }}
         >
-          <Typography variant="h4" sx={{ paddingRight: 3 }}>
-            Basket: <code>/{basketName}</code>
+          <Typography variant="h4">
+            Basket:
+            <Tooltip arrow title="Copy basket link" placement="top">
+              <Button
+                sx={{ flexGrow: 0, color: "info.main" }}
+                onClick={handleCopyLinkButtonClick}
+              >
+                <Typography variant="h5" sx={{ paddingRight: 1 }}>
+                  <code>/{basketName}</code>
+                </Typography>
+                <ContentCopyIcon fontSize="small" />
+              </Button>
+            </Tooltip>
           </Typography>
-
-          <Tooltip arrow title="Copy basket link" placement="top">
-            <Button
-              sx={{ flexGrow: 0 }}
-              onClick={async () => {
-                // TODO: fix link
-                await navigator.clipboard.writeText(
-                  `https://placeholder.com/hook/${basketName}`,
-                );
-              }}
-            >
-              <ContentCopyIcon />
-            </Button>
-          </Tooltip>
 
           <Typography variant="subtitle2">
             {requests.length} requests
