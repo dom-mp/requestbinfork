@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import type { ChangeEvent } from "react";
+import { useNavigate } from "react-router";
 import apiService from "../../services/requestBinAPI";
 import { handleAPIError } from "../../utils";
 import {
-  Box,
+  Paper,
   Typography,
   Stack,
   TextField,
@@ -17,6 +18,7 @@ interface CreateBasketProps {
 
 const CreateBasket = ({ setBaskets }: CreateBasketProps) => {
   const [basketName, setBasketName] = useState<string>("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     apiService
@@ -32,50 +34,62 @@ const CreateBasket = ({ setBaskets }: CreateBasketProps) => {
 
       // TODO: success message notification should be handled in react eventually
       alert(`Basket ${verifiedName} successfully created.`);
+      navigate(`/baskets/${basketName}`);
     } catch (error: unknown) {
       handleAPIError(error);
     }
   };
 
   const handleBasketNameChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setBasketName(event.currentTarget.value);
   };
 
   return (
-    <Box>
-      <Typography variant="h3">New Basket</Typography>
-      <Typography variant="body1">
-        Create a basket to collect and inspect HTTP Requests
-      </Typography>
+    <Paper
+      elevation={4}
+      sx={{
+        maxWidth: "100%",
+        flexGrow: 1,
+        padding: 4,
+      }}
+    >
+      <Stack spacing={2} sx={{ alignItems: "center" }}>
+        <Typography variant="h3">New Basket</Typography>
+        <Typography variant="body1">
+          Create a basket to collect and inspect HTTP Requests
+        </Typography>
 
-      <form onSubmit={handleSubmit}>
-        <Stack direction={{ sm: "row", xs: "column" }} spacing={1}>
-          <TextField
-            required
-            variant="standard"
-            id="new-basket-name"
-            value={basketName}
-            onChange={handleBasketNameChange}
-            sx={{ width: "26ch" }}
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <InputAdornment position="start">
-                    placeholder.com/
-                  </InputAdornment>
-                ),
-              },
-            }}
-          />
+        <form onSubmit={handleSubmit}>
+          <Stack direction={{ sm: "row", xs: "column" }} spacing={1}>
+            <TextField
+              required
+              autoFocus
+              variant="outlined"
+              id="new-basket-name"
+              color="info"
+              value={basketName}
+              onChange={handleBasketNameChange}
+              sx={{ width: "26ch" }}
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      placeholder.com/
+                    </InputAdornment>
+                  ),
+                },
+              }}
+            />
 
-          <Button type="submit" variant="contained">
-            Create
-          </Button>
-        </Stack>
-      </form>
-    </Box>
+            <Button type="submit" variant="contained">
+              Create
+            </Button>
+          </Stack>
+        </form>
+      </Stack>
+    </Paper>
   );
 };
 
