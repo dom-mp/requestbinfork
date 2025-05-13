@@ -5,18 +5,18 @@ import type { Token, Basket, Request } from "./types";
 import { QueryResult } from "pg";
 import mongoose from "mongoose";
 
-export function generate_random_string() {
+export function generateRandomString() {
   return Math.random().toString(36).substring(2);
 }
 
-export async function generate_token(): Promise<string> {
+export async function generateToken(): Promise<string> {
   let token: string = "";
-  const query: string = "SELECT * FROM tokens WHERE token_value = ($1)";
+  const query: string = "SELECT token FROM baskets WHERE token = ($1)";
   let result: QueryResult<Token>;
   try {
     do {
       const segments: string[] = Array.from({ length: 3 }, () =>
-        generate_random_string()
+        generateRandomString()
       );
       token = segments.join("");
 
@@ -29,12 +29,18 @@ export async function generate_token(): Promise<string> {
   }
 }
 
-export async function storeToken(token: string): Promise<Token> {
+export async function storeToken(
+  token: string,
+  basketName: string
+): Promise<Token> {
   const query: string =
-    "INSERT INTO tokens (token_value) VALUES ($1) RETURNING *";
+    "UPDATE baskets SET token = ($1) WHERE name = $2 RETURNING *";
 
   try {
-    const result: QueryResult<Token> = await pool.query(query, [token]);
+    const result: QueryResult<Token> = await pool.query(query, [
+      token,
+      basketName,
+    ]);
     console.log("Inserted token:", result.rows[0]);
     return result.rows[0];
   } catch (err) {
