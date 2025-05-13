@@ -22,7 +22,7 @@ export interface Basket {
 }
 
 export interface RequestBody extends Document {
-  id?: string;
+  id: string;
   request: any;
 }
 
