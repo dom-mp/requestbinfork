@@ -39,6 +39,17 @@ class PostgresController {
     }
   }
 
+  public async getBaskets(): Promise<Basket[]> {
+    const query: string = "SELECT * FROM baskets";
+
+    try {
+      return (await this.pool.query(query)).rows;
+    } catch (err) {
+      console.error("Error while getting basket names: ", err);
+      throw new Error("Failed to get basket names");
+    }
+  }
+
   public async getToken(tokenValue: string) {
     const query: string = "SELECT token FROM baskets WHERE token = ($1)";
     return await this.pool.query(query, [tokenValue]);

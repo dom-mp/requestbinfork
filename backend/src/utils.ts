@@ -1,6 +1,4 @@
-// import { IncomingHttpHeaders } from "http";
-// import pool from "./controllers/postgresql";
-// import type { Token, Basket, Request } from "./types";
+import { IncomingHttpHeaders } from "http";
 import { QueryResult } from "pg";
 import PostgresController from "./controllers/postgresql";
 
@@ -30,14 +28,14 @@ export async function generateToken(): Promise<string> {
   }
 }
 
-// export function headersToString(headers: IncomingHttpHeaders): string {
-//   let headerString = "";
-//   for (const key in headers) {
-//     headerString += `${key}: ${headers[key]}\n`;
-//   }
+export function headersToString(headers: IncomingHttpHeaders): string {
+  let headerString = "";
+  for (const key in headers) {
+    headerString += `${key}: ${headers[key]}\n`;
+  }
 
-//   return headerString;
-// }
+  return headerString;
+}
 
 // export async function getBasketName(name: string): Promise<string | null> {
 //   const query: string = "SELECT name FROM baskets WHERE name = ($1)";

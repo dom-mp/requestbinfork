@@ -24,17 +24,11 @@ if (!useMockAPI) {
 }
 
 
-// router.get("/baskets", async (_req: Request, res: Response) => {
-//   const query: string = "SELECT * FROM baskets";
-//   try {
-//     const response: QueryResult<Basket> = await pool.query(query);
-//     const baskets = response.rows.map(({ name }) => name);
-//     res.status(200).json({ baskets });
-//   } catch (err) {
-//     console.error("Error while getting basket names: ", err);
-//     throw new Error("Failed to get basket names");
-//   }
-// });
+router.get("/baskets", async (_req: Request, res: Response) => {
+    const response = await pg.getBaskets();
+    const baskets = response.map(({ name }) => name);
+    res.status(200).json({ baskets });
+});
 
 router.get("/generate_name", async (_req: Request, res: Response) => {
   let basketName: string = "";
@@ -74,25 +68,25 @@ router.post("/baskets/:name", async (req: Request, res: Response) => {
   res.status(200).send();
 });
 
-// router.delete(
-//   "/baskets/:name",
-//   (_req: Request<{ name: string }>, _res: Response) => {
-//   }
-// );
+router.delete(
+  "/baskets/:name",
+  (_req: Request<{ name: string }>, _res: Response) => {
+  }
+);
 
-// router.delete(
-//   "/:name/requests",
-//   (_req: Request<{ name: string }>, _res: Response) => {}
-// );
+router.delete(
+  "/:name/requests",
+  (_req: Request<{ name: string }>, _res: Response) => {}
+);
 
-// router.get(
-//   "/baskets/:name/requests",
-//   (_req: Request<{ name: string }>, _res: Response) => {}
-// );
+router.get(
+  "/baskets/:name/requests",
+  (_req: Request<{ name: string }>, _res: Response) => {}
+);
 
-// router.delete(
-//   "/baskets/:name/requests",
-//   (_req: Request<{ name: string }>, _res: Response) => {}
-// );
+router.delete(
+  "/baskets/:name/requests",
+  (_req: Request<{ name: string }>, _res: Response) => {}
+);
 
 export default router;
