@@ -43,6 +43,9 @@ router.get("/generate_token", async (req: Request, res: Response) => {
   if (typeof basketName !== "string") {
     res.status(422).send("missing basket name");
     return;
+  } else if (await isBasketNameUnique(basketName)) {
+    res.status(422).send("basket does not exist");
+    return;
   }
 
   let token: string = await generateToken();
