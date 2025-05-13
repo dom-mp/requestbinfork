@@ -45,8 +45,8 @@ class PostgresController {
     try {
       return (await this.pool.query(query)).rows;
     } catch (err) {
-      console.error("Error while getting basket names: ", err);
-      throw new Error("Failed to get basket names");
+      console.error("PostgreSQL: Error while getting basket names: ", err);
+      throw new Error("PostgreSQL: Failed to get basket names");
     }
   }
 
@@ -57,7 +57,7 @@ class PostgresController {
     if (result.rows.length > 0) {
       return result.rows[0].name;
     } else {
-      console.error("Basket not found");
+      console.error("PostgreSQL: Basket not found");
       return null;
     }
   }
@@ -83,11 +83,11 @@ class PostgresController {
         basketName,
       ]);
 
-      console.log("Inserted token:", result.rows[0]);
+      console.log("PostgreSQL: Inserted token:", result.rows[0]);
       return result.rows[0];
     } catch (err) {
-      console.error("Error inserting token:", token);
-      throw new Error("Failed to store token");
+      console.error("PostgreSQL: Error inserting token:", token);
+      throw new Error("PostgreSQL: Failed to store token");
     }
   }
 
@@ -96,10 +96,10 @@ class PostgresController {
 
     try {
       await this.pool.query(query, [basketName]);
-      console.log("Basket created");
+      console.log("PostgreSQL: Basket created");
     } catch (err) {
-      console.error("Error creating basket");
-      throw new Error("Failed to create basket");
+      console.error("PostgreSQL: Error creating basket");
+      throw new Error("PostgreSQL: Failed to create basket");
     }
   }
 
@@ -120,11 +120,11 @@ class PostgresController {
         headers,
         bodyMongoId,
       ]);
-      console.log("Inserted request:", result.rows[0]);
+      console.log("PostgreSQL: Inserted request:", result.rows[0]);
       return result.rows[0];
     } catch (err) {
       console.error(
-        "Error inserting request:",
+        "PostgreSQL: Error inserting request:",
         {
           basketName,
           sentAt,
@@ -134,7 +134,44 @@ class PostgresController {
         },
         err
       );
-      throw new Error("Failed to store request");
+      throw new Error("PostgreSQL: Failed to store request");
+    }
+  }
+
+  public async getBasketRequestBodyIds(basketName: string): Promise<string[]> {
+    const query = "SELECT body_mongo_id FROM requests WHERE basket_name = ($1)";
+    try {
+      const result: QueryResult = await this.pool.query(query, [basketName]);
+      return result.rows
+        .filter(({ body_mongo_id }) => body_mongo_id)
+        .map((record) => record.body_mongo_id);
+    } catch (error) {
+      console.error(
+        "PostgreSQL: Error getting basket request body IDs for basket: ",
+        basketName,
+        error
+      );
+      throw new Error("PostgreSQL: Failed to get basket request body IDs");
+    }
+  }
+
+  public async deleteBasketRequests(basketName: string): Promise<boolean> {
+    const query = "DELETE FROM requests WHERE basket_name = ($1)";
+    try {
+      const result: QueryResult = await this.pool.query(query, [basketName]);
+      console.log(
+        "PostgreSQL: ",
+        result.rowCount,
+        " deleted requests for basket",
+        basketName
+      );
+      return true;
+    } catch (error) {
+      console.error(
+        `PostgreSQL: Error deleting requests bodies for basket: ${basketName}:`,
+        error
+      );
+      return false;
     }
   }
 }
