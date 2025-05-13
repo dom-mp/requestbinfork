@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router";
 import apiService from "./services/requestBinAPI";
 import { Container, Box, Stack, useMediaQuery } from "@mui/material";
 import { ThemeProvider, useTheme } from "@mui/material/styles";
+import theme from "./theme.ts";
 import CssBaseline from "@mui/material/CssBaseline";
 import Nav from "./components/Nav";
 import Basket from "./components/Basket";
@@ -13,8 +14,7 @@ import MyBasketsFab from "./components/MyBasketsFab";
 function App() {
   const [baskets, setBaskets] = useState<Array<string>>([]);
   const [drawerState, setDrawerState] = useState(false);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(useTheme().breakpoints.down("sm"));
 
   // load initial state
   useEffect(() => {
