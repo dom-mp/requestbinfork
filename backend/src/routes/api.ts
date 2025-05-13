@@ -1,17 +1,8 @@
 import express, { Request, Response } from "express";
-// import pool from "../controllers/postgresql";
-// import { QueryResult } from "pg";
 import {
-  // isBasketNameUnique,
   generateRandomString,
   generateToken,
-  // storeToken,
-  // addNewBasket,
 } from "../utils";
-// import type {
-//   // Request as RequestType,
-//   Basket,
-// } from "../types";
 import PostgresController from "../controllers/postgresql";
 
 const router = express.Router();
