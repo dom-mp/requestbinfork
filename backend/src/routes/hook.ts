@@ -22,6 +22,7 @@ router.all("/:name", async (req: Request<{ name: string }>, res: Response) => {
 
     if (req.body) {
       mongo = new MongoController();
+      await mongo.connectToDatabase();
       request.mongoBodyId = await mongo.saveRequestBody(req.body);
       await mongo.closeConnection();
     }

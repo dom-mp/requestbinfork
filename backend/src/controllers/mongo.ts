@@ -7,24 +7,12 @@ class MongoController {
 
   constructor(dbName: string = "requestBodies") {
     this.dbName = dbName;
-    this.connectToDatabase();
 
     const schema = new mongoose.Schema<RequestBody>({
       request: mongoose.Schema.Types.Mixed,
     });
 
     this.requestBodyModel = this.createModel(schema);
-  }
-
-  private async connectToDatabase(): Promise<void> {
-    try {
-      if (mongoose.connection.readyState !== 1) {
-        await mongoose.connect(`mongodb://localhost:27017/${this.dbName}`);
-        console.log("Connected to MongoDB");
-      }
-    } catch (error: any) {
-      console.error(`Error connecting to MongoDB: ${error.message}`);
-    }
   }
 
   private createSchema(schema: mongoose.Schema): mongoose.Schema {
@@ -41,7 +29,24 @@ class MongoController {
 
   private createModel(schema: mongoose.Schema): mongoose.Model<RequestBody> {
     const jsonSchema = this.createSchema(schema);
+    const modelName = "RequestBody";
+
+    if (mongoose.models[modelName]) {
+      return mongoose.models[modelName] as mongoose.Model<RequestBody>;
+    }
+
     return mongoose.model<RequestBody>("RequestBody", jsonSchema);
+  }
+
+  public async connectToDatabase(): Promise<void> {
+    try {
+      if (mongoose.connection.readyState !== 1) {
+        await mongoose.connect(`mongodb://localhost:27017/${this.dbName}`);
+        console.log("Connected to MongoDB");
+      }
+    } catch (error: any) {
+      console.error(`Error connecting to MongoDB: ${error.message}`);
+    }
   }
 
   public getModel(): mongoose.Model<RequestBody> {
