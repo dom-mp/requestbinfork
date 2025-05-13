@@ -112,6 +112,6 @@ export async function saveRequest({
       headers,
       mongoBodyId,
     }, err);
-    throw new Error("Failed to store request,");
+    throw new Error("Failed to store request");
   }
 }
