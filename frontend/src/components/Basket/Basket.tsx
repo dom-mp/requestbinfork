@@ -18,7 +18,6 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
 
-
 const Basket = () => {
   const basketName = useParams().basketName ?? "";
   const [requests, setRequests] = useState<Array<RequestType>>([]);
@@ -37,6 +36,7 @@ const Basket = () => {
     if (!confirm(`Delete basket "${basketName}"?`)) return;
 
     await apiService.deleteBasket(basketName);
+    setRequests(await apiService.getRequests(basketName));
     navigate("/");
     alert(`Basket "${basketName}" successfully deleted.`);
   };
