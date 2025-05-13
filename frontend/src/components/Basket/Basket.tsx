@@ -61,7 +61,7 @@ const Basket = () => {
               onClick={async () => {
                 // TODO: fix link
                 await navigator.clipboard.writeText(
-                  `https://placeholder.com/hook/${basketName}`,
+                  `https://placeholder.com/hook/${basketName}`
                 );
               }}
             >
