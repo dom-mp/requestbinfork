@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import type { Request as RequestType } from "../../types";
 import apiService from "../../services/requestBinAPI";
 import { handleAPIError } from "../../utils";
@@ -20,16 +20,7 @@ const Basket = () => {
   const basketName = useParams().basketName ?? "";
   const [requests, setRequests] = useState<Array<RequestType>>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-
-  const populateBasket = (basketName: string) => {
-    try {
-      apiService.getRequests(basketName).then((mockBaskets) => {
-        setRequests(mockBaskets);
-      });
-    } catch (error: unknown) {
-      handleAPIError(error);
-    }
-  };
+  const navigate = useNavigate();
 
   const handleCopyLinkButtonClick = async () => {
     // TODO: fix link
@@ -40,7 +31,15 @@ const Basket = () => {
   };
 
   useEffect(() => {
-    populateBasket(basketName);
+    apiService
+      .getRequests(basketName)
+      .then((mockBaskets) => {
+        setRequests(mockBaskets);
+      })
+      .catch((error: unknown) => {
+        navigate("/");
+        handleAPIError(error);
+      });
   }, [basketName]);
 
   return (
