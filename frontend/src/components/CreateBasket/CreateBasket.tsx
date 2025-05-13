@@ -23,7 +23,10 @@ const CreateBasket = ({ setBaskets }: CreateBasketProps) => {
   useEffect(() => {
     apiService
       .generateName()
-      .then((generatedName) => setBasketName(generatedName));
+      .then((generatedName) => setBasketName(generatedName))
+      .catch((error: unknown) => {
+        handleAPIError(error);
+      });
   }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
