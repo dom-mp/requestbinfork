@@ -72,9 +72,9 @@ class MongoController {
       }
       console.log("Request found", requestSaved.request);
       return requestSaved.request;
-    } catch (err) {
-      console.error("Error fetching request body:", err);
-      throw err;
+    } catch (error) {
+      console.error("Error fetching request body:", error);
+      throw error;
     }
   }
 
