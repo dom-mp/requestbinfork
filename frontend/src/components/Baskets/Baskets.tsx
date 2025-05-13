@@ -3,6 +3,7 @@ import {
   List,
   ListItem,
   ListItemIcon,
+  ListItemText,
   Typography,
   Drawer,
   Stack,
@@ -44,6 +45,7 @@ const Baskets = ({ baskets, drawerState, setDrawerState }: BasketsProps) => {
               key={basketName}
               component={Link}
               to={`/baskets/${basketName}`}
+              divider={true}
               sx={{
                 color: "primary.main",
                 "&:hover": {
@@ -55,7 +57,7 @@ const Baskets = ({ baskets, drawerState, setDrawerState }: BasketsProps) => {
               <ListItemIcon>
                 <ArchiveIcon sx={{ color: "primary.main" }} />
               </ListItemIcon>
-              {basketName}
+              <ListItemText>/{basketName}</ListItemText>
             </ListItem>
           ))}
         </List>
