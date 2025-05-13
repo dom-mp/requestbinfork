@@ -1,7 +1,7 @@
 import express from "express";
 import mockApiRouter from "./routes/mockApi";
 import apiRouter from "./routes/api";
-// import hookRouter from "./routes/hook";
+import hookRouter from "./routes/hook";
 
 const app = express();
 app.use(express.json());
@@ -22,7 +22,7 @@ if (useMockAPI) {
   app.use("/mockApi", mockApiRouter);
 } else {
   app.use("/api", apiRouter);
-  // app.use("/hook", hookRouter);
+  app.use("/hook", hookRouter);
 }
 
 app.listen(PORT, () => {

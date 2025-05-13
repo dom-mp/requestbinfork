@@ -37,45 +37,4 @@ export function headersToString(headers: IncomingHttpHeaders): string {
   return headerString;
 }
 
-// export async function getBasketName(name: string): Promise<string | null> {
-//   const query: string = "SELECT name FROM baskets WHERE name = ($1)";
-//   const result: QueryResult = await pool.query(query, [name]);
 
-//   if (result.rows.length > 0) {
-//     return result.rows[0].name;
-//   } else {
-//     console.error("Basket not found");
-//     return null;
-//   }
-// }
-
-// export async function saveRequest({
-//   basketName,
-//   sentAt,
-//   method,
-//   headers,
-//   mongoBodyId,
-// }: Request) {
-//   const query: string = `INSERT INTO requests (basket_name, sent_at, method, headers, body_mongo_id)
-//      VALUES ($1, $2, $3, $4, $5) RETURNING *`;
-//   try {
-//     const result: QueryResult = await pool.query(query, [
-//       basketName,
-//       sentAt,
-//       method,
-//       headers,
-//       mongoBodyId,
-//     ]);
-//     console.log("Inserted request:", result.rows[0]);
-//     return result.rows[0];
-//   } catch (err) {
-//     console.error("Error inserting request:", {
-//       basketName,
-//       sentAt,
-//       method,
-//       headers,
-//       mongoBodyId,
-//     }, err);
-//     throw new Error("Failed to store request");
-//   }
-// }

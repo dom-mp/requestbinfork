@@ -1,5 +1,5 @@
 import { Pool, PoolClient, QueryResult } from "pg";
-import { Basket } from "../types";
+import { Basket, Request } from "../types";
 
 class PostgresController {
   private dbName: string;
@@ -50,6 +50,18 @@ class PostgresController {
     }
   }
 
+  public async getBasketName(name: string): Promise<string | null> {
+    const query: string = "SELECT name FROM baskets WHERE name = ($1)";
+    const result: QueryResult = await this.pool.query(query, [name]);
+
+    if (result.rows.length > 0) {
+      return result.rows[0].name;
+    } else {
+      console.error("Basket not found");
+      return null;
+    }
+  }
+
   public async getToken(tokenValue: string) {
     const query: string = "SELECT token FROM baskets WHERE token = ($1)";
     return await this.pool.query(query, [tokenValue]);
@@ -88,6 +100,41 @@ class PostgresController {
     } catch (err) {
       console.error("Error creating basket");
       throw new Error("Failed to create basket");
+    }
+  }
+
+  public async saveRequest({
+    basketName,
+    sentAt,
+    method,
+    headers,
+    bodyMongoId,
+  }: Request) {
+    const query: string = `INSERT INTO requests (basket_name, sent_at, method, headers, body_mongo_id)
+       VALUES ($1, $2, $3, $4, $5) RETURNING *`;
+    try {
+      const result: QueryResult = await this.pool.query(query, [
+        basketName,
+        sentAt,
+        method,
+        headers,
+        bodyMongoId,
+      ]);
+      console.log("Inserted request:", result.rows[0]);
+      return result.rows[0];
+    } catch (err) {
+      console.error(
+        "Error inserting request:",
+        {
+          basketName,
+          sentAt,
+          method,
+          headers,
+          bodyMongoId,
+        },
+        err
+      );
+      throw new Error("Failed to store request");
     }
   }
 }
