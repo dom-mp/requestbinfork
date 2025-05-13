@@ -62,28 +62,17 @@ router.get("/generate_token", async (req: Request, res: Response) => {
   res.status(200).json({ token });
 });
 
-// router.post("/baskets/:name", async (req: Request, res: Response) => {
-//   const basketName = req.params.name;
+router.post("/baskets/:name", async (req: Request, res: Response) => {
+  const basketName = req.params.name;
 
-//   if ((await isBasketNameUnique(basketName)) === false) {
-//     res.status(409).json("Basket name taken");
-//     return;
-//   }
+  if (await pg.doesBasketExist(basketName)) {
+    res.status(409).json("Basket name taken");
+    return;
+  }
 
-//   try {
-//     await addNewBasket(basketName);
-//   } catch (err) {
-//     let message = "";
-
-//     if (err instanceof Error) {
-//       message = err.message;
-//     }
-
-//     res.status(500).json(message);
-//     return;
-//   }
-//   res.status(200).send();
-// });
+  await pg.addNewBasket(basketName);
+  res.status(200).send();
+});
 
 // router.delete(
 //   "/baskets/:name",

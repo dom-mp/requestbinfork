@@ -30,43 +30,6 @@ export async function generateToken(): Promise<string> {
   }
 }
 
-// export async function storeToken(
-//   token: string,
-//   basketName: string
-// ): Promise<Token> {
-//   const query: string =
-//     "UPDATE baskets SET token = ($1) WHERE name = $2 RETURNING *";
-
-//   try {
-//     const result: QueryResult = await pool.query(query, [
-//       token,
-//       basketName,
-//     ]);
-//     console.log("Inserted token:", result.rows[0]);
-//     return result.rows[0];
-//   } catch (err) {
-//     console.error("Error inserting token:", token);
-//     throw new Error("Failed to store token");
-//   }
-// }
-
-// export async function isBasketNameUnique(name: string): Promise<boolean> {
-//   const query: string = "SELECT * FROM baskets WHERE name = ($1)";
-//   let result: QueryResult = await pool.query(query, [name]);
-//   return (result.rowCount ?? 0) === 0;
-// }
-
-// export async function addNewBasket(basketName: string) {
-//   const query = "INSERT INTO baskets(name) VALUES ($1)";
-
-//   try {
-//     await pool.query(query, [basketName]);
-//   } catch (err) {
-//     console.error("Error creating basket");
-//     throw new Error("Failed to create basket");
-//   }
-// }
-
 // export function headersToString(headers: IncomingHttpHeaders): string {
 //   let headerString = "";
 //   for (const key in headers) {

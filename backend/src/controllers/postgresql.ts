@@ -67,6 +67,18 @@ class PostgresController {
       throw new Error("Failed to store token");
     }
   }
+
+  public async addNewBasket(basketName: string) {
+    const query = "INSERT INTO baskets(name) VALUES ($1)";
+
+    try {
+      await this.pool.query(query, [basketName]);
+      console.log("Basket created");
+    } catch (err) {
+      console.error("Error creating basket");
+      throw new Error("Failed to create basket");
+    }
+  }
 }
 
 export default PostgresController;
