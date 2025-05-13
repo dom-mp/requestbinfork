@@ -1,30 +1,30 @@
 import express, { Request, Response } from "express";
-import {
-  getBasketId,
-  headersToString,
-  saveRequestBody,
-  saveRequest,
-} from "../utils";
-
+import { getBasketName, headersToString, saveRequest } from "../utils";
 import { Request as RequestType } from "../types";
+import MongoController from "../controllers/mongo";
 
 const router = express.Router();
 
 router.all("/:name", async (req: Request<{ name: string }>, res: Response) => {
   const basketName = req.params.name;
-  const basketId: number | null = await getBasketId(basketName);
+  const exists: string | null = await getBasketName(basketName);
 
-  if (basketId) {
+  if (exists) {
     const request: RequestType = {
-      basketId,
+      basketName,
       sentAt: new Date().toISOString(),
       method: req.method,
       headers: headersToString(req.headers),
       mongoBodyId: null,
-    }
+    };
+
+    let mongo: MongoController;
 
     if (req.body) {
-      request.mongoBodyId = await saveRequestBody(req.body);
+      mongo = new MongoController();
+      await mongo.connectToDatabase();
+      request.mongoBodyId = await mongo.saveRequestBody(req.body);
+      await mongo.closeConnection();
     }
 
     saveRequest(request);

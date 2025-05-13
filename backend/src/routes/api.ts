@@ -15,6 +15,7 @@ import type {
 
 const router = express.Router();
 
+
 router.get("/baskets", async (_req: Request, res: Response) => {
   const query: string = "SELECT * FROM baskets";
   try {
@@ -79,7 +80,8 @@ router.post("/baskets/:name", async (req: Request, res: Response) => {
 
 router.delete(
   "/baskets/:name",
-  (_req: Request<{ name: string }>, _res: Response) => {}
+  (_req: Request<{ name: string }>, _res: Response) => {
+  }
 );
 
 router.delete(

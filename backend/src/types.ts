@@ -27,7 +27,7 @@ export interface RequestBody extends Document {
 }
 
 export interface Request {
-  basketId: number;
+  basketName: string;
   sentAt: string;
   method: string;
   headers: string;
