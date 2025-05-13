@@ -66,6 +66,20 @@ function App() {
       </BrowserRouter>
 
       <MyBasketsFab setDrawerState={setDrawerState} isMobile={isMobile} />
+
+      <Box
+        className="bg-image"
+        sx={{
+          position: "absolute",
+          inset: 0,
+          zIndex: -10,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "background.default",
+          backgroundImage: `radial-gradient(${theme.palette.primary.light} 1px, transparent 1px)`,
+          backgroundSize: "16px 16px",
+        }}
+      ></Box>
     </ThemeProvider>
   );
 }
