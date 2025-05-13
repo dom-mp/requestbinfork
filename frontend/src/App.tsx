@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
 import apiService from "./services/requestBinAPI";
+import { handleAPIError } from "./utils.ts";
 import { Container, Box, Stack, useMediaQuery } from "@mui/material";
 import { ThemeProvider, useTheme } from "@mui/material/styles";
 import theme from "./theme.ts";
@@ -18,7 +19,12 @@ function App() {
 
   // load initial state
   useEffect(() => {
-    apiService.getBaskets().then((baskets) => setBaskets(baskets));
+    apiService
+      .getBaskets()
+      .then((baskets) => setBaskets(baskets))
+      .catch((error: unknown) => {
+        handleAPIError(error);
+      });
   }, []);
 
   return (
