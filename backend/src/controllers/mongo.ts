@@ -77,6 +77,18 @@ class MongoController {
       throw err;
     }
   }
+
+  public async closeConnection(): Promise<void> {
+    try {
+      if (mongoose.connection.readyState !== 0) {
+        await mongoose.disconnect();
+        console.log("Disconnected from MongoDB");
+      }
+    } catch (error: any) {
+      console.error("Error disconnecting from MongoDB:", error.message);
+      throw new Error("Failed to close MongoDB connection");
+    }
+  }
 }
 
 export default MongoController;

@@ -30,6 +30,7 @@ router.all("/:name", async (req: Request<{ name: string }>, res: Response) => {
     }
 
     saveRequest(request);
+    await mongo.closeConnection();
     res.status(204).json();
   } else {
     res.status(404).json({ message: "Basket not found" });
