@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import type { ChangeEvent } from "react";
+import { useNavigate } from "react-router";
 import apiService from "../../services/requestBinAPI";
 import { handleAPIError } from "../../utils";
 import {
@@ -17,6 +18,7 @@ interface CreateBasketProps {
 
 const CreateBasket = ({ setBaskets }: CreateBasketProps) => {
   const [basketName, setBasketName] = useState<string>("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     apiService
@@ -32,6 +34,7 @@ const CreateBasket = ({ setBaskets }: CreateBasketProps) => {
 
       // TODO: success message notification should be handled in react eventually
       alert(`Basket ${verifiedName} successfully created.`);
+      navigate(`/baskets/${basketName}`);
     } catch (error: unknown) {
       handleAPIError(error);
     }
