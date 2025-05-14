@@ -12,20 +12,17 @@ import {
   Tooltip,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { hasContentTypeJSON } from "../../utils";
 
 const Request = ({
   basketName,
   method,
   sentAt,
   headers,
-  requestBodyContentType,
   requestBody,
 }: RequestProps & { basketName: string }) => {
   const [showJSON, setShowJSON] = useState(false);
-  const isJSON: boolean = requestBodyContentType
-    .trim()
-    .toLowerCase()
-    .endsWith("json");
+  const isJSON: boolean = hasContentTypeJSON(headers);
 
   const rawJSON = (
     <Box>

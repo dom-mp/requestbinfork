@@ -13,3 +13,16 @@ export const handleAPIError = (e: unknown, msg?: string) => {
   }
   alert(msg);
 };
+
+export const hasContentTypeJSON = (headers: string) => {
+  const headerArray = headers.split("\n");
+  return headerArray.some((header) => {
+    const [key, value] = header.split(/:\s+/);
+    if (
+      key.toLowerCase() === "content-type" &&
+      value.toLowerCase() === "application/json"
+    ) {
+      return true;
+    }
+  });
+};
