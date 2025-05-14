@@ -109,7 +109,9 @@ router.get(
       };
     });
 
-    Promise.all(mappedResult).then((outcome) => res.status(200).send(outcome));
+    Promise.all(mappedResult).then((outcome) =>
+      res.status(200).json({ outcome })
+    );
   }
 );
 
