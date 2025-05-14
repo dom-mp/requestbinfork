@@ -1,7 +1,9 @@
 import axios from "axios";
 import type { Request } from "../types";
 
-const API_BASE = "/mockApi";
+// TODO: this should be an env var
+// const API_BASE = "/mockApi";
+const API_BASE = "/api";
 
 const getBaskets = async (): Promise<Array<string>> => {
   const response = await axios.get(`${API_BASE}/baskets`);
