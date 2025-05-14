@@ -3,28 +3,33 @@ import { useParams, useNavigate } from "react-router";
 import type { Request as RequestType } from "../../types";
 import apiService from "../../services/requestBinAPI";
 import { handleAPIError } from "../../utils";
+import DialogComponent from "../Dialog";
 import RequestList from "../RequestList";
-import {
-  Button,
-  Paper,
-  Container,
-  Stack,
-  Divider,
-  Typography,
-  Tooltip,
-  Snackbar,
-} from "@mui/material";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
+import Container from "@mui/material/Container";
+import Stack from "@mui/material/Stack";
+import Divider from "@mui/material/Divider";
+import Typography from "@mui/material/Typography";
+import Tooltip from "@mui/material/Tooltip";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
 
 interface BasketProps {
+  setSnackbarMessage: React.Dispatch<React.SetStateAction<string>>;
+  setSnackbarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   getBaskets: () => Promise<void>;
 }
-const Basket = ({ getBaskets }: BasketProps) => {
+
+const Basket = ({
+  setSnackbarMessage,
+  setSnackbarOpen,
+  getBaskets,
+}: BasketProps) => {
   const basketName = useParams().basketName ?? "";
   const [requests, setRequests] = useState<Array<RequestType>>([]);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [dialogState, setDialogState] = useState(false);
   const navigate = useNavigate();
 
   const handleCopyLinkButtonClick = async () => {
@@ -32,16 +37,21 @@ const Basket = ({ getBaskets }: BasketProps) => {
     await navigator.clipboard.writeText(
       `https://placeholder.com/hook/${basketName}`,
     );
+    setSnackbarMessage("Basket URL copied to clipboard");
     setSnackbarOpen(true);
   };
 
   const handleDeleteBasketButtonClick = async () => {
-    if (!confirm(`Delete basket "${basketName}"?`)) return;
-
-    await apiService.deleteBasket(basketName);
-    await getBaskets();
-    navigate("/");
-    alert(`Basket "${basketName}" successfully deleted.`);
+    try {
+      await apiService.deleteBasket(basketName);
+      // Just rerequesting baskets, prioritise consistency > performance for now
+      await getBaskets();
+      setSnackbarMessage(`Deleted basket /${basketName}`);
+      setSnackbarOpen(true);
+      navigate("/");
+    } catch (error: unknown) {
+      handleAPIError(error);
+    }
   };
 
   const handleClearBasketButtonClick = async () => {
@@ -74,14 +84,6 @@ const Basket = ({ getBaskets }: BasketProps) => {
         padding: 2,
       }}
     >
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={() => setSnackbarOpen(false)}
-        message="Basket url copied to clipboard."
-      />
-
       <Container>
         <Stack
           direction="row"
@@ -113,10 +115,16 @@ const Basket = ({ getBaskets }: BasketProps) => {
           </Tooltip>
 
           <Tooltip arrow title="Delete basket" placement="top">
-            <Button color="error" onClick={handleDeleteBasketButtonClick}>
+            <Button color="error" onClick={() => setDialogState(true)}>
               <DeleteForeverIcon />
             </Button>
           </Tooltip>
+
+          <DialogComponent
+            dialogState={dialogState}
+            setDialogState={setDialogState}
+            handleConfirm={handleDeleteBasketButtonClick}
+          />
 
           <Typography variant="subtitle2">
             {requests.length} requests

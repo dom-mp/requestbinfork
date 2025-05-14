@@ -2,7 +2,11 @@ import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
 import apiService from "./services/requestBinAPI";
 import { handleAPIError } from "./utils.ts";
-import { Container, Box, Stack, useMediaQuery } from "@mui/material";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import Snackbar from "@mui/material/Snackbar";
 import { ThemeProvider, useTheme } from "@mui/material/styles";
 import theme from "./theme.ts";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -16,6 +20,8 @@ function App() {
   const [baskets, setBaskets] = useState<Array<string>>([]);
   const [drawerState, setDrawerState] = useState(false);
   const isMobile = useMediaQuery(useTheme().breakpoints.down("sm"));
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const getBaskets = async () => {
     try {
@@ -37,6 +43,15 @@ function App() {
         <Container maxWidth="xl" sx={{ minWidth: "350px" }}>
           <CssBaseline />
           <Nav />
+
+          <Snackbar
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            open={snackbarOpen}
+            autoHideDuration={3000}
+            onClose={() => setSnackbarOpen(false)}
+            message={snackbarMessage}
+          />
+
           <Box
             component="main"
             sx={{
@@ -57,12 +72,24 @@ function App() {
               <Routes>
                 <Route
                   path="/"
-                  element={<CreateBasket setBaskets={setBaskets} />}
+                  element={
+                    <CreateBasket
+                      setBaskets={setBaskets}
+                      setSnackbarMessage={setSnackbarMessage}
+                      setSnackbarOpen={setSnackbarOpen}
+                    />
+                  }
                 />
                 <Route path="baskets">
                   <Route
                     path=":basketName"
-                    element={<Basket getBaskets={getBaskets} />}
+                    element={
+                      <Basket
+                        setSnackbarMessage={setSnackbarMessage}
+                        setSnackbarOpen={setSnackbarOpen}
+                        getBaskets={getBaskets}
+                      />
+                    }
                   />
                 </Route>
               </Routes>
@@ -71,7 +98,6 @@ function App() {
                 baskets={baskets}
                 drawerState={drawerState}
                 setDrawerState={setDrawerState}
-                isMobile={isMobile}
               />
             </Stack>
           </Box>

@@ -1,20 +1,17 @@
 import { NavLink } from "react-router";
-import {
-  MenuList,
-  MenuItem,
-  ListSubheader,
-  ListItemIcon,
-  Divider,
-  Typography,
-  Drawer,
-} from "@mui/material";
+import MenuList from "@mui/material/MenuList";
+import MenuItem from "@mui/material/MenuItem";
+import ListSubheader from "@mui/material/ListSubheader";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Divider from "@mui/material/Divider";
+import Typography from "@mui/material/Typography";
+import Drawer from "@mui/material/Drawer";
 import ArchiveIcon from "@mui/icons-material/Archive";
 
 interface BasketsProps {
   baskets: Array<string>;
   drawerState: boolean;
-  setDrawerState: (boolean: boolean) => void;
-  isMobile: boolean;
+  setDrawerState: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const MyBaskets = ({ baskets, drawerState, setDrawerState }: BasketsProps) => {
@@ -30,7 +27,7 @@ const MyBaskets = ({ baskets, drawerState, setDrawerState }: BasketsProps) => {
         },
       }}
     >
-      <MenuList dense={true} onClick={() => setDrawerState(false)}>
+      <MenuList dense={false} onClick={() => setDrawerState(false)}>
         <ListSubheader>My Baskets</ListSubheader>
         <Divider />
 
@@ -41,7 +38,7 @@ const MyBaskets = ({ baskets, drawerState, setDrawerState }: BasketsProps) => {
             to={`/baskets/${basketName}`}
             sx={{
               "& .MuiListItemIcon-root": {
-                color: "text.primary",
+                color: "text.secondary",
               },
               "&:hover": {
                 color: "secondary.contrastText",
@@ -68,7 +65,7 @@ const MyBaskets = ({ baskets, drawerState, setDrawerState }: BasketsProps) => {
             }}
           >
             <ListItemIcon>
-              <ArchiveIcon />
+              <ArchiveIcon fontSize="small" />
             </ListItemIcon>
 
             <Typography variant="inherit" noWrap>
