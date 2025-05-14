@@ -1,5 +1,6 @@
 import { Pool, PoolClient, QueryResult } from "pg";
 import { Basket, Request } from "../types";
+import { normalizeRequest } from "../utils";
 
 class PostgresController {
   private dbName: string;
@@ -185,6 +186,14 @@ class PostgresController {
       console.error(`PostgreSQL: Error deleting basket ${basketName}`, error);
       return false;
     }
+  }
+
+  public async fetchBasketContents(basketName: string): Promise<Request[]> {
+    const query = "SELECT * FROM requests WHERE basket_name = $1";
+
+    const result = await this.pool.query(query, [basketName]);
+
+    return result.rows.map((basketItem) => normalizeRequest(basketItem));
   }
 }
 
