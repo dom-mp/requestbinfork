@@ -76,7 +76,7 @@ router.delete(
     await mongo.closeConnection();
 
     if (successfulDelete) res.status(204).json();
-  }
+  },
 );
 
 router.get(
@@ -112,7 +112,7 @@ router.get(
     Promise.all(mappedResult).then((requests) =>
       res.status(200).json({ requests })
     );
-  }
+  },
 );
 
 router.delete(
@@ -135,7 +135,7 @@ router.delete(
     await mongo.closeConnection();
 
     if (successfulDelete) res.status(204).json();
-  }
+  },
 );
 
 export default router;
