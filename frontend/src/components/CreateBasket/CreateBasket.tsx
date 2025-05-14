@@ -41,6 +41,9 @@ const CreateBasket = ({
     event.preventDefault();
     try {
       const verifiedName = await apiService.createBasket(basketName);
+      const generatedToken = await apiService.getToken(basketName);
+
+      localStorage.setItem(`basketName_${verifiedName}`, generatedToken);
       setBaskets((baskets) => baskets.concat(verifiedName));
       setSnackbarMessage(`${verifiedName} basket was created!`);
       setSnackbarOpen(true);
@@ -52,7 +55,7 @@ const CreateBasket = ({
   };
 
   const handleBasketNameChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setBasketName(event.currentTarget.value);
   };
