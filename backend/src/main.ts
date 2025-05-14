@@ -23,6 +23,7 @@ app.use((req, _res, next) => {
 });
 
 app.use(express.json());
+app.use(express.static("dist"));
 
 const PORT = 3000;
 const useMockAPI = process.env.USE_MOCK_API;
