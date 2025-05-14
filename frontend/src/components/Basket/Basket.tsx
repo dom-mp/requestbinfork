@@ -4,15 +4,13 @@ import type { Request as RequestType } from "../../types";
 import apiService from "../../services/requestBinAPI";
 import { handleAPIError } from "../../utils";
 import RequestList from "../RequestList";
-import {
-  Button,
-  Paper,
-  Container,
-  Stack,
-  Divider,
-  Typography,
-  Tooltip,
-} from "@mui/material";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
+import Container from "@mui/material/Container";
+import Stack from "@mui/material/Stack";
+import Divider from "@mui/material/Divider";
+import Typography from "@mui/material/Typography";
+import Tooltip from "@mui/material/Tooltip";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import DialogComponent from "./../Dialog/Dialog";
@@ -20,12 +18,14 @@ import DialogComponent from "./../Dialog/Dialog";
 interface BasketProps {
   setSnackbarMessage: React.Dispatch<React.SetStateAction<string>>;
   setSnackbarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setBaskets: React.Dispatch<React.SetStateAction<Array<string>>>;
   baskets: Array<string>;
 }
 
 const Basket = ({
   setSnackbarMessage,
   setSnackbarOpen,
+  setBaskets,
   baskets,
 }: BasketProps) => {
   const basketName = useParams().basketName ?? "";
@@ -50,7 +50,9 @@ const Basket = ({
       navigate("/");
       // This is to delete from local
       const index = baskets.indexOf(basketName);
-      baskets.splice(index, 1);
+      const basketsCopy = baskets.slice();
+      basketsCopy.splice(index, 1);
+      setBaskets(basketsCopy);
     } catch (error: unknown) {
       handleAPIError(error);
     } finally {
@@ -111,7 +113,7 @@ const Basket = ({
           <DialogComponent
             dialogState={dialogState}
             setDialogState={setDialogState}
-            handleDeleteBasketButtonClick={handleDeleteBasketButtonClick}
+            handleConfirm={handleDeleteBasketButtonClick}
           />
 
           <Typography variant="subtitle2">

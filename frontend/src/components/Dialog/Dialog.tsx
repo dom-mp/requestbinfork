@@ -10,13 +10,13 @@ import {
 interface DialogComponentProps {
   dialogState: boolean;
   setDialogState: React.Dispatch<React.SetStateAction<boolean>>;
-  handleDeleteBasketButtonClick: () => void;
+  handleConfirm: () => void;
 }
 
 const DialogComponent = ({
   dialogState,
   setDialogState,
-  handleDeleteBasketButtonClick,
+  handleConfirm,
 }: DialogComponentProps) => {
   return (
     <Dialog
@@ -28,20 +28,20 @@ const DialogComponent = ({
         Are you sure you want to delete this Basket?
       </DialogTitle>
       <DialogContent>
-        <DialogContentText>Deleting this is permanent.</DialogContentText>
+        <DialogContentText>This is an irreversible action</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={() => setDialogState(false)} autoFocus>
-          Disagree
+          Cancel
         </Button>
         <Button
           onClick={() => {
             setDialogState(false);
-            handleDeleteBasketButtonClick();
+            handleConfirm();
           }}
           autoFocus
         >
-          Agree
+          Confirm
         </Button>
       </DialogActions>
     </Dialog>
