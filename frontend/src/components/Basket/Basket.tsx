@@ -55,13 +55,14 @@ const Basket = ({ getBaskets }: BasketProps) => {
   useEffect(() => {
     apiService
       .getRequests(basketName)
-      .then((mockBaskets) => {
-        setRequests(mockBaskets);
+      .then((requests) => {
+        setRequests(requests);
       })
       .catch((error: unknown) => {
         navigate("/");
         handleAPIError(error);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [basketName]);
 
   return (
