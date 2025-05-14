@@ -109,9 +109,7 @@ router.get(
       };
     });
 
-    Promise.all(mappedResult)
-      .then((outcome) => res.status(200).send(outcome))
-      .then(() => mongo.closeConnection());
+    Promise.all(mappedResult).then((outcome) => res.status(200).send(outcome));
   }
 );
 
