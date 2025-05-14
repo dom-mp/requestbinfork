@@ -2,7 +2,7 @@ import { Pool, PoolClient, QueryResult } from "pg";
 import { Basket, Request } from "../types";
 import { normalizeRequest } from "../utils";
 
-class PostgresController {
+class PostgresClient {
   private dbName: string;
   pool: Pool;
 
@@ -81,8 +81,6 @@ class PostgresController {
         token,
         basketName,
       ]);
-
-      console.log("PostgreSQL: Token saved");
       return result.rows[0];
     } catch (err) {
       console.error("PostgreSQL: Error inserting token:", token);
@@ -95,7 +93,6 @@ class PostgresController {
 
     try {
       await this.pool.query(query, [basketName]);
-      console.log("PostgreSQL: Basket created");
     } catch (err) {
       console.error("PostgreSQL: Error creating basket");
       throw new Error("PostgreSQL: Failed to create basket");
@@ -119,7 +116,6 @@ class PostgresController {
         headers,
         bodyMongoId,
       ]);
-      console.log("PostgreSQL: Request saved");
       return result.rows[0];
     } catch (err) {
       console.error(
@@ -178,7 +174,6 @@ class PostgresController {
     const query = "DELETE FROM baskets WHERE name = ($1)";
     try {
       await this.pool.query(query, [basketName]);
-      console.log(`PostgreSQL: Basket ${basketName} has been deleted `);
       return true;
     } catch (error) {
       console.error(`PostgreSQL: Error deleting basket ${basketName}`, error);
@@ -193,4 +188,4 @@ class PostgresController {
   }
 }
 
-export default PostgresController;
+export default PostgresClient;
