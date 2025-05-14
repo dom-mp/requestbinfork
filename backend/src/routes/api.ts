@@ -100,8 +100,6 @@ router.get(
         requestBody = await mongo.getRequestBody(request.bodyMongoId);
       }
 
-      console.log(typeof requestBody);
-
       return {
         basketName: request.basketName,
         sentAt: request.sentAt,
