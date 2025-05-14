@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import mockApiRouter from "./routes/mockApi";
 import apiRouter from "./routes/api";
@@ -24,7 +25,6 @@ app.use((req, _res, next) => {
 
 app.use(express.json());
 
-const PORT = 3000;
 const useMockAPI = process.env.USE_MOCK_API;
 // allows us to run the mock api conditionally with:
 // `API_MODE=mock  ts-node-dev ./src/main.ts`
@@ -49,6 +49,6 @@ app.get("/ping", (_req, res) => {
   res.send("pong");
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Server running on port ${process.env.PORT}`);
 });
