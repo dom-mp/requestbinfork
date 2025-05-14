@@ -174,6 +174,18 @@ class PostgresController {
       return false;
     }
   }
+
+  public async deleteBasket(basketName: string): Promise<boolean> {
+    const query = "DELETE FROM baskets WHERE name = ($1)";
+    try {
+      await this.pool.query(query, [basketName]);
+      console.log(`PostgreSQL: Basket ${basketName} has been deleted `);
+      return true;
+    } catch (error) {
+      console.error(`PostgreSQL: Error deleting basket ${basketName}`, error);
+      return false;
+    }
+  }
 }
 
 export default PostgresController;

@@ -58,7 +58,25 @@ router.post("/baskets/:name", async (req: Request, res: Response) => {
 
 router.delete(
   "/baskets/:name",
-  (_req: Request<{ name: string }>, _res: Response) => {}
+  async (req: Request<{ name: string }>, res: Response) => {
+    const basketName = req.params.name;
+
+    if (!(await pg.doesBasketExist(basketName))) {
+      res.status(404).send("Basket does not exist");
+      return;
+    }
+
+    const mongoIds = await pg.getBasketRequestBodyIds(basketName);
+    const mongo = new MongoController();
+    await mongo.connectToDatabase();
+
+    let successfulDelete =
+      (await mongo.deleteBodyRequests(mongoIds)) &&
+      (await pg.deleteBasket(basketName));
+    await mongo.closeConnection();
+
+    if (successfulDelete) res.status(204).json();
+  }
 );
 
 router.get(
