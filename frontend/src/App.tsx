@@ -8,7 +8,7 @@ import theme from "./theme.ts";
 import CssBaseline from "@mui/material/CssBaseline";
 import Nav from "./components/Nav";
 import Basket from "./components/Basket";
-import Baskets from "./components/Baskets";
+import MyBaskets from "./components/MyBaskets";
 import CreateBasket from "./components/CreateBasket";
 import MyBasketsFab from "./components/MyBasketsFab";
 
@@ -17,14 +17,18 @@ function App() {
   const [drawerState, setDrawerState] = useState(false);
   const isMobile = useMediaQuery(useTheme().breakpoints.down("sm"));
 
+  const getBaskets = async () => {
+    try {
+      const baskets = await apiService.getBaskets();
+      setBaskets(baskets);
+    } catch (error: unknown) {
+      handleAPIError(error, "Your baskets could not be found.");
+    }
+  };
+
   // load initial state
   useEffect(() => {
-    apiService
-      .getBaskets()
-      .then((baskets) => setBaskets(baskets))
-      .catch((error: unknown) => {
-        handleAPIError(error);
-      });
+    getBaskets();
   }, []);
 
   return (
@@ -56,11 +60,14 @@ function App() {
                   element={<CreateBasket setBaskets={setBaskets} />}
                 />
                 <Route path="baskets">
-                  <Route path=":basketName" element={<Basket />} />
+                  <Route
+                    path=":basketName"
+                    element={<Basket getBaskets={getBaskets} />}
+                  />
                 </Route>
               </Routes>
 
-              <Baskets
+              <MyBaskets
                 baskets={baskets}
                 drawerState={drawerState}
                 setDrawerState={setDrawerState}
