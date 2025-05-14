@@ -27,6 +27,7 @@ const Basket = ({
   setSnackbarOpen,
   getBaskets,
 }: BasketProps) => {
+  const POLLING_INTERVAL = 1000; // poll every 1 second
   const basketName = useParams().basketName ?? "";
   const [requests, setRequests] = useState<Array<RequestType>>([]);
   const [dialogState, setDialogState] = useState(false);
@@ -63,16 +64,19 @@ const Basket = ({
   };
 
   useEffect(() => {
-    apiService
-      .getRequests(basketName)
-      .then((requests) => {
+    const fetchRequests = async () => {
+      try {
+        const requests = await apiService.getRequests(basketName);
         setRequests(requests);
-      })
-      .catch((error: unknown) => {
-        navigate("/");
+      } catch (error: unknown) {
         handleAPIError(error);
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      }
+    };
+
+    fetchRequests();
+    const intervalId = setInterval(fetchRequests, POLLING_INTERVAL);
+
+    return () => clearInterval(intervalId);
   }, [basketName]);
 
   return (
