@@ -42,6 +42,18 @@ const Basket = ({ setSnackbarMessage, setSnackbarOpen }: BasketProps) => {
     // await apiService.deleteBasket(basketName);
     // navigate("/");
     // alert(`Basket "${basketName}" successfully deleted.`);
+    // console.log("trere");
+    // setDialogState(false);
+
+    try {
+      await apiService.deleteBasket(basketName);
+      setSnackbarMessage(`Deleted basket /${basketName}`);
+      setSnackbarOpen(true);
+      navigate("/");
+    } catch (error: unknown) {
+      handleAPIError(error);
+    } finally {
+    }
   };
 
   useEffect(() => {
@@ -90,14 +102,16 @@ const Basket = ({ setSnackbarMessage, setSnackbarOpen }: BasketProps) => {
           </Typography>
 
           <Tooltip arrow title="Delete basket" placement="top">
-            <Button color="error" onClick={handleDeleteBasketButtonClick}>
-              <DialogComponent
-                dialogState={!dialogState}
-                setDialogState={setDialogState}
-              />
+            <Button color="error" onClick={() => setDialogState(true)}>
               <DeleteForeverIcon />
             </Button>
           </Tooltip>
+
+          <DialogComponent
+            dialogState={dialogState}
+            setDialogState={setDialogState}
+            handleDeleteBasketButtonClick={handleDeleteBasketButtonClick}
+          />
 
           <Typography variant="subtitle2">
             {requests.length} requests
