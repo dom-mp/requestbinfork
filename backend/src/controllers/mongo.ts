@@ -9,7 +9,7 @@ class MongoController {
     this.dbName = dbName;
 
     const schema = new mongoose.Schema<RequestBody>({
-      request: mongoose.Schema.Types.Mixed,
+      request: mongoose.Schema.Types.String,
     });
 
     this.requestBodyModel = this.createModel(schema);

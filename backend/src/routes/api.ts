@@ -100,6 +100,8 @@ router.get(
         requestBody = await mongo.getRequestBody(request.bodyMongoId);
       }
 
+      console.log(typeof requestBody);
+
       return {
         basketName: request.basketName,
         sentAt: request.sentAt,
@@ -109,8 +111,8 @@ router.get(
       };
     });
 
-    Promise.all(mappedResult).then((outcome) =>
-      res.status(200).json({ outcome })
+    Promise.all(mappedResult).then((requests) =>
+      res.status(200).json({ requests })
     );
   }
 );
