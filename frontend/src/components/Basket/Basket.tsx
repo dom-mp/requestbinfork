@@ -17,26 +17,25 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
 
 interface BasketProps {
+  originURL: string;
   setSnackbarMessage: React.Dispatch<React.SetStateAction<string>>;
   setSnackbarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   getBaskets: () => Promise<void>;
 }
 
 const Basket = ({
+  originURL,
   setSnackbarMessage,
   setSnackbarOpen,
   getBaskets,
 }: BasketProps) => {
-  const basketName = useParams().basketName ?? "";
   const [requests, setRequests] = useState<Array<RequestType>>([]);
   const [dialogState, setDialogState] = useState(false);
   const navigate = useNavigate();
+  const basketName = useParams().basketName ?? "";
 
   const handleCopyLinkButtonClick = async () => {
-    // TODO: fix link
-    await navigator.clipboard.writeText(
-      `https://placeholder.com/hook/${basketName}`,
-    );
+    await navigator.clipboard.writeText(`${originURL}/hook/${basketName}`);
     setSnackbarMessage("Basket URL copied to clipboard");
     setSnackbarOpen(true);
   };
@@ -132,7 +131,11 @@ const Basket = ({
         </Stack>
 
         <Divider />
-        <RequestList basketName={basketName} requests={requests} />
+        <RequestList
+          originURL={originURL}
+          basketName={basketName}
+          requests={requests}
+        />
       </Container>
     </Paper>
   );

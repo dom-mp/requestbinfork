@@ -1,4 +1,4 @@
-import type { Request as RequestProps } from "../../types";
+import type { Request as RequestType } from "../../types";
 import StyledJSONTree from "../StyledJSONTree";
 import { useState } from "react";
 import {
@@ -14,7 +14,12 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { hasContentTypeJSON } from "../../utils";
 
+interface RequestProps extends RequestType {
+  originURL: string;
+}
+
 const Request = ({
+  originURL,
   basketName,
   method,
   sentAt,
@@ -75,7 +80,7 @@ const Request = ({
         <Accordion>
           <AccordionDetails>
             <Typography component="code">
-              PATH: placeholder.com/hook/{basketName}
+              PATH: {originURL}/hook/{basketName}
             </Typography>
           </AccordionDetails>
         </Accordion>
