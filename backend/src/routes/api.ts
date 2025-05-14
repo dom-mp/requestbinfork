@@ -1,17 +1,5 @@
 import express, { Request, Response } from "express";
-// import pool from "../controllers/postgresql";
-// import { QueryResult } from "pg";
-import {
-  // isBasketNameUnique,
-  generateRandomString,
-  generateToken,
-  // storeToken,
-  // addNewBasket,
-} from "../utils";
-// import type {
-//   // Request as RequestType,
-//   Basket,
-// } from "../types";
+import { generateRandomString, generateToken } from "../utils";
 import PostgresController from "../controllers/postgresql";
 import MongoController from "../controllers/mongo";
 
@@ -44,10 +32,10 @@ router.get("/generate_token", async (req: Request, res: Response) => {
   const basketName = req.query.name;
 
   if (typeof basketName !== "string") {
-    res.status(422).send("missing basket name");
+    res.status(422).send("Missing basket name");
     return;
   } else if (!(await pg.doesBasketExist(basketName))) {
-    res.status(404).send("basket does not exist");
+    res.status(404).send("Basket does not exist");
     return;
   }
 
@@ -114,7 +102,25 @@ router.get(
 
 router.delete(
   "/baskets/:name/requests",
-  (_req: Request<{ name: string }>, _res: Response) => {}
+  async (req: Request<{ name: string }>, res: Response) => {
+    const basketName = req.params.name;
+
+    if (!(await pg.doesBasketExist(basketName))) {
+      res.status(404).send("Basket does not exist");
+      return;
+    }
+
+    const mongoIds = await pg.getBasketRequestBodyIds(basketName);
+    const mongo = new MongoController();
+    await mongo.connectToDatabase();
+
+    let successfulDelete =
+      (await mongo.deleteBodyRequests(mongoIds)) &&
+      (await pg.deleteBasketRequests(basketName));
+    await mongo.closeConnection();
+
+    if (successfulDelete) res.status(204).json();
+  }
 );
 
 export default router;

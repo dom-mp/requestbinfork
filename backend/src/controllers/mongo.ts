@@ -62,8 +62,8 @@ class MongoController {
       console.log("MongoDB: Saved request", saved);
       return saved.toJSON().id!;
     } catch (error) {
-      console.error("Error saving request:", error);
-      throw new Error("Failed to save request body");
+      console.error("MongoDB: Error saving request:", error);
+      throw new Error("MongoDB: Failed to save request body");
     }
   }
 
@@ -73,13 +73,30 @@ class MongoController {
         _id: bodyMongoId,
       });
       if (!requestSaved) {
-        throw new Error("Request not found");
+        throw new Error("MongoDB: Request not found");
       }
-      console.log("Request found", requestSaved.request);
+      console.log("MongoDB: Request found", requestSaved.request);
       return requestSaved.request;
     } catch (error) {
-      console.error("Error fetching request body:", error);
+      console.error("MongoDB: Error fetching request body:", error);
       throw error;
+    }
+  }
+
+  public async deleteBodyRequests(ids: string[]): Promise<boolean> {
+    try {
+      const objectIds = ids.map((id) => new mongoose.Types.ObjectId(id));
+      const deleteRequestBodies = await this.requestBodyModel.deleteMany({
+        _id: { $in: objectIds },
+      });
+      console.log(
+        "MongoDB: Deleted request bodies:",
+        deleteRequestBodies.deletedCount
+      );
+      return true;
+    } catch (error) {
+      console.error("MongoDB: Error deleting request bodies:", error);
+      return false;
     }
   }
 
