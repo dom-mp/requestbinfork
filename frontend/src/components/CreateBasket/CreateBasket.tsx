@@ -69,6 +69,7 @@ const CreateBasket = ({ setBaskets }: CreateBasketProps) => {
             <TextField
               required
               autoFocus
+              spellCheck={false}
               variant="outlined"
               id="new-basket-name"
               color="info"
