@@ -24,6 +24,11 @@ const Request = ({
   const [showJSON, setShowJSON] = useState(false);
   const isJSON: boolean = hasContentTypeJSON(headers);
 
+  // Catch null body + type check
+  if (typeof requestBody !== "string") {
+    requestBody = JSON.stringify(requestBody);
+  }
+
   const rawJSON = (
     <Box>
       <Typography
