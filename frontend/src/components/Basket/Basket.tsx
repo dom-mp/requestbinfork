@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router";
 import type { Request as RequestType } from "../../types";
 import apiService from "../../services/requestBinAPI";
 import { handleAPIError } from "../../utils";
+import DialogComponent from "../Dialog";
 import RequestList from "../RequestList";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
@@ -13,20 +14,18 @@ import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import DialogComponent from "./../Dialog/Dialog";
+import ClearAllIcon from "@mui/icons-material/ClearAll";
 
 interface BasketProps {
   setSnackbarMessage: React.Dispatch<React.SetStateAction<string>>;
   setSnackbarOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setBaskets: React.Dispatch<React.SetStateAction<Array<string>>>;
-  baskets: Array<string>;
+  getBaskets: () => Promise<void>;
 }
 
 const Basket = ({
   setSnackbarMessage,
   setSnackbarOpen,
-  setBaskets,
-  baskets,
+  getBaskets,
 }: BasketProps) => {
   const basketName = useParams().basketName ?? "";
   const [requests, setRequests] = useState<Array<RequestType>>([]);
@@ -36,7 +35,7 @@ const Basket = ({
   const handleCopyLinkButtonClick = async () => {
     // TODO: fix link
     await navigator.clipboard.writeText(
-      `https://placeholder.com/hook/${basketName}`
+      `https://placeholder.com/hook/${basketName}`,
     );
     setSnackbarMessage("Basket URL copied to clipboard");
     setSnackbarOpen(true);
@@ -45,30 +44,35 @@ const Basket = ({
   const handleDeleteBasketButtonClick = async () => {
     try {
       await apiService.deleteBasket(basketName);
+      // Just rerequesting baskets, prioritise consistency > performance for now
+      await getBaskets();
       setSnackbarMessage(`Deleted basket /${basketName}`);
       setSnackbarOpen(true);
       navigate("/");
-      // This is to delete from local
-      const index = baskets.indexOf(basketName);
-      const basketsCopy = baskets.slice();
-      basketsCopy.splice(index, 1);
-      setBaskets(basketsCopy);
     } catch (error: unknown) {
       handleAPIError(error);
-    } finally {
     }
+  };
+
+  const handleClearBasketButtonClick = async () => {
+    if (!confirm(`Delete all requests in basket "${basketName}"?`)) return;
+
+    await apiService.clearBasket(basketName);
+    setRequests(await apiService.getRequests(basketName));
+    alert(`Basket "${basketName}" successfully cleared.`);
   };
 
   useEffect(() => {
     apiService
       .getRequests(basketName)
-      .then((mockBaskets) => {
-        setRequests(mockBaskets);
+      .then((requests) => {
+        setRequests(requests);
       })
       .catch((error: unknown) => {
         navigate("/");
         handleAPIError(error);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [basketName]);
 
   return (
@@ -103,6 +107,12 @@ const Basket = ({
               </Button>
             </Tooltip>
           </Typography>
+
+          <Tooltip arrow title="Clear basket" placement="top">
+            <Button color="warning" onClick={handleClearBasketButtonClick}>
+              <ClearAllIcon />
+            </Button>
+          </Tooltip>
 
           <Tooltip arrow title="Delete basket" placement="top">
             <Button color="error" onClick={() => setDialogState(true)}>

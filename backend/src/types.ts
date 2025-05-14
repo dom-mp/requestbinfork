@@ -26,3 +26,11 @@ export interface Request {
   headers: string;
   bodyMongoId: string | null;
 }
+
+export interface PostgresRequestRow {
+  basket_name: string;
+  sent_at: string;
+  method: string;
+  headers: string;
+  body_mongo_id: string;
+}

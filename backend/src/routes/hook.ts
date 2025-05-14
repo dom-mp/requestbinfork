@@ -1,46 +1,39 @@
 import express, { Request, Response } from "express";
 import { headersToString } from "../utils";
 import { Request as RequestType } from "../types";
-import MongoController from "../controllers/mongo";
-import PostgresController from "../controllers/postgresql";
+import MongoClient from "../controllers/mongo";
+import PostgresClient from "../controllers/postgresql";
 
-const router = express.Router();
-const useMockAPI = process.env.USE_MOCK_API;
-let pg: PostgresController;
+export default function hookRouter(pg: PostgresClient, mongo: MongoClient) {
+  const router = express.Router();
 
-if (!useMockAPI) {
-  pg = new PostgresController();
-}
+  router.all("/:name", async (req: Request<{ name: string }>, res: Response) => {
+    const basketName = req.params.name;
+    const exists: string | null = await pg.getBasketName(basketName);
 
-router.all("/:name", async (req: Request<{ name: string }>, res: Response) => {
-  console.log("here");
-  const basketName = req.params.name;
-  const exists: string | null = await pg.getBasketName(basketName);
+    if (exists) {
+      const request: RequestType = {
+        basketName,
+        sentAt: new Date().toISOString(),
+        method: req.method,
+        headers: headersToString(req.headers),
+        bodyMongoId: null,
+      };
 
-  if (exists) {
-    const request: RequestType = {
-      basketName,
-      sentAt: new Date().toISOString(),
-      method: req.method,
-      headers: headersToString(req.headers),
-      bodyMongoId: null,
-    };
 
-    let mongo: MongoController;
+      if ((req as any).rawBody) {
 
-    if (req.body) {
-      mongo = new MongoController();
-      await mongo.connectToDatabase();
-      request.bodyMongoId = await mongo.saveRequestBody(req.body);
-      await mongo.closeConnection();
+        const rawBody = (req as any).rawBody;
+        request.bodyMongoId = await mongo.saveRequestBody(rawBody);
+      }
+
+      pg.saveRequest(request);
+      res.status(204).json();
+    } else {
+      res.status(404).json({ message: "Basket not found" });
+      return;
     }
+  });
 
-    pg.saveRequest(request);
-    res.status(204).json();
-  } else {
-    res.status(404).json({ message: "Basket not found" });
-    return;
-  }
-});
-
-export default router;
+  return router;
+}

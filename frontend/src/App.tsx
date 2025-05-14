@@ -12,7 +12,7 @@ import theme from "./theme.ts";
 import CssBaseline from "@mui/material/CssBaseline";
 import Nav from "./components/Nav";
 import Basket from "./components/Basket";
-import Baskets from "./components/Baskets";
+import MyBaskets from "./components/MyBaskets";
 import CreateBasket from "./components/CreateBasket";
 import MyBasketsFab from "./components/MyBasketsFab";
 
@@ -23,14 +23,18 @@ function App() {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
+  const getBaskets = async () => {
+    try {
+      const baskets = await apiService.getBaskets();
+      setBaskets(baskets);
+    } catch (error: unknown) {
+      handleAPIError(error, "Your baskets could not be found.");
+    }
+  };
+
   // load initial state
   useEffect(() => {
-    apiService
-      .getBaskets()
-      .then((baskets) => setBaskets(baskets))
-      .catch((error: unknown) => {
-        handleAPIError(error);
-      });
+    getBaskets();
   }, []);
 
   return (
@@ -83,15 +87,14 @@ function App() {
                       <Basket
                         setSnackbarMessage={setSnackbarMessage}
                         setSnackbarOpen={setSnackbarOpen}
-                        setBaskets={setBaskets}
-                        baskets={baskets}
+                        getBaskets={getBaskets}
                       />
                     }
                   />
                 </Route>
               </Routes>
 
-              <Baskets
+              <MyBaskets
                 baskets={baskets}
                 drawerState={drawerState}
                 setDrawerState={setDrawerState}

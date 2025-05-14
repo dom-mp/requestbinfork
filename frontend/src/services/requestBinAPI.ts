@@ -1,21 +1,27 @@
 import axios from "axios";
 import type { Request } from "../types";
 
-const API_BASE = "/mockApi";
+// TODO: this should be an env var
+// const API_BASE = "/mockApi";
+const API_BASE = "/api";
 
 const getBaskets = async (): Promise<Array<string>> => {
   const response = await axios.get(`${API_BASE}/baskets`);
   return response.data.baskets;
 };
 
+const getToken = async (): Promise<string> => {
+  const response = await axios.get(`${API_BASE}/generate_token`);
+  return response.data.token;
+};
+
 const generateName = async (): Promise<string> => {
   const response = await axios.get(`${API_BASE}/generate_name`);
-  return response.data.name;
+  return response.data.basketName;
 };
 
 const createBasket = async (basketName: string): Promise<string> => {
   const response = await axios.post(`${API_BASE}/baskets/${basketName}`);
-  console.log(response);
   return response.data.basketName;
 };
 
@@ -27,7 +33,14 @@ const getRequests = async (basketName: string): Promise<Array<Request>> => {
   const response = await axios.get(
     `${API_BASE}/baskets/${basketName}/requests`,
   );
-  return response.data.requests;
+
+  const requests = response.data.requests;
+  console.log(requests);
+  // TODO: this is a quick-fix; replace with zod
+  if (!Array.isArray(requests)) throw new Error("Received unexpected type.");
+
+  console.log(typeof requests[0]);
+  return requests;
 };
 
 const clearBasket = async (basketName: string): Promise<void> => {
@@ -36,6 +49,7 @@ const clearBasket = async (basketName: string): Promise<void> => {
 
 export default {
   getBaskets,
+  getToken,
   generateName,
   createBasket,
   deleteBasket,

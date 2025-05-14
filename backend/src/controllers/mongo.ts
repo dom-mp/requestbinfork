@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { RequestBody } from "../types";
 
-class MongoController {
+class MongoClient {
   private dbName: string;
   private requestBodyModel: mongoose.Model<RequestBody>;
 
@@ -9,7 +9,7 @@ class MongoController {
     this.dbName = dbName;
 
     const schema = new mongoose.Schema<RequestBody>({
-      request: mongoose.Schema.Types.Mixed,
+      request: mongoose.Schema.Types.String,
     });
 
     this.requestBodyModel = this.createModel(schema);
@@ -59,11 +59,10 @@ class MongoController {
         request: requestBody,
       });
       const saved = await newRequestBody.save();
-      console.log("MongoDB: Saved request", saved);
       return saved.toJSON().id!;
     } catch (error) {
-      console.error("Error saving request:", error);
-      throw new Error("Failed to save request body");
+      console.error("MongoDB: Error saving request:", error);
+      throw new Error("MongoDB: Failed to save request body");
     }
   }
 
@@ -73,13 +72,25 @@ class MongoController {
         _id: bodyMongoId,
       });
       if (!requestSaved) {
-        throw new Error("Request not found");
+        throw new Error("MongoDB: Request not found");
       }
-      console.log("Request found", requestSaved.request);
       return requestSaved.request;
     } catch (error) {
-      console.error("Error fetching request body:", error);
+      console.error("MongoDB: Error fetching request body:", error);
       throw error;
+    }
+  }
+
+  public async deleteBodyRequests(ids: string[]): Promise<boolean> {
+    try {
+      const objectIds = ids.map((id) => new mongoose.Types.ObjectId(id));
+      await this.requestBodyModel.deleteMany({
+        _id: { $in: objectIds },
+      });
+      return true;
+    } catch (error) {
+      console.error("MongoDB: Error deleting request bodies:", error);
+      return false;
     }
   }
 
@@ -96,4 +107,4 @@ class MongoController {
   }
 }
 
-export default MongoController;
+export default MongoClient;

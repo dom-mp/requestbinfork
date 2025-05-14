@@ -76,6 +76,7 @@ const CreateBasket = ({
             <TextField
               required
               autoFocus
+              spellCheck={false}
               variant="outlined"
               id="new-basket-name"
               color="info"
