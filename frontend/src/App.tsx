@@ -17,14 +17,18 @@ function App() {
   const [drawerState, setDrawerState] = useState(false);
   const isMobile = useMediaQuery(useTheme().breakpoints.down("sm"));
 
+  const getBaskets = async () => {
+    try {
+      const baskets = await apiService.getBaskets();
+      setBaskets(baskets);
+    } catch (error: unknown) {
+      handleAPIError(error, "Your baskets could not be found.");
+    }
+  };
+
   // load initial state
   useEffect(() => {
-    apiService
-      .getBaskets()
-      .then((baskets) => setBaskets(baskets))
-      .catch((error: unknown) => {
-        handleAPIError(error);
-      });
+    getBaskets();
   }, []);
 
   return (
@@ -56,7 +60,10 @@ function App() {
                   element={<CreateBasket setBaskets={setBaskets} />}
                 />
                 <Route path="baskets">
-                  <Route path=":basketName" element={<Basket />} />
+                  <Route
+                    path=":basketName"
+                    element={<Basket getBaskets={getBaskets} />}
+                  />
                 </Route>
               </Routes>
 
