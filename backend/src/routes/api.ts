@@ -53,7 +53,7 @@ router.post("/baskets/:name", async (req: Request, res: Response) => {
   }
 
   await pg.addNewBasket(basketName);
-  res.status(200).send();
+  res.status(200).send({ basketName });
 });
 
 router.delete(
