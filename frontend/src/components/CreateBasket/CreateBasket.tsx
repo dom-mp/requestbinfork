@@ -84,7 +84,6 @@ const CreateBasket = ({
               spellCheck={false}
               variant="outlined"
               id="new-basket-name"
-              color="info"
               value={basketName}
               onChange={handleBasketNameChange}
               size="medium"
@@ -93,8 +92,11 @@ const CreateBasket = ({
               }}
               slotProps={{
                 input: {
+                  sx: {
+                    color: "text.secondary",
+                  },
                   startAdornment: (
-                    <InputAdornment position="start">
+                    <InputAdornment position="start" sx={{ margin: 0 }}>
                       {originURL}/hook/
                     </InputAdornment>
                   ),
