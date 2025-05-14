@@ -1,6 +1,7 @@
 import { IncomingHttpHeaders } from "http";
 import { QueryResult } from "pg";
 import PostgresController from "./controllers/postgresql";
+import { Request, PostgresRequestRow } from "./types";
 
 export function generateRandomString() {
   return Math.random().toString(36).substring(2);
@@ -37,4 +38,12 @@ export function headersToString(headers: IncomingHttpHeaders): string {
   return headerString;
 }
 
-
+export function normalizeRequest(request: PostgresRequestRow): Request {
+  return {
+    basketName: request["basket_name"],
+    sentAt: request["sent_at"],
+    method: request["method"],
+    headers: request["headers"],
+    bodyMongoId: request["body_mongo_id"],
+  };
+}
