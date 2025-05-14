@@ -43,19 +43,12 @@ const Basket = ({
   };
 
   const handleDeleteBasketButtonClick = async () => {
-    // if (!confirm(`Delete basket "${basketName}"?`)) return;
-    // await apiService.deleteBasket(basketName);
-    // navigate("/");
-    // alert(`Basket "${basketName}" successfully deleted.`);
-    // console.log("trere");
-    // setDialogState(false);
-    console.log(baskets);
     try {
       await apiService.deleteBasket(basketName);
       setSnackbarMessage(`Deleted basket /${basketName}`);
       setSnackbarOpen(true);
       navigate("/");
-      // delete from local as well
+      // This is to delete from local
       const index = baskets.indexOf(basketName);
       baskets.splice(index, 1);
     } catch (error: unknown) {

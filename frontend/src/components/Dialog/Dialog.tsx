@@ -20,7 +20,6 @@ const DialogComponent = ({
 }: DialogComponentProps) => {
   return (
     <Dialog
-      // fullScreen={fullScreen}
       open={dialogState}
       onClose={() => setDialogState(false)}
       aria-labelledby="delete-basket"
