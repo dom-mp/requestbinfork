@@ -12,7 +12,7 @@ const getBaskets = async (): Promise<Array<string>> => {
 
 const generateName = async (): Promise<string> => {
   const response = await axios.get(`${API_BASE}/generate_name`);
-  return response.data.name;
+  return response.data.basketName;
 };
 
 const createBasket = async (basketName: string): Promise<string> => {
