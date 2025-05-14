@@ -174,6 +174,22 @@ class PostgresController {
       return false;
     }
   }
+
+  public async fetchBasketContents(basketName: string): Promise<Request[]> {
+    const query = "SELECT * FROM requests WHERE basket_name = $1";
+
+    const result = await this.pool.query(query, [basketName]);
+
+    return result.rows.map((basketItem) => {
+      return {
+        basketName: basketItem["basket_name"],
+        sentAt: basketItem["sent_at"],
+        method: basketItem["method"],
+        headers: basketItem["headers"].sp,
+        bodyMongoId: basketItem["body_mongo_id"],
+      };
+    });
+  }
 }
 
 export default PostgresController;

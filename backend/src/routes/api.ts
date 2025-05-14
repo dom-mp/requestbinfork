@@ -68,7 +68,36 @@ router.delete(
 
 router.get(
   "/baskets/:name/requests",
-  (_req: Request<{ name: string }>, _res: Response) => {}
+  async (req: Request<{ name: string }>, res: Response) => {
+    const basketName = req.params.name;
+
+    if ((await pg.doesBasketExist(basketName)) === false) {
+      res.status(422).send("basket does not exist");
+      return;
+    }
+
+    let result = await pg.fetchBasketContents(basketName);
+    const mongo = new MongoController();
+    await mongo.connectToDatabase();
+
+    let mappedResult = result.map(async (request) => {
+      let requestBody = null;
+
+      if (request.bodyMongoId) {
+        requestBody = await mongo.getRequestBody(request.bodyMongoId);
+      }
+
+      return {
+        basketName: request.basketName,
+        sentAt: request.sentAt,
+        method: request.method,
+        headers: request.headers,
+        request: requestBody,
+      };
+    });
+
+    Promise.all(mappedResult).then((outcome) => res.status(200).send(outcome));
+  }
 );
 
 router.delete(
