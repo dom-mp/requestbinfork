@@ -7,6 +7,7 @@ import PostgresClient from "./controllers/postgresql";
 import MongoClient from "./controllers/mongo";
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 // Middleware to store raw data in the request
 app.use((req, _res, next) => {
@@ -49,6 +50,6 @@ app.get("/ping", (_req, res) => {
   res.send("pong");
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`);
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
