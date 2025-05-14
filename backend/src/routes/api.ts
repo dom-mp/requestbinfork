@@ -109,8 +109,8 @@ router.get(
       };
     });
 
-    Promise.all(mappedResult).then((outcome) =>
-      res.status(200).json({ requests: outcome }),
+    Promise.all(mappedResult).then((requests) =>
+      res.status(200).json({ requests })
     );
   },
 );
