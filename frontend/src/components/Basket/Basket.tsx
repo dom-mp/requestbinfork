@@ -12,22 +12,27 @@ import {
   Divider,
   Typography,
   Tooltip,
-  Snackbar,
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-const Basket = () => {
+interface BasketProps {
+  setSnackbarMessage: React.Dispatch<React.SetStateAction<string>>;
+  setSnackbarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Basket = ({ setSnackbarMessage, setSnackbarOpen }: BasketProps) => {
   const basketName = useParams().basketName ?? "";
   const [requests, setRequests] = useState<Array<RequestType>>([]);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  // const [snackbarOpen, setSnackbarOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleCopyLinkButtonClick = async () => {
     // TODO: fix link
     await navigator.clipboard.writeText(
-      `https://placeholder.com/hook/${basketName}`,
+      `https://placeholder.com/hook/${basketName}`
     );
+    setSnackbarMessage("Basket URL copied to clipboard");
     setSnackbarOpen(true);
   };
 
@@ -60,13 +65,13 @@ const Basket = () => {
         padding: 2,
       }}
     >
-      <Snackbar
+      {/* <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={snackbarOpen}
         autoHideDuration={3000}
         onClose={() => setSnackbarOpen(false)}
         message="Basket url copied to clipboard."
-      />
+      /> */}
 
       <Container>
         <Stack

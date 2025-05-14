@@ -14,9 +14,15 @@ import {
 
 interface CreateBasketProps {
   setBaskets: React.Dispatch<React.SetStateAction<Array<string>>>;
+  setSnackbarMessage: React.Dispatch<React.SetStateAction<string>>;
+  setSnackbarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CreateBasket = ({ setBaskets }: CreateBasketProps) => {
+const CreateBasket = ({
+  setBaskets,
+  setSnackbarMessage,
+  setSnackbarOpen,
+}: CreateBasketProps) => {
   const [basketName, setBasketName] = useState<string>("");
   const navigate = useNavigate();
 
@@ -34,9 +40,10 @@ const CreateBasket = ({ setBaskets }: CreateBasketProps) => {
     try {
       const verifiedName = await apiService.createBasket(basketName);
       setBaskets((baskets) => baskets.concat(verifiedName));
+      setSnackbarMessage(`${verifiedName} basket was created!`);
+      setSnackbarOpen(true);
 
       // TODO: success message notification should be handled in react eventually
-      alert(`Basket ${verifiedName} successfully created.`);
       navigate(`/baskets/${basketName}`);
     } catch (error: unknown) {
       handleAPIError(error);
@@ -44,7 +51,7 @@ const CreateBasket = ({ setBaskets }: CreateBasketProps) => {
   };
 
   const handleBasketNameChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setBasketName(event.currentTarget.value);
   };

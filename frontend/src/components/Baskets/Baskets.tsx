@@ -13,11 +13,16 @@ import ArchiveIcon from "@mui/icons-material/Archive";
 interface BasketsProps {
   baskets: Array<string>;
   drawerState: boolean;
-  setDrawerState: (boolean: boolean) => void;
-  isMobile: boolean;
+  setDrawerState: React.Dispatch<React.SetStateAction<boolean>>;
+  snackbarMessage: boolean;
 }
 
-const Baskets = ({ baskets, drawerState, setDrawerState }: BasketsProps) => {
+const Baskets = ({
+  baskets,
+  drawerState,
+  setDrawerState,
+  snackbarMessage,
+}: BasketsProps) => {
   return (
     <Drawer
       anchor="right"
