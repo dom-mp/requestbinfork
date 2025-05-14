@@ -4,21 +4,26 @@ import EmptyBasketContent from "../EmptyBasketContent";
 import { List, ListItem } from "@mui/material";
 
 interface RequestListProps {
+  originURL: string;
   basketName: string;
   requests: Array<RequestType>;
 }
 
-const RequestList = ({ basketName, requests }: RequestListProps) => {
+const RequestList = ({ originURL, basketName, requests }: RequestListProps) => {
   return (
     <List>
       {requests.length ? (
         requests.map((request, i) => (
           <ListItem key={i}>
-            <Request {...request} basketName={basketName} />
+            <Request
+              originURL={originURL}
+              {...request}
+              basketName={basketName}
+            />
           </ListItem>
         ))
       ) : (
-        <EmptyBasketContent basketName={basketName} />
+        <EmptyBasketContent originURL={originURL} basketName={basketName} />
       )}
     </List>
   );

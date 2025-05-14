@@ -13,12 +13,14 @@ import {
 } from "@mui/material";
 
 interface CreateBasketProps {
+  originURL: string;
   setBaskets: React.Dispatch<React.SetStateAction<Array<string>>>;
   setSnackbarMessage: React.Dispatch<React.SetStateAction<string>>;
   setSnackbarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CreateBasket = ({
+  originURL,
   setBaskets,
   setSnackbarMessage,
   setSnackbarOpen,
@@ -43,7 +45,6 @@ const CreateBasket = ({
       setSnackbarMessage(`${verifiedName} basket was created!`);
       setSnackbarOpen(true);
 
-      // TODO: success message notification should be handled in react eventually
       navigate(`/baskets/${basketName}`);
     } catch (error: unknown) {
       handleAPIError(error);
@@ -51,11 +52,12 @@ const CreateBasket = ({
   };
 
   const handleBasketNameChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setBasketName(event.currentTarget.value);
   };
 
+  // TODO: set originURL to ngrok url for local testing
   return (
     <Paper
       elevation={4}
@@ -82,12 +84,15 @@ const CreateBasket = ({
               color="info"
               value={basketName}
               onChange={handleBasketNameChange}
-              sx={{ width: "26ch" }}
+              size="medium"
+              sx={{
+                flexGrow: 0,
+              }}
               slotProps={{
                 input: {
                   startAdornment: (
                     <InputAdornment position="start">
-                      placeholder.com/
+                      {originURL}/hook/
                     </InputAdornment>
                   ),
                 },

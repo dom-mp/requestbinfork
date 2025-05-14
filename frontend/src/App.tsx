@@ -22,6 +22,7 @@ function App() {
   const isMobile = useMediaQuery(useTheme().breakpoints.down("sm"));
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const originURL = window.location.origin;
 
   const getBaskets = async () => {
     try {
@@ -74,6 +75,7 @@ function App() {
                   path="/"
                   element={
                     <CreateBasket
+                      originURL={originURL}
                       setBaskets={setBaskets}
                       setSnackbarMessage={setSnackbarMessage}
                       setSnackbarOpen={setSnackbarOpen}
@@ -85,6 +87,7 @@ function App() {
                     path=":basketName"
                     element={
                       <Basket
+                        originURL={originURL}
                         setSnackbarMessage={setSnackbarMessage}
                         setSnackbarOpen={setSnackbarOpen}
                         getBaskets={getBaskets}
