@@ -20,9 +20,16 @@ const Request = ({
   sentAt,
   headers,
   requestBody,
-}: RequestProps & { basketName: string }) => {
+}: RequestProps) => {
   const [showJSON, setShowJSON] = useState(false);
   const isJSON: boolean = hasContentTypeJSON(headers);
+
+  // This is a temporary solution to the backend sending an array
+  // of js objects instead of an array of JSON strings
+  // TODO: Revert this;
+  if (typeof requestBody !== "string") {
+    requestBody = JSON.stringify(requestBody);
+  }
 
   const rawJSON = (
     <Box>
@@ -34,6 +41,7 @@ const Request = ({
       </Typography>
     </Box>
   );
+
   return (
     <Stack
       direction="row"
