@@ -13,6 +13,7 @@ import {
 //   Basket,
 // } from "../types";
 import PostgresController from "../controllers/postgresql";
+import MongoController from "../controllers/mongo";
 
 const router = express.Router();
 
@@ -23,11 +24,10 @@ if (!useMockAPI) {
   pg = new PostgresController();
 }
 
-
 router.get("/baskets", async (_req: Request, res: Response) => {
-    const response = await pg.getBaskets();
-    const baskets = response.map(({ name }) => name);
-    res.status(200).json({ baskets });
+  const response = await pg.getBaskets();
+  const baskets = response.map(({ name }) => name);
+  res.status(200).json({ baskets });
 });
 
 router.get("/generate_name", async (_req: Request, res: Response) => {
@@ -35,7 +35,7 @@ router.get("/generate_name", async (_req: Request, res: Response) => {
 
   do {
     basketName = generateRandomString().substring(2, 9);
-  } while ((await pg.doesBasketExist(basketName)));
+  } while (await pg.doesBasketExist(basketName));
 
   res.status(200).json({ basketName });
 });
@@ -46,7 +46,7 @@ router.get("/generate_token", async (req: Request, res: Response) => {
   if (typeof basketName !== "string") {
     res.status(422).send("missing basket name");
     return;
-  } else if (!await pg.doesBasketExist(basketName)) {
+  } else if (!(await pg.doesBasketExist(basketName))) {
     res.status(404).send("basket does not exist");
     return;
   }
@@ -70,8 +70,7 @@ router.post("/baskets/:name", async (req: Request, res: Response) => {
 
 router.delete(
   "/baskets/:name",
-  (_req: Request<{ name: string }>, _res: Response) => {
-  }
+  (_req: Request<{ name: string }>, _res: Response) => {}
 );
 
 router.delete(
@@ -81,7 +80,36 @@ router.delete(
 
 router.get(
   "/baskets/:name/requests",
-  (_req: Request<{ name: string }>, _res: Response) => {}
+  async (req: Request<{ name: string }>, res: Response) => {
+    const basketName = req.params.name;
+
+    if ((await pg.doesBasketExist(basketName)) === false) {
+      res.status(422).send("basket does not exist");
+      return;
+    }
+
+    let result = await pg.fetchBasketContents(basketName);
+    const mongo = new MongoController();
+    await mongo.connectToDatabase();
+
+    let mappedResult = result.map(async (request) => {
+      let requestBody = null;
+
+      if (request.bodyMongoId) {
+        requestBody = await mongo.getRequestBody(request.bodyMongoId);
+      }
+
+      return {
+        basketName: request.basketName,
+        sentAt: request.sentAt,
+        method: request.method,
+        headers: request.headers,
+        request: requestBody,
+      };
+    });
+
+    Promise.all(mappedResult).then((outcome) => res.status(200).send(outcome));
+  }
 );
 
 router.delete(
