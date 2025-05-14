@@ -10,7 +10,7 @@
     "db-init": "createdb requestbin && psql -d requestbin < schema.sql",
     "mock": "USE_MOCK_API=true ts-node-dev ./src/main.ts",
     "build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist ../backend",
-    "build:full": "npm run db-init && npm run build:ui"
+    "build:full": "npm install && npm run db-init && npm run build:ui"
   },
   "repository": {
     "type": "git",
