@@ -35,11 +35,10 @@ const getRequests = async (basketName: string): Promise<Array<Request>> => {
   );
 
   const requests = response.data.requests;
-  console.log(requests);
+
   // TODO: this is a quick-fix; replace with zod
   if (!Array.isArray(requests)) throw new Error("Received unexpected type.");
 
-  console.log(typeof requests[0]);
   return requests;
 };
 
