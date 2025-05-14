@@ -59,7 +59,7 @@ class MongoController {
         request: requestBody,
       });
       const saved = await newRequestBody.save();
-      console.log("MongoDB: Saved request", saved);
+      console.log("MongoDB: Request Saved");
       return saved.toJSON().id!;
     } catch (error) {
       console.error("MongoDB: Error saving request:", error);
@@ -75,7 +75,7 @@ class MongoController {
       if (!requestSaved) {
         throw new Error("MongoDB: Request not found");
       }
-      console.log("MongoDB: Request found", requestSaved.request);
+      console.log("MongoDB: Request found");
       return requestSaved.request;
     } catch (error) {
       console.error("MongoDB: Error fetching request body:", error);

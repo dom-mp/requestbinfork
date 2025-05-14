@@ -42,7 +42,6 @@ class PostgresController {
 
   public async getBaskets(): Promise<Basket[]> {
     const query: string = "SELECT * FROM baskets";
-
     try {
       return (await this.pool.query(query)).rows;
     } catch (err) {
@@ -54,7 +53,6 @@ class PostgresController {
   public async getBasketName(name: string): Promise<string | null> {
     const query: string = "SELECT name FROM baskets WHERE name = ($1)";
     const result: QueryResult = await this.pool.query(query, [name]);
-
     if (result.rows.length > 0) {
       return result.rows[0].name;
     } else {
@@ -84,7 +82,7 @@ class PostgresController {
         basketName,
       ]);
 
-      console.log("PostgreSQL: Inserted token:", result.rows[0]);
+      console.log("PostgreSQL: Token saved");
       return result.rows[0];
     } catch (err) {
       console.error("PostgreSQL: Error inserting token:", token);
@@ -121,7 +119,7 @@ class PostgresController {
         headers,
         bodyMongoId,
       ]);
-      console.log("PostgreSQL: Inserted request:", result.rows[0]);
+      console.log("PostgreSQL: Request saved");
       return result.rows[0];
     } catch (err) {
       console.error(
@@ -190,9 +188,7 @@ class PostgresController {
 
   public async fetchBasketContents(basketName: string): Promise<Request[]> {
     const query = "SELECT * FROM requests WHERE basket_name = $1";
-
     const result = await this.pool.query(query, [basketName]);
-
     return result.rows.map((basketItem) => normalizeRequest(basketItem));
   }
 }
