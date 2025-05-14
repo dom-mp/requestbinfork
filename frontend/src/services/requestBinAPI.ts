@@ -17,7 +17,6 @@ const generateName = async (): Promise<string> => {
 
 const createBasket = async (basketName: string): Promise<string> => {
   const response = await axios.post(`${API_BASE}/baskets/${basketName}`);
-  console.log(response);
   return response.data.basketName;
 };
 
@@ -29,7 +28,12 @@ const getRequests = async (basketName: string): Promise<Array<Request>> => {
   const response = await axios.get(
     `${API_BASE}/baskets/${basketName}/requests`,
   );
-  return response.data.requests;
+
+  const requests = response.data;
+  // TODO: this is a quick-fix; replace with zod
+  if (!Array.isArray(requests)) throw new Error("Received unexpected type.");
+
+  return requests;
 };
 
 const clearBasket = async (basketName: string): Promise<void> => {
