@@ -79,6 +79,7 @@ function App() {
                       <Basket
                         setSnackbarMessage={setSnackbarMessage}
                         setSnackbarOpen={setSnackbarOpen}
+                        baskets={baskets}
                       />
                     }
                   />

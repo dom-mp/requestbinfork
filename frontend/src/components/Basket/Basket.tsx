@@ -20,9 +20,14 @@ import DialogComponent from "./../Dialog/Dialog";
 interface BasketProps {
   setSnackbarMessage: React.Dispatch<React.SetStateAction<string>>;
   setSnackbarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  baskets: Array<string>;
 }
 
-const Basket = ({ setSnackbarMessage, setSnackbarOpen }: BasketProps) => {
+const Basket = ({
+  setSnackbarMessage,
+  setSnackbarOpen,
+  baskets,
+}: BasketProps) => {
   const basketName = useParams().basketName ?? "";
   const [requests, setRequests] = useState<Array<RequestType>>([]);
   const [dialogState, setDialogState] = useState(false);
@@ -44,12 +49,15 @@ const Basket = ({ setSnackbarMessage, setSnackbarOpen }: BasketProps) => {
     // alert(`Basket "${basketName}" successfully deleted.`);
     // console.log("trere");
     // setDialogState(false);
-
+    console.log(baskets);
     try {
       await apiService.deleteBasket(basketName);
       setSnackbarMessage(`Deleted basket /${basketName}`);
       setSnackbarOpen(true);
       navigate("/");
+      // delete from local as well
+      const index = baskets.indexOf(basketName);
+      baskets.splice(index, 1);
     } catch (error: unknown) {
       handleAPIError(error);
     } finally {
