@@ -105,11 +105,13 @@ router.get(
         sentAt: request.sentAt,
         method: request.method,
         headers: request.headers,
-        request: requestBody,
+        requestBody: requestBody,
       };
     });
 
-    Promise.all(mappedResult).then((outcome) => res.status(200).send(outcome));
+    Promise.all(mappedResult)
+      .then((outcome) => res.status(200).send(outcome))
+      .then(() => mongo.closeConnection());
   }
 );
 
