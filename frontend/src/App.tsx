@@ -8,7 +8,7 @@ import theme from "./theme.ts";
 import CssBaseline from "@mui/material/CssBaseline";
 import Nav from "./components/Nav";
 import Basket from "./components/Basket";
-import Baskets from "./components/Baskets";
+import MyBaskets from "./components/MyBaskets";
 import CreateBasket from "./components/CreateBasket";
 import MyBasketsFab from "./components/MyBasketsFab";
 
@@ -60,7 +60,7 @@ function App() {
                 </Route>
               </Routes>
 
-              <Baskets
+              <MyBaskets
                 baskets={baskets}
                 drawerState={drawerState}
                 setDrawerState={setDrawerState}
