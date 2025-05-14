@@ -13,7 +13,6 @@ if (!useMockAPI) {
 }
 
 router.all("/:name", async (req: Request<{ name: string }>, res: Response) => {
-  console.log("here");
   const basketName = req.params.name;
   const exists: string | null = await pg.getBasketName(basketName);
 

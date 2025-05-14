@@ -1,5 +1,6 @@
 import { Pool, PoolClient, QueryResult } from "pg";
 import { Basket, Request } from "../types";
+import { normalizeRequest } from "../utils";
 
 class PostgresController {
   private dbName: string;
@@ -175,20 +176,24 @@ class PostgresController {
     }
   }
 
+  public async deleteBasket(basketName: string): Promise<boolean> {
+    const query = "DELETE FROM baskets WHERE name = ($1)";
+    try {
+      await this.pool.query(query, [basketName]);
+      console.log(`PostgreSQL: Basket ${basketName} has been deleted `);
+      return true;
+    } catch (error) {
+      console.error(`PostgreSQL: Error deleting basket ${basketName}`, error);
+      return false;
+    }
+  }
+
   public async fetchBasketContents(basketName: string): Promise<Request[]> {
     const query = "SELECT * FROM requests WHERE basket_name = $1";
 
     const result = await this.pool.query(query, [basketName]);
 
-    return result.rows.map((basketItem) => {
-      return {
-        basketName: basketItem["basket_name"],
-        sentAt: basketItem["sent_at"],
-        method: basketItem["method"],
-        headers: basketItem["headers"].sp,
-        bodyMongoId: basketItem["body_mongo_id"],
-      };
-    });
+    return result.rows.map((basketItem) => normalizeRequest(basketItem));
   }
 }
 
