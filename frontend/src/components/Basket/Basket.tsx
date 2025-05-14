@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import DialogComponent from "./../Dialog/Dialog";
 
 interface BasketProps {
   setSnackbarMessage: React.Dispatch<React.SetStateAction<string>>;
@@ -24,7 +25,7 @@ interface BasketProps {
 const Basket = ({ setSnackbarMessage, setSnackbarOpen }: BasketProps) => {
   const basketName = useParams().basketName ?? "";
   const [requests, setRequests] = useState<Array<RequestType>>([]);
-  // const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [dialogState, setDialogState] = useState(false);
   const navigate = useNavigate();
 
   const handleCopyLinkButtonClick = async () => {
@@ -37,11 +38,10 @@ const Basket = ({ setSnackbarMessage, setSnackbarOpen }: BasketProps) => {
   };
 
   const handleDeleteBasketButtonClick = async () => {
-    if (!confirm(`Delete basket "${basketName}"?`)) return;
-
-    await apiService.deleteBasket(basketName);
-    navigate("/");
-    alert(`Basket "${basketName}" successfully deleted.`);
+    // if (!confirm(`Delete basket "${basketName}"?`)) return;
+    // await apiService.deleteBasket(basketName);
+    // navigate("/");
+    // alert(`Basket "${basketName}" successfully deleted.`);
   };
 
   useEffect(() => {
@@ -65,14 +65,6 @@ const Basket = ({ setSnackbarMessage, setSnackbarOpen }: BasketProps) => {
         padding: 2,
       }}
     >
-      {/* <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={() => setSnackbarOpen(false)}
-        message="Basket url copied to clipboard."
-      /> */}
-
       <Container>
         <Stack
           direction="row"
@@ -99,6 +91,10 @@ const Basket = ({ setSnackbarMessage, setSnackbarOpen }: BasketProps) => {
 
           <Tooltip arrow title="Delete basket" placement="top">
             <Button color="error" onClick={handleDeleteBasketButtonClick}>
+              <DialogComponent
+                dialogState={!dialogState}
+                setDialogState={setDialogState}
+              />
               <DeleteForeverIcon />
             </Button>
           </Tooltip>
