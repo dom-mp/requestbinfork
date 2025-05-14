@@ -12,8 +12,8 @@ const StyledJSONTree = ({ json }: StyledJSONTreeProps) => {
   const jsonTreeTheme = {
     scheme: "night_owl",
     author: "Daniel Chae, Dominique Morales Perez",
-    base00: pallete.background.default, //  Default Background
-    base01: pallete.background.paper, //  Lighter Background (Used for status bars, line number and folding marks)
+    base00: pallete.background.paper, //  Default Background
+    base01: pallete.background.default, //  Lighter Background (Used for status bars, line number and folding marks)
     base02: pallete.action.selected, //  Selection Background
     base03: pallete.text.disabled, //  Comments, Invisibles, Line Highlighting
     base04: pallete.text.secondary, //  Dark Foreground (Used for status bars)
