@@ -11,13 +11,13 @@ const getBaskets = async (): Promise<Array<string>> => {
 };
 
 const getToken = async (basketName: string): Promise<string> => {
-  const response = await axios.get(`${API_BASE}/generate_token/`, {
+  const response = await axios.get(`${API_BASE}/baskets/generate_token/`, {
     params: { name: basketName },
   });
   return response.data.token;
 };
 const generateName = async (): Promise<string> => {
-  const response = await axios.get(`${API_BASE}/generate_name`);
+  const response = await axios.get(`${API_BASE}/baskets/generate_name`);
   return response.data.basketName;
 };
 
@@ -32,7 +32,7 @@ const deleteBasket = async (basketName: string): Promise<void> => {
 
 const getRequests = async (basketName: string): Promise<Array<Request>> => {
   const response = await axios.get(
-    `${API_BASE}/baskets/${basketName}/requests`
+    `${API_BASE}/baskets/${basketName}/requests`,
   );
 
   const requests = response.data.requests;

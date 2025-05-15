@@ -3,14 +3,7 @@ import type { ChangeEvent } from "react";
 import { useNavigate } from "react-router";
 import apiService from "../../services/requestBinAPI";
 import { handleAPIError } from "../../utils";
-import {
-  Paper,
-  Typography,
-  Stack,
-  TextField,
-  Button,
-  InputAdornment,
-} from "@mui/material";
+import { Paper, Typography, Stack, TextField, Button } from "@mui/material";
 
 interface CreateBasketProps {
   originURL: string;
@@ -55,19 +48,19 @@ const CreateBasket = ({
   };
 
   const handleBasketNameChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setBasketName(event.currentTarget.value);
   };
 
-  // TODO: set originURL to ngrok url for local testing
   return (
     <Paper
       elevation={4}
       sx={{
-        maxWidth: "100%",
+        maxWidth: "600px",
         flexGrow: 1,
         padding: 4,
+        margin: "0 auto",
       }}
     >
       <Stack spacing={2} sx={{ alignItems: "center" }}>
@@ -77,13 +70,18 @@ const CreateBasket = ({
         </Typography>
 
         <form onSubmit={handleSubmit}>
-          <Stack direction={{ sm: "row", xs: "column" }} spacing={1}>
+          <Stack
+            direction={{ sm: "row", xs: "column" }}
+            spacing={1}
+            sx={{ paddingTop: 1 }}
+          >
             <TextField
-              required
               autoFocus
+              required
               spellCheck={false}
               variant="outlined"
               id="new-basket-name"
+              label={`${originURL}/`}
               value={basketName}
               onChange={handleBasketNameChange}
               size="medium"
@@ -95,11 +93,10 @@ const CreateBasket = ({
                   sx: {
                     color: "text.secondary",
                   },
-                  startAdornment: (
-                    <InputAdornment position="start" sx={{ margin: 0 }}>
-                      {originURL}/hook/
-                    </InputAdornment>
-                  ),
+                },
+                inputLabel: {
+                  sx: { color: "text.primary" },
+                  required: false, // Hide label "required" asterisk
                 },
               }}
             />
