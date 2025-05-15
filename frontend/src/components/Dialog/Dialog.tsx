@@ -8,12 +8,14 @@ import {
 } from "@mui/material";
 
 interface DialogComponentProps {
+  prompt: string;
   dialogState: boolean;
   setDialogState: React.Dispatch<React.SetStateAction<boolean>>;
   handleConfirm: () => void;
 }
 
 const DialogComponent = ({
+  prompt,
   dialogState,
   setDialogState,
   handleConfirm,
@@ -22,24 +24,22 @@ const DialogComponent = ({
     <Dialog
       open={dialogState}
       onClose={() => setDialogState(false)}
-      aria-labelledby="delete-basket"
+      aria-labelledby="confirmation-dialog"
     >
-      <DialogTitle id="delete-basket">
-        Are you sure you want to delete this Basket?
-      </DialogTitle>
+      <DialogTitle>{prompt}</DialogTitle>
       <DialogContent>
-        <DialogContentText>This is an irreversible action</DialogContentText>
+        <DialogContentText>This is an irreversible action.</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={() => setDialogState(false)} autoFocus>
           Cancel
         </Button>
         <Button
+          color="error"
           onClick={() => {
             setDialogState(false);
             handleConfirm();
           }}
-          autoFocus
         >
           Confirm
         </Button>

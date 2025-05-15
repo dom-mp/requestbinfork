@@ -5,7 +5,10 @@ import apiService from "../../services/requestBinAPI";
 import { handleAPIError } from "../../utils";
 import DialogComponent from "../Dialog";
 import RequestList from "../RequestList";
+import Grid from "@mui/material/Grid";
+import Badge from "@mui/material/Badge";
 import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
 import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
@@ -15,6 +18,9 @@ import Tooltip from "@mui/material/Tooltip";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
+import CodeIcon from "@mui/icons-material/Code";
+import CodeOffIcon from "@mui/icons-material/Code";
+import SwapVertIcon from "@mui/icons-material/SwapVert";
 
 interface BasketProps {
   originURL: string;
@@ -32,7 +38,9 @@ const Basket = ({
   const POLLING_INTERVAL = 1000; // poll every 1 second
   const basketName = useParams().basketName ?? "";
   const [requests, setRequests] = useState<Array<RequestType>>([]);
-  const [dialogState, setDialogState] = useState(false);
+  const [deleteDialogState, setDeleteDialogState] = useState(false);
+  const [showJSON, setShowJSON] = useState(false);
+  const [reverse, setReverse] = useState(true);
   const navigate = useNavigate();
 
   const handleCopyLinkButtonClick = async () => {
@@ -63,11 +71,15 @@ const Basket = ({
     alert(`Basket "${basketName}" successfully cleared.`);
   };
 
+  const handleReverseButtonClick = () => {
+    setReverse((val) => !val);
+  };
+
   useEffect(() => {
     const fetchRequests = async () => {
       try {
         const requests = await apiService.getRequests(basketName);
-        setRequests(requests);
+        setRequests(reverse ? requests.toReversed() : requests);
       } catch (error: unknown) {
         handleAPIError(error);
       }
@@ -77,68 +89,102 @@ const Basket = ({
     const intervalId = setInterval(fetchRequests, POLLING_INTERVAL);
 
     return () => clearInterval(intervalId);
-  }, [basketName]);
+  }, [basketName, reverse]);
 
   return (
     <Paper
       elevation={4}
       sx={{
-        maxWidth: "100%",
+        maxWidth: "1500px",
+        minWidth: "400px",
         flexGrow: 1,
         padding: 2,
       }}
     >
       <Container>
-        <Stack
-          direction="row"
-          sx={{
-            flexWrap: "wrap",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
+        <Grid
+          container
+          spacing={{ xs: 1, sm: 2 }}
+          columns={{ xs: 4, sm: 12 }}
+          sx={{ paddingBottom: 2 }}
         >
-          <Typography variant="h4">
-            Basket:
-            <Tooltip arrow title="Copy basket link" placement="top">
-              <Button sx={{ flexGrow: 0 }} onClick={handleCopyLinkButtonClick}>
-                <Typography variant="h5" sx={{ paddingRight: 1 }}>
-                  <code>/{basketName}</code>
-                </Typography>
-                <ContentCopyIcon fontSize="small" />
-              </Button>
-            </Tooltip>
-          </Typography>
+          <Grid size="grow" sx={{ minWidth: "280px" }}>
+            <Stack direction="row" spacing={1} alignItems="baseline">
+              <Typography variant="h4">Basket:</Typography>
 
-          <Tooltip arrow title="Clear basket" placement="top">
-            <Button color="warning" onClick={handleClearBasketButtonClick}>
-              <ClearAllIcon />
-            </Button>
-          </Tooltip>
+              <Tooltip
+                arrow
+                title={`${requests.length} requests in basket`}
+                placement="right-start"
+              >
+                <Badge badgeContent={requests.length} color="primary">
+                  <Typography
+                    variant="h4"
+                    color="secondary"
+                    sx={{ paddingRight: 1 }}
+                  >
+                    <code>/{basketName}</code>
+                  </Typography>
+                </Badge>
+              </Tooltip>
+            </Stack>
+          </Grid>
 
-          <Tooltip arrow title="Delete basket" placement="top">
-            <Button color="error" onClick={() => setDialogState(true)}>
-              <DeleteForeverIcon />
-            </Button>
-          </Tooltip>
+          <Grid size={4} sx={{ textAlign: "right" }}>
+            <ButtonGroup variant="text">
+              <Tooltip arrow title="Copy basket link" placement="top">
+                <Button onClick={handleCopyLinkButtonClick}>
+                  <ContentCopyIcon fontSize="small" />
+                </Button>
+              </Tooltip>
 
-          <DialogComponent
-            dialogState={dialogState}
-            setDialogState={setDialogState}
-            handleConfirm={handleDeleteBasketButtonClick}
-          />
+              <Tooltip arrow title={`Reverse order`} placement="top">
+                <Button color="success" onClick={handleReverseButtonClick}>
+                  <SwapVertIcon />
+                </Button>
+              </Tooltip>
+              <Tooltip arrow title="Format JSON" placement="top">
+                <Button
+                  color="info"
+                  variant={showJSON ? "contained" : "text"}
+                  onClick={() => setShowJSON((val) => !val)}
+                >
+                  {showJSON ? <CodeOffIcon /> : <CodeIcon />}
+                </Button>
+              </Tooltip>
 
-          <Typography variant="subtitle2">
-            {requests.length} requests
-          </Typography>
-        </Stack>
+              <Tooltip arrow title="Clear basket" placement="top">
+                <Button color="warning" onClick={handleClearBasketButtonClick}>
+                  <ClearAllIcon />
+                </Button>
+              </Tooltip>
 
+              <Tooltip arrow title="Delete basket" placement="top">
+                <Button
+                  color="error"
+                  onClick={() => setDeleteDialogState(true)}
+                >
+                  <DeleteForeverIcon />
+                </Button>
+              </Tooltip>
+            </ButtonGroup>
+          </Grid>
+        </Grid>
         <Divider />
         <RequestList
           originURL={originURL}
           basketName={basketName}
           requests={requests}
+          showJSON={showJSON}
         />
       </Container>
+
+      <DialogComponent
+        prompt="Are you sure you want to delete this Basket?"
+        dialogState={deleteDialogState}
+        setDialogState={setDeleteDialogState}
+        handleConfirm={handleDeleteBasketButtonClick}
+      />
     </Paper>
   );
 };

@@ -1,31 +1,36 @@
 import type { Request as RequestType } from "../../types";
 import Request from "../../components/Request";
 import EmptyBasketContent from "../EmptyBasketContent";
-import { List, ListItem } from "@mui/material";
+import Grid from "@mui/material/Grid";
 
 interface RequestListProps {
   originURL: string;
   basketName: string;
   requests: Array<RequestType>;
+  showJSON: boolean;
 }
 
-const RequestList = ({ originURL, basketName, requests }: RequestListProps) => {
+const RequestList = ({
+  originURL,
+  basketName,
+  requests,
+  showJSON,
+}: RequestListProps) => {
+  if (!requests.length) {
+    return <EmptyBasketContent originURL={originURL} basketName={basketName} />;
+  }
+
   return (
-    <List>
-      {requests.length ? (
-        requests.map((request, i) => (
-          <ListItem key={i}>
-            <Request
-              originURL={originURL}
-              {...request}
-              basketName={basketName}
-            />
-          </ListItem>
-        ))
-      ) : (
-        <EmptyBasketContent originURL={originURL} basketName={basketName} />
-      )}
-    </List>
+    <Grid container spacing={{ xs: 1, sm: 2 }} columns={{ xs: 4, sm: 12 }}>
+      {requests.map((request, i) => (
+        <Request
+          key={i}
+          originURL={originURL}
+          showJSON={showJSON}
+          {...request}
+        />
+      ))}
+    </Grid>
   );
 };
 

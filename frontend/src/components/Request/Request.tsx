@@ -1,21 +1,17 @@
 import type { Request as RequestType } from "../../types";
 import StyledJSONTree from "../StyledJSONTree";
-import { useState } from "react";
-import {
-  Box,
-  Stack,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Typography,
-  Switch,
-  Tooltip,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { hasContentTypeJSON } from "../../utils";
 
 interface RequestProps extends RequestType {
   originURL: string;
+  showJSON: boolean;
 }
 
 const Request = ({
@@ -25,8 +21,8 @@ const Request = ({
   sentAt,
   headers,
   requestBody,
+  showJSON,
 }: RequestProps) => {
-  const [showJSON, setShowJSON] = useState(false);
   const isJSON: boolean = hasContentTypeJSON(headers);
 
   // Catch null body + type check
@@ -46,15 +42,8 @@ const Request = ({
   );
 
   return (
-    <Stack
-      direction="row"
-      sx={{
-        gap: 3,
-        flexWrap: "wrap",
-        justifyContent: "space-between",
-      }}
-    >
-      <Box>
+    <Grid container>
+      <Grid size="auto" sx={{ paddingRight: 3 }}>
         <Typography variant="h5">{method}</Typography>
         <Typography
           component="time"
@@ -63,23 +52,15 @@ const Request = ({
         >
           {sentAt}
         </Typography>
+      </Grid>
 
-        {isJSON && (
-          <Tooltip arrow title="Format JSON" placement="right">
-            <Switch
-              checked={showJSON}
-              onChange={(e) => {
-                setShowJSON(e.target.checked);
-              }}
-            />
-          </Tooltip>
-        )}
-      </Box>
-
-      <Box>
+      <Grid size="grow" width="1000px" minWidth="300px">
         <Accordion>
           <AccordionDetails>
-            <Typography component="code">
+            <Typography
+              component="code"
+              sx={{ wordBreak: "break-all", textWrap: "wrap" }}
+            >
               PATH: {originURL}/hook/{basketName}
             </Typography>
           </AccordionDetails>
@@ -118,8 +99,8 @@ const Request = ({
             )}
           </AccordionDetails>
         </Accordion>
-      </Box>
-    </Stack>
+      </Grid>
+    </Grid>
   );
 };
 
