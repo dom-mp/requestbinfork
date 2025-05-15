@@ -55,7 +55,7 @@ const CreateBasket = ({
   };
 
   const handleBasketNameChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setBasketName(event.currentTarget.value);
   };
@@ -79,11 +79,12 @@ const CreateBasket = ({
         <form onSubmit={handleSubmit}>
           <Stack direction={{ sm: "row", xs: "column" }} spacing={1}>
             <TextField
-              required
               autoFocus
+              required
               spellCheck={false}
               variant="outlined"
               id="new-basket-name"
+              label={`${originURL}/`}
               value={basketName}
               onChange={handleBasketNameChange}
               size="medium"
@@ -95,11 +96,11 @@ const CreateBasket = ({
                   sx: {
                     color: "text.secondary",
                   },
-                  startAdornment: (
-                    <InputAdornment position="start" sx={{ margin: 0 }}>
-                      {originURL}/hook/
-                    </InputAdornment>
-                  ),
+                  // startAdornment: (
+                  //   <InputAdornment position="start" sx={{ margin: 0 }}>
+                  //     {originURL}/hook/
+                  //   </InputAdornment>
+                  // ),
                 },
               }}
             />
