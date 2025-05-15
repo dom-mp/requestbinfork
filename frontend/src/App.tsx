@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
 import apiService from "./services/requestBinAPI";
-import { handleAPIError } from "./utils.ts";
-import { NotificationsProvider } from "./components/useNotifications";
+import { handleAPIError, setErrorNotifier } from "./utils.ts";
+import { useNotifications } from "@toolpad/core/useNotifications";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import Snackbar from "@mui/material/Snackbar";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme.ts";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -21,8 +20,7 @@ function App() {
   const [baskets, setBaskets] = useState<Array<string>>([]);
   const [drawerState, setDrawerState] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const notifications = useNotifications();
   const originURL = window.location.origin;
 
   const getBaskets = async () => {
@@ -37,78 +35,64 @@ function App() {
   // load initial state
   useEffect(() => {
     getBaskets();
-  }, []);
+    setErrorNotifier((message) =>
+      notifications.show(message, { key: message, severity: "error" }),
+    );
+  }, [notifications]);
 
   return (
     <ThemeProvider theme={theme}>
-      <NotificationsProvider>
-        <BrowserRouter>
-          <Container maxWidth="xl" sx={{ minWidth: "350px" }}>
-            <CssBaseline />
-            <Nav />
+      <BrowserRouter>
+        <Container maxWidth="xl" sx={{ minWidth: "350px" }}>
+          <CssBaseline />
+          <Nav />
 
-            <Snackbar
-              anchorOrigin={{ vertical: "top", horizontal: "center" }}
-              open={snackbarOpen}
-              autoHideDuration={3000}
-              onClose={() => setSnackbarOpen(false)}
-              message={snackbarMessage}
-            />
-
-            <Box
-              component="main"
+          <Box
+            component="main"
+            sx={{
+              flexGrow: 1,
+              paddingTop: 3,
+              // create space dynamically for Nav
+              ...theme.mixins.toolbar,
+            }}
+          >
+            <Stack
+              direction="row"
               sx={{
-                flexGrow: 1,
-                paddingTop: 3,
-                // create space dynamically for Nav
-                ...theme.mixins.toolbar,
+                gap: 3,
+                flexWrap: "wrap",
+                justifyContent: "space-between",
               }}
             >
-              <Stack
-                direction="row"
-                sx={{
-                  gap: 3,
-                  flexWrap: "wrap",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Routes>
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <CreateBasket
+                      originURL={originURL}
+                      setBaskets={setBaskets}
+                    />
+                  }
+                />
+                <Route path="baskets">
                   <Route
-                    path="/"
+                    path=":basketName"
                     element={
-                      <CreateBasket
-                        originURL={originURL}
-                        setBaskets={setBaskets}
-                        setSnackbarMessage={setSnackbarMessage}
-                        setSnackbarOpen={setSnackbarOpen}
-                      />
+                      <Basket originURL={originURL} getBaskets={getBaskets} />
                     }
                   />
-                  <Route path="baskets">
-                    <Route
-                      path=":basketName"
-                      element={
-                        <Basket
-                          originURL={originURL}
-                          setSnackbarMessage={setSnackbarMessage}
-                          setSnackbarOpen={setSnackbarOpen}
-                          getBaskets={getBaskets}
-                        />
-                      }
-                    />
-                  </Route>
-                </Routes>
+                </Route>
+              </Routes>
 
-                <MyBaskets
-                  baskets={baskets}
-                  drawerState={drawerState}
-                  setDrawerState={setDrawerState}
-                />
-              </Stack>
-            </Box>
-          </Container>
-        </BrowserRouter>
-      </NotificationsProvider>
+              <MyBaskets
+                baskets={baskets}
+                drawerState={drawerState}
+                setDrawerState={setDrawerState}
+              />
+            </Stack>
+          </Box>
+        </Container>
+      </BrowserRouter>
 
       <MyBasketsFab
         drawerState={drawerState}

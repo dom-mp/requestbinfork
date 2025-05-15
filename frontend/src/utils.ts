@@ -1,9 +1,14 @@
 import axios from "axios";
+import type { ShowNotification } from "@toolpad/core";
 
-export type NotificationFunction = (message: string) => void;
+export type NotificationFunction = (
+  message: string,
+) => string | ShowNotification;
 
 // default error notification
-let notifyError: NotificationFunction = (message) => console.error(message);
+let notifyError: NotificationFunction = (message) => (
+  console.error(message), message
+);
 
 export const setErrorNotifier = (notifier: NotificationFunction) => {
   notifyError = notifier;
