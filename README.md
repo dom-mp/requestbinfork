@@ -25,7 +25,46 @@ RequestBin is a tool that allows you to capture, log, and inspect HTTP requests 
 - Request payload data is stored in MongoDB.
 - State persistence is implemented via browser local storage, allowing users to access the same bins across sessions.
 
+## Requirements
+
+In the `backend` directory, create a `.env` file with the following contents:
+
+  ```env
+  # PostgreSQL configuration
+  PGHOST=localhost
+  PGDATABASE=requestbin
+  PGPORT=5432           # Default PostgreSQL port
+  PGUSER=postgres       # Replace with your PostgreSQL username
+  PGPASSWORD=postgres   # Replace with your PostgreSQL password
+
+  # MongoDB configuration
+  MONGODB_URI=mongodb://localhost:27017 # Default MongoDB URI
+
+  # Application port
+  PORT=3000             # Port the backend server will run on
+  ```
+
+💡**Note:** Ensure that PostgreSQL and MongoDB are installed and running locally with the above credentials. You may need to adjust these values to match your environment.
+
 ## Installation
+
+Navigate to the `backend` directory
+
+```bash
+cd backend
+```
+
+Build the full project
+
+```bash
+npm run build:full
+```
+
+Start the application
+
+```bash
+npm start
+```
 
 ### Dependencies
 
