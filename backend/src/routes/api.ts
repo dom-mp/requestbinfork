@@ -124,5 +124,17 @@ export default function basketRouter(pg: PostgresClient, mongo: MongoClient) {
     }
   );
 
+  router.get("/baskets/validate", async (req: Request, res: Response) => {
+    const queryString = req.query.basketNames;
+
+    if (typeof queryString !== "string") {
+      res.status(400).send("Missing basket names");
+      return;
+    }
+
+    const basketNames = await pg.getValidBaskets(queryString.split(","));
+    res.status(200).json({ basketNames });
+  });
+
   return router;
 }
