@@ -14,9 +14,9 @@ const getValidBaskets = async (
   basketNames: Array<string>,
 ): Promise<Array<string>> => {
   const response = await axios.get(`${API_BASE}/baskets/validate`, {
-    params: { basketNames },
+    params: { basketNames: basketNames.join(",") },
   });
-  return response.data.baskets;
+  return response.data.basketNames;
 };
 
 const getToken = async (basketName: string): Promise<string> => {
