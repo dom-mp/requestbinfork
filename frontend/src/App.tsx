@@ -27,15 +27,33 @@ function App() {
   const getBaskets = async () => {
     try {
       const baskets = await apiService.getBaskets();
+
       setBaskets(baskets);
     } catch (error: unknown) {
       handleAPIError(error, "Your baskets could not be found.");
     }
   };
 
+  const validateBasket = async () => {
+    try {
+      const localStorageBasketKeys = Object.keys({ ...localStorage }).join(",");
+      const validBasketKeys = await apiService.validateBasket(
+        localStorageBasketKeys
+      );
+      const validBaskets = baskets.filter((basketName) =>
+        validBasketKeys.includes(basketName)
+      );
+
+      setBaskets(validBaskets);
+    } catch (error: unknown) {
+      handleAPIError(error, "Something went wrong with your baskets.");
+    }
+  };
+
   // load initial state
   useEffect(() => {
     getBaskets();
+    validateBasket();
   }, []);
 
   return (
