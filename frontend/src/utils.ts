@@ -1,5 +1,14 @@
 import axios from "axios";
 
+export type NotificationFunction = (message: string) => void;
+
+// default error notification
+let notifyError: NotificationFunction = (message) => console.error(message);
+
+export const setErrorNotifier = (notifier: NotificationFunction) => {
+  notifyError = notifier;
+};
+
 export const handleAPIError = (e: unknown, msg?: string) => {
   console.error(e);
   if (!msg) {
@@ -7,11 +16,13 @@ export const handleAPIError = (e: unknown, msg?: string) => {
       msg = e.response.data.message;
     } else if (e instanceof Error) {
       msg = e.message;
-    } else {
-      msg = "An unknown error occurred.";
     }
   }
-  alert(msg);
+  if (typeof msg !== "string") {
+    msg = "An unknown error occurred.";
+  }
+
+  notifyError(msg);
 };
 
 export const hasContentTypeJSON = (headers: string) => {
