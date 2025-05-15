@@ -7,19 +7,21 @@ interface RequestListProps {
   originURL: string;
   basketName: string;
   requests: Array<RequestType>;
+  showJSON: boolean;
 }
 
-const RequestList = ({ originURL, basketName, requests }: RequestListProps) => {
+const RequestList = ({
+  originURL,
+  basketName,
+  requests,
+  showJSON,
+}: RequestListProps) => {
   return (
     <List>
       {requests.length ? (
         requests.map((request, i) => (
           <ListItem key={i}>
-            <Request
-              originURL={originURL}
-              {...request}
-              basketName={basketName}
-            />
+            <Request originURL={originURL} showJSON={showJSON} {...request} />
           </ListItem>
         ))
       ) : (

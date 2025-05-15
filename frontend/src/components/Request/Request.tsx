@@ -1,21 +1,17 @@
 import type { Request as RequestType } from "../../types";
 import StyledJSONTree from "../StyledJSONTree";
-import { useState } from "react";
-import {
-  Box,
-  Stack,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Typography,
-  Switch,
-  Tooltip,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { hasContentTypeJSON } from "../../utils";
 
 interface RequestProps extends RequestType {
   originURL: string;
+  showJSON: boolean;
 }
 
 const Request = ({
@@ -25,8 +21,8 @@ const Request = ({
   sentAt,
   headers,
   requestBody,
+  showJSON,
 }: RequestProps) => {
-  const [showJSON, setShowJSON] = useState(false);
   const isJSON: boolean = hasContentTypeJSON(headers);
 
   // Catch null body + type check
@@ -63,17 +59,6 @@ const Request = ({
         >
           {sentAt}
         </Typography>
-
-        {isJSON && (
-          <Tooltip arrow title="Format JSON" placement="right">
-            <Switch
-              checked={showJSON}
-              onChange={(e) => {
-                setShowJSON(e.target.checked);
-              }}
-            />
-          </Tooltip>
-        )}
       </Box>
 
       <Box>

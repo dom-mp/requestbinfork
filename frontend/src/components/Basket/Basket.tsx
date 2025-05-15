@@ -5,7 +5,9 @@ import apiService from "../../services/requestBinAPI";
 import { handleAPIError } from "../../utils";
 import DialogComponent from "../Dialog";
 import RequestList from "../RequestList";
+import Badge from "@mui/material/Badge";
 import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
 import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
@@ -15,6 +17,8 @@ import Tooltip from "@mui/material/Tooltip";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
+import CodeIcon from "@mui/icons-material/Code";
+import CodeOffIcon from "@mui/icons-material/Code";
 
 interface BasketProps {
   originURL: string;
@@ -32,7 +36,8 @@ const Basket = ({
   const POLLING_INTERVAL = 1000; // poll every 1 second
   const basketName = useParams().basketName ?? "";
   const [requests, setRequests] = useState<Array<RequestType>>([]);
-  const [dialogState, setDialogState] = useState(false);
+  const [deleteDialogState, setDeleteDialogState] = useState(false);
+  const [showJSON, setShowJSON] = useState(false);
   const navigate = useNavigate();
 
   const handleCopyLinkButtonClick = async () => {
@@ -97,39 +102,55 @@ const Basket = ({
             alignItems: "center",
           }}
         >
-          <Typography variant="h4">
-            Basket:
-            <Tooltip arrow title="Copy basket link" placement="top">
-              <Button sx={{ flexGrow: 0 }} onClick={handleCopyLinkButtonClick}>
-                <Typography variant="h5" sx={{ paddingRight: 1 }}>
+          <Stack direction="row" spacing={1} alignItems="baseline">
+            <Typography variant="h4">Basket:</Typography>
+
+            <Tooltip
+              arrow
+              title={`${requests.length} requests in basket`}
+              placement="right-start"
+            >
+              <Badge badgeContent={requests.length} color="primary">
+                <Typography
+                  variant="h4"
+                  color="secondary"
+                  sx={{ paddingRight: 1 }}
+                >
                   <code>/{basketName}</code>
                 </Typography>
+              </Badge>
+            </Tooltip>
+          </Stack>
+
+          <ButtonGroup variant="text">
+            <Tooltip arrow title="Copy basket link" placement="top">
+              <Button onClick={handleCopyLinkButtonClick}>
                 <ContentCopyIcon fontSize="small" />
               </Button>
             </Tooltip>
-          </Typography>
 
-          <Tooltip arrow title="Clear basket" placement="top">
-            <Button color="warning" onClick={handleClearBasketButtonClick}>
-              <ClearAllIcon />
-            </Button>
-          </Tooltip>
+            <Tooltip arrow title="Format JSON" placement="top">
+              <Button
+                color="info"
+                variant={showJSON ? "contained" : "text"}
+                onClick={() => setShowJSON((val) => !val)}
+              >
+                {showJSON ? <CodeOffIcon /> : <CodeIcon />}
+              </Button>
+            </Tooltip>
 
-          <Tooltip arrow title="Delete basket" placement="top">
-            <Button color="error" onClick={() => setDialogState(true)}>
-              <DeleteForeverIcon />
-            </Button>
-          </Tooltip>
+            <Tooltip arrow title="Clear basket" placement="top">
+              <Button color="warning" onClick={handleClearBasketButtonClick}>
+                <ClearAllIcon />
+              </Button>
+            </Tooltip>
 
-          <DialogComponent
-            dialogState={dialogState}
-            setDialogState={setDialogState}
-            handleConfirm={handleDeleteBasketButtonClick}
-          />
-
-          <Typography variant="subtitle2">
-            {requests.length} requests
-          </Typography>
+            <Tooltip arrow title="Delete basket" placement="top">
+              <Button color="error" onClick={() => setDeleteDialogState(true)}>
+                <DeleteForeverIcon />
+              </Button>
+            </Tooltip>
+          </ButtonGroup>
         </Stack>
 
         <Divider />
@@ -137,8 +158,16 @@ const Basket = ({
           originURL={originURL}
           basketName={basketName}
           requests={requests}
+          showJSON={showJSON}
         />
       </Container>
+
+      <DialogComponent
+        prompt="Are you sure you want to delete this Basket?"
+        dialogState={deleteDialogState}
+        setDialogState={setDeleteDialogState}
+        handleConfirm={handleDeleteBasketButtonClick}
+      />
     </Paper>
   );
 };
