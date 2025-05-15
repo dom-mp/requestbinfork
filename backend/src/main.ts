@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import mockApiRouter from "./routes/mockApi";
 import apiRouter from "./routes/api";
@@ -6,6 +7,7 @@ import PostgresClient from "./controllers/postgresql";
 import MongoClient from "./controllers/mongo";
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 // Middleware to store raw data in the request
 app.use((req, _res, next) => {
@@ -25,7 +27,6 @@ app.use((req, _res, next) => {
 app.use(express.json());
 app.use(express.static("dist"));
 
-const PORT = 3000;
 const useMockAPI = process.env.USE_MOCK_API;
 // allows us to run the mock api conditionally with:
 // `API_MODE=mock  ts-node-dev ./src/main.ts`
