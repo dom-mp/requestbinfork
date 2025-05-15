@@ -25,6 +25,7 @@ app.use((req, _res, next) => {
 });
 
 app.use(express.json());
+app.use(express.static("dist"));
 
 const useMockAPI = process.env.USE_MOCK_API;
 // allows us to run the mock api conditionally with:

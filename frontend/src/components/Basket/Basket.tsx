@@ -29,13 +29,12 @@ const Basket = ({
   setSnackbarOpen,
   getBaskets,
 }: BasketProps) => {
-
   const POLLING_INTERVAL = 1000; // poll every 1 second
   const basketName = useParams().basketName ?? "";
   const [requests, setRequests] = useState<Array<RequestType>>([]);
   const [dialogState, setDialogState] = useState(false);
   const navigate = useNavigate();
-      
+
   const handleCopyLinkButtonClick = async () => {
     await navigator.clipboard.writeText(`${originURL}/hook/${basketName}`);
     setSnackbarMessage("Basket URL copied to clipboard");
@@ -100,10 +99,7 @@ const Basket = ({
           <Typography variant="h4">
             Basket:
             <Tooltip arrow title="Copy basket link" placement="top">
-              <Button
-                sx={{ flexGrow: 0, color: "info.main" }}
-                onClick={handleCopyLinkButtonClick}
-              >
+              <Button sx={{ flexGrow: 0 }} onClick={handleCopyLinkButtonClick}>
                 <Typography variant="h5" sx={{ paddingRight: 1 }}>
                   <code>/{basketName}</code>
                 </Typography>

@@ -118,8 +118,9 @@ function App() {
           width: "100%",
           height: "100%",
           backgroundColor: "background.default",
-          backgroundImage: `radial-gradient(${theme.palette.primary.light} 1px, transparent 1px)`,
+          backgroundImage: `radial-gradient(${theme.palette.primary.dark} 1px, transparent 1.5px)`,
           backgroundSize: "16px 16px",
+          maskImage: "linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0))",
         }}
       ></Box>
     </ThemeProvider>
