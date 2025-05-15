@@ -61,13 +61,13 @@ const Basket = ({ originURL, getBaskets }: BasketProps) => {
       // Just rerequesting baskets, prioritise consistency > performance for now
       await getBaskets();
 
+      localStorage.removeItem(basketName);
+      navigate("/");
+
       notifications.show(`Deleted basket /${basketName}`, {
         key: "delete",
         autoHideDuration: 2000,
       });
-
-      localStorage.removeItem(basketName);
-      navigate("/");
     } catch (error: unknown) {
       handleAPIError(error);
     }
