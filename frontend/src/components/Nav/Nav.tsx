@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { AppBar, Toolbar, Button } from "@mui/material";
+import LogoIcon from "../LogoIcon";
 
 const Nav = () => {
   return (
@@ -12,7 +13,7 @@ const Nav = () => {
     >
       <Toolbar>
         <Button color="inherit" component={Link} to={"/"}>
-          RequestBin
+          <LogoIcon sx={{ marginRight: 1 }} /> RequestBin
         </Button>
         <Button
           color="inherit"
