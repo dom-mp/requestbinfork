@@ -70,7 +70,7 @@ npm start
 
 ### API
 
-- [`API Documentation`](https://github.com/dom-and-the-night-owls/requestbin/wiki/API-Documentation)
+- [API Documentation](https://github.com/dom-and-the-night-owls/requestbin/wiki/API-Documentation)
   
 ### Dependencies
 
