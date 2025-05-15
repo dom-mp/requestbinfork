@@ -48,6 +48,7 @@ const Basket = ({
       await getBaskets();
       setSnackbarMessage(`Deleted basket /${basketName}`);
       setSnackbarOpen(true);
+      localStorage.removeItem(basketName);
       navigate("/");
     } catch (error: unknown) {
       handleAPIError(error);
