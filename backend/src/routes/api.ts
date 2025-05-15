@@ -12,7 +12,7 @@ export default function basketRouter(pg: PostgresClient, mongo: MongoClient) {
     res.status(200).json({ baskets });
   });
 
-  router.get("/generate_name", async (_req: Request, res: Response) => {
+  router.get("/baskets/generate_name", async (_req: Request, res: Response) => {
     let basketName: string = "";
 
     do {
@@ -22,11 +22,11 @@ export default function basketRouter(pg: PostgresClient, mongo: MongoClient) {
     res.status(200).json({ basketName });
   });
 
-  router.get("/generate_token", async (req: Request, res: Response) => {
+  router.get("/baskets/generate_token", async (req: Request, res: Response) => {
     const basketName = req.query.name;
 
     if (typeof basketName !== "string") {
-      res.status(422).send("Missing basket name");
+      res.status(400).send("Missing basket name");
       return;
     } else if (!(await pg.doesBasketExist(basketName))) {
       res.status(404).send("Basket does not exist");
@@ -76,7 +76,7 @@ export default function basketRouter(pg: PostgresClient, mongo: MongoClient) {
       const basketName = req.params.name;
 
       if ((await pg.doesBasketExist(basketName)) === false) {
-        res.status(422).send("basket does not exist");
+        res.status(404).send("basket does not exist");
         return;
       }
 
