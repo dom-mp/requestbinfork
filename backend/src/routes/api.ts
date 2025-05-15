@@ -76,7 +76,7 @@ export default function basketRouter(pg: PostgresClient, mongo: MongoClient) {
       const basketName = req.params.name;
 
       if ((await pg.doesBasketExist(basketName)) === false) {
-        res.status(404).send("basket does not exist");
+        res.status(404).send("Basket does not exist");
         return;
       }
 
@@ -120,7 +120,7 @@ export default function basketRouter(pg: PostgresClient, mongo: MongoClient) {
         (await mongo.deleteBodyRequests(mongoIds)) &&
         (await pg.deleteBasketRequests(basketName));
 
-      if (successfulDelete) res.status(204).json();
+      if (successfulDelete) res.status(204).send("Basket has been cleared");
     }
   );
 
