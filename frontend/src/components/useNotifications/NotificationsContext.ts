@@ -1,7 +1,8 @@
 import { createContext } from "react";
+import type { showNotificationType } from "./NotificationsProvider";
 
 export interface NotificationsContextType {
-  showNotification: (message: string) => void;
+  showNotification: showNotificationType;
 }
 
 export const NotificationsContext =

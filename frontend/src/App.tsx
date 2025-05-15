@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
 import apiService from "./services/requestBinAPI";
-import { handleAPIError, setErrorNotifier } from "./utils.ts";
-import {
-  NotificationsProvider,
-  useNotifications,
-} from "./components/useNotifications";
+import { handleAPIError } from "./utils.ts";
+import { NotificationsProvider } from "./components/useNotifications";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -24,7 +21,6 @@ function App() {
   const [baskets, setBaskets] = useState<Array<string>>([]);
   const [drawerState, setDrawerState] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { showNotification } = useNotifications();
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const originURL = window.location.origin;
@@ -40,9 +36,8 @@ function App() {
 
   // load initial state
   useEffect(() => {
-    setErrorNotifier(showNotification);
     getBaskets();
-  }, [showNotification]);
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
