@@ -139,4 +139,4 @@ dist
 .pnp.*
 
 # ignore build
-./backend/build/
+backend/build/
