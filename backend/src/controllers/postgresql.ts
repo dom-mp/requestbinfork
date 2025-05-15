@@ -7,6 +7,7 @@ class PostgresClient {
 
   constructor() {
     this.pool = new Pool();
+    console.log("Connected to PostgreSQL server");
   }
 
   public async connect(): Promise<PoolClient> {
@@ -175,6 +176,20 @@ class PostgresClient {
     const query = "SELECT * FROM requests WHERE basket_name = $1";
     const result = await this.pool.query(query, [basketName]);
     return result.rows.map((basketItem) => normalizeRequest(basketItem));
+  }
+
+  public async getValidBaskets(basketNames: string[]): Promise<any> {
+    let placeHolder = basketNames.map((_, idx) => `$${idx + 1}`).join(", ");
+
+    const query = `SELECT * FROM baskets WHERE name = ANY(ARRAY[${placeHolder}])`;
+
+    try {
+      const result = await this.pool.query(query, basketNames);
+      return result.rows.map((row) => row.name);
+    } catch (error) {
+      console.error("PostgreSQL: could not validate baskets", basketNames);
+      throw new Error("PostgreSQL: Failed to validate baskets");
+    }
   }
 }
 
