@@ -1,0 +1,114 @@
+# Get all baskets
+GET http://localhost:3000/api/baskets/
+
+# {
+#   "baskets": [
+#     "78ugqjy",
+#     "x06skz4",
+#     "5ce2eoa"
+#   ]
+# }
+
+###
+
+# Generate random basket name
+GET http://localhost:3000/api/generate_name
+
+###
+
+# Generate token
+GET http://localhost:3000/api/generate_token?name=rs2geo9
+
+###
+
+# Create a basket
+POST http://localhost:3000/api/baskets/rs2geor
+
+###
+
+# Delete basket
+DELETE  http://localhost:3000/api/baskets/rs2geo9
+
+###
+
+# Get requests for a basket
+GET http://localhost:3000/api/baskets/rs2geo9/requests
+
+###
+
+# Delete requests for a basket
+DELETE http://localhost:3000/api/baskets/rs2geo9/requests
+
+###
+
+# Hook
+GET http://localhost:3000/hook/rs2geo9
+
+###
+
+POST http://localhost:3000/hook/rs2geo9
+content-type: application/json
+
+{
+  "name": "sample",
+  "time": "Wed, 21 Oct 2015 18:27:50 GMT"
+}
+
+###
+# MOCK API
+
+# Get all baskets
+GET http://localhost:3000/mockApi/baskets/
+
+# {
+#   "baskets": [
+#     "78ugqjy",
+#     "x06skz4",
+#     "5ce2eoa"
+#   ]
+# }
+
+###
+
+# Generate random basket name
+GET http://localhost:3000/mockApi/generate_name
+
+###
+
+# Generate token
+GET http://localhost:3000/mockApi/generate_token?name=x06skz5
+
+###
+
+# Create a basket
+POST http://localhost:3000/mockApi/baskets/rs2geo9
+
+###
+
+# Delete basket
+DELETE  http://localhost:3000/mockApi/baskets/rs2geo9
+
+###
+
+# Get requests for a basket
+GET http://localhost:3000/mockApi/baskets/rs2geo9/requests
+
+###
+
+# Generate random basket name
+DELETE http://localhost:3000/mockApi/baskets/rs2geo9/requests
+
+###
+
+# Hook
+GET http://localhost:3000/hook/x06skz5
+
+###
+
+POST http://localhost:3000/hook/x06skz5
+content-type: application/json
+
+{
+  "name": "sample",
+  "time": "Wed, 21 Oct 2015 18:27:50 GMT"
+}
