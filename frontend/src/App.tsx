@@ -107,7 +107,11 @@ function App() {
         </Container>
       </BrowserRouter>
 
-      <MyBasketsFab setDrawerState={setDrawerState} isMobile={isMobile} />
+      <MyBasketsFab
+        drawerState={drawerState}
+        setDrawerState={setDrawerState}
+        isMobile={isMobile}
+      />
 
       <Box
         className="bg-image"
