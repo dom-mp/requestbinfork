@@ -43,7 +43,7 @@ const CreateBasket = ({
       const verifiedName = await apiService.createBasket(basketName);
       const generatedToken = await apiService.getToken(basketName);
 
-      localStorage.setItem(`basketName_${verifiedName}`, generatedToken);
+      localStorage.setItem(`${verifiedName}`, generatedToken);
       setBaskets((baskets) => baskets.concat(verifiedName));
       setSnackbarMessage(`${verifiedName} basket was created!`);
       setSnackbarOpen(true);
