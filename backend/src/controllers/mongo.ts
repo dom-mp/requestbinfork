@@ -41,7 +41,7 @@ class MongoClient {
   public async connectToDatabase(): Promise<void> {
     try {
       if (mongoose.connection.readyState !== 1) {
-        await mongoose.connect(`mongodb://localhost:27017/${this.dbName}`);
+        await mongoose.connect(`${process.env.MONGODB_URI}/${this.dbName}`);
         console.log("Connected to MongoDB");
       }
     } catch (error: any) {

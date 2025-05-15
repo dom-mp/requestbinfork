@@ -41,6 +41,9 @@ const CreateBasket = ({
     event.preventDefault();
     try {
       const verifiedName = await apiService.createBasket(basketName);
+      const generatedToken = await apiService.getToken(basketName);
+
+      localStorage.setItem(`basketName_${verifiedName}`, generatedToken);
       setBaskets((baskets) => baskets.concat(verifiedName));
       setSnackbarMessage(`${verifiedName} basket was created!`);
       setSnackbarOpen(true);
@@ -52,7 +55,7 @@ const CreateBasket = ({
   };
 
   const handleBasketNameChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setBasketName(event.currentTarget.value);
   };
@@ -81,7 +84,6 @@ const CreateBasket = ({
               spellCheck={false}
               variant="outlined"
               id="new-basket-name"
-              color="info"
               value={basketName}
               onChange={handleBasketNameChange}
               size="medium"
@@ -90,8 +92,11 @@ const CreateBasket = ({
               }}
               slotProps={{
                 input: {
+                  sx: {
+                    color: "text.secondary",
+                  },
                   startAdornment: (
-                    <InputAdornment position="start">
+                    <InputAdornment position="start" sx={{ margin: 0 }}>
                       {originURL}/hook/
                     </InputAdornment>
                   ),

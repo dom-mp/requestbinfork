@@ -3,20 +3,10 @@ import { Basket, Request } from "../types";
 import { normalizeRequest } from "../utils";
 
 class PostgresClient {
-  private dbName: string;
   pool: Pool;
 
-  constructor(dbName: string = "requestbin") {
-    this.dbName = dbName;
-    this.pool = this.createPool(this.dbName);
-  }
-
-  private createPool(dbName: string) {
-    return new Pool({
-      host: "localhost",
-      database: dbName,
-      port: 5432,
-    });
+  constructor() {
+    this.pool = new Pool();
   }
 
   public async connect(): Promise<PoolClient> {
