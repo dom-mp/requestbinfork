@@ -24,36 +24,33 @@ function App() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const originURL = window.location.origin;
 
-  const getBaskets = async () => {
+  const getValidBaskets = async () => {
     try {
-      const baskets = await apiService.getBaskets();
+      const localStorageBasketKeys = Object.keys({ ...localStorage });
+      const validBaskets = await apiService.getValidBaskets(
+        localStorageBasketKeys
+      );
 
-      setBaskets(baskets);
+      localStorageBasketKeys.forEach((key) => {
+        if (!validBaskets.includes(key)) {
+          localStorage.removeItem(key);
+        }
+      });
+
+      setBaskets(validBaskets);
     } catch (error: unknown) {
       handleAPIError(error, "Your baskets could not be found.");
     }
   };
 
-  const validateBasket = async () => {
-    try {
-      const localStorageBasketKeys = Object.keys({ ...localStorage }).join(",");
-      const validBasketKeys = await apiService.validateBasket(
-        localStorageBasketKeys
-      );
-      const validBaskets = baskets.filter((basketName) =>
-        validBasketKeys.includes(basketName)
-      );
-
-      setBaskets(validBaskets);
-    } catch (error: unknown) {
-      handleAPIError(error, "Something went wrong with your baskets.");
-    }
+  const setBasketsToLocalStorage = () => {
+    setBaskets(Object.keys({ ...localStorage }));
   };
 
   // load initial state
   useEffect(() => {
-    getBaskets();
-    validateBasket();
+    setBasketsToLocalStorage();
+    getValidBaskets();
   }, []);
 
   return (
@@ -108,7 +105,7 @@ function App() {
                         originURL={originURL}
                         setSnackbarMessage={setSnackbarMessage}
                         setSnackbarOpen={setSnackbarOpen}
-                        getBaskets={getBaskets}
+                        getValidBaskets={getValidBaskets}
                       />
                     }
                   />

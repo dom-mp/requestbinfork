@@ -26,14 +26,14 @@ interface BasketProps {
   originURL: string;
   setSnackbarMessage: React.Dispatch<React.SetStateAction<string>>;
   setSnackbarOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  getBaskets: () => Promise<void>;
+  getValidBaskets: () => Promise<void>;
 }
 
 const Basket = ({
   originURL,
   setSnackbarMessage,
   setSnackbarOpen,
-  getBaskets,
+  getValidBaskets,
 }: BasketProps) => {
   const POLLING_INTERVAL = 1000; // poll every 1 second
   const basketName = useParams().basketName ?? "";
@@ -53,7 +53,7 @@ const Basket = ({
     try {
       await apiService.deleteBasket(basketName);
       // Just rerequesting baskets, prioritise consistency > performance for now
-      await getBaskets();
+      await getValidBaskets();
       setSnackbarMessage(`Deleted basket /${basketName}`);
       setSnackbarOpen(true);
       localStorage.removeItem(basketName);

@@ -56,13 +56,6 @@ const clearBasket = async (basketName: string): Promise<void> => {
   await axios.delete(`${API_BASE}/baskets/${basketName}/requests`);
 };
 
-const validateBasket = async (basketNames: string): Promise<Array<string>> => {
-  const response = await axios.get(`${API_BASE}/baskets/validate`, {
-    params: { basketNames: basketNames },
-  });
-  return response.data.basketNames;
-};
-
 export default {
   getBaskets,
   getValidBaskets,
@@ -72,5 +65,4 @@ export default {
   deleteBasket,
   getRequests,
   clearBasket,
-  validateBasket,
 };
