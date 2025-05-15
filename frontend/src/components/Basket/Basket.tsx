@@ -19,6 +19,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
 import CodeIcon from "@mui/icons-material/Code";
 import CodeOffIcon from "@mui/icons-material/Code";
+import Grid from "@mui/material/Grid";
 
 interface BasketProps {
   originURL: string;
@@ -88,71 +89,76 @@ const Basket = ({
     <Paper
       elevation={4}
       sx={{
-        maxWidth: "100%",
+        maxWidth: "1500px",
+        minWidth: "400px",
         flexGrow: 1,
         padding: 2,
       }}
     >
       <Container>
-        <Stack
-          direction="row"
-          sx={{
-            flexWrap: "wrap",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
+        <Grid
+          container
+          spacing={{ xs: 1, sm: 2 }}
+          columns={{ xs: 4, sm: 12 }}
+          sx={{ paddingBottom: 2 }}
         >
-          <Stack direction="row" spacing={1} alignItems="baseline">
-            <Typography variant="h4">Basket:</Typography>
+          <Grid size="grow" sx={{ minWidth: "280px" }}>
+            <Stack direction="row" spacing={1} alignItems="baseline">
+              <Typography variant="h4">Basket:</Typography>
 
-            <Tooltip
-              arrow
-              title={`${requests.length} requests in basket`}
-              placement="right-start"
-            >
-              <Badge badgeContent={requests.length} color="primary">
-                <Typography
-                  variant="h4"
-                  color="secondary"
-                  sx={{ paddingRight: 1 }}
-                >
-                  <code>/{basketName}</code>
-                </Typography>
-              </Badge>
-            </Tooltip>
-          </Stack>
-
-          <ButtonGroup variant="text">
-            <Tooltip arrow title="Copy basket link" placement="top">
-              <Button onClick={handleCopyLinkButtonClick}>
-                <ContentCopyIcon fontSize="small" />
-              </Button>
-            </Tooltip>
-
-            <Tooltip arrow title="Format JSON" placement="top">
-              <Button
-                color="info"
-                variant={showJSON ? "contained" : "text"}
-                onClick={() => setShowJSON((val) => !val)}
+              <Tooltip
+                arrow
+                title={`${requests.length} requests in basket`}
+                placement="right-start"
               >
-                {showJSON ? <CodeOffIcon /> : <CodeIcon />}
-              </Button>
-            </Tooltip>
+                <Badge badgeContent={requests.length} color="primary">
+                  <Typography
+                    variant="h4"
+                    color="secondary"
+                    sx={{ paddingRight: 1 }}
+                  >
+                    <code>/{basketName}</code>
+                  </Typography>
+                </Badge>
+              </Tooltip>
+            </Stack>
+          </Grid>
 
-            <Tooltip arrow title="Clear basket" placement="top">
-              <Button color="warning" onClick={handleClearBasketButtonClick}>
-                <ClearAllIcon />
-              </Button>
-            </Tooltip>
+          <Grid size={4} sx={{ textAlign: "right" }}>
+            <ButtonGroup variant="text">
+              <Tooltip arrow title="Copy basket link" placement="top">
+                <Button onClick={handleCopyLinkButtonClick}>
+                  <ContentCopyIcon fontSize="small" />
+                </Button>
+              </Tooltip>
 
-            <Tooltip arrow title="Delete basket" placement="top">
-              <Button color="error" onClick={() => setDeleteDialogState(true)}>
-                <DeleteForeverIcon />
-              </Button>
-            </Tooltip>
-          </ButtonGroup>
-        </Stack>
+              <Tooltip arrow title="Format JSON" placement="top">
+                <Button
+                  color="info"
+                  variant={showJSON ? "contained" : "text"}
+                  onClick={() => setShowJSON((val) => !val)}
+                >
+                  {showJSON ? <CodeOffIcon /> : <CodeIcon />}
+                </Button>
+              </Tooltip>
 
+              <Tooltip arrow title="Clear basket" placement="top">
+                <Button color="warning" onClick={handleClearBasketButtonClick}>
+                  <ClearAllIcon />
+                </Button>
+              </Tooltip>
+
+              <Tooltip arrow title="Delete basket" placement="top">
+                <Button
+                  color="error"
+                  onClick={() => setDeleteDialogState(true)}
+                >
+                  <DeleteForeverIcon />
+                </Button>
+              </Tooltip>
+            </ButtonGroup>
+          </Grid>
+        </Grid>
         <Divider />
         <RequestList
           originURL={originURL}

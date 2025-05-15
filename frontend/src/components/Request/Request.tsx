@@ -1,7 +1,7 @@
 import type { Request as RequestType } from "../../types";
 import StyledJSONTree from "../StyledJSONTree";
 import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
+import Grid from "@mui/material/Grid";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -42,15 +42,8 @@ const Request = ({
   );
 
   return (
-    <Stack
-      direction="row"
-      sx={{
-        gap: 3,
-        flexWrap: "wrap",
-        justifyContent: "space-between",
-      }}
-    >
-      <Box>
+    <Grid container>
+      <Grid size="auto" sx={{ paddingRight: 3 }}>
         <Typography variant="h5">{method}</Typography>
         <Typography
           component="time"
@@ -59,12 +52,15 @@ const Request = ({
         >
           {sentAt}
         </Typography>
-      </Box>
+      </Grid>
 
-      <Box>
+      <Grid size="grow" width="1000px" minWidth="300px">
         <Accordion>
           <AccordionDetails>
-            <Typography component="code">
+            <Typography
+              component="code"
+              sx={{ wordBreak: "break-all", textWrap: "wrap" }}
+            >
               PATH: {originURL}/hook/{basketName}
             </Typography>
           </AccordionDetails>
@@ -103,8 +99,8 @@ const Request = ({
             )}
           </AccordionDetails>
         </Accordion>
-      </Box>
-    </Stack>
+      </Grid>
+    </Grid>
   );
 };
 

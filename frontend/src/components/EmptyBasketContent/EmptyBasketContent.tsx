@@ -1,3 +1,6 @@
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+
 interface EmptyBasketContentProps {
   originURL: string;
   basketName: string;
@@ -7,16 +10,16 @@ const EmptyBasketContent = ({
   originURL,
   basketName,
 }: EmptyBasketContentProps) => (
-  <div className="emptyBasket">
-    <h3>Empty Basket!</h3>
-    <p>
-      This basket is empty, send requests to{" "}
+  <Box p={3}>
+    <Typography variant="h5">Empty Basket!</Typography>
+    <Typography variant="body1" sx={{ wordWrap: "break-all" }}>
+      This basket is listening for HTTP requests at{" "}
       <code>
         {originURL}/hook/{basketName}
-      </code>{" "}
-      and they will appear here.
-    </p>
-  </div>
+      </code>
+      .
+    </Typography>
+  </Box>
 );
 
 export default EmptyBasketContent;
