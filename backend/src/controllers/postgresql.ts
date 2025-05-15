@@ -178,10 +178,10 @@ class PostgresClient {
     return result.rows.map((basketItem) => normalizeRequest(basketItem));
   }
 
-  public async getValidBaskets(basketNames: string[]): Promise<any> {
+  public async getValidBaskets(basketNames: string[]): Promise<string[]> {
     let placeHolder = basketNames.map((_, idx) => `$${idx + 1}`).join(", ");
 
-    const query = `SELECT * FROM baskets WHERE name = ANY(ARRAY[${placeHolder}])`;
+    const query = `SELECT name FROM baskets WHERE name = ANY(ARRAY[${placeHolder}])`;
 
     try {
       const result = await this.pool.query(query, basketNames);
