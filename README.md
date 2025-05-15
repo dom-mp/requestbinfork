@@ -50,21 +50,21 @@ In the `backend` directory, create a `.env` file with the following contents:
 
 Navigate to the `backend` directory
 
-  ```bash
-  cd backend
-  ```
+```bash
+cd backend
+```
 
 Build the full project
 
 ```bash
-  npm run build:full
+npm run build:full
 ```
 
 Start the application
 
-  ```bash
-  npm start
-  ```
+```bash
+npm start
+```
 
 ### Dependencies
 
