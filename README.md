@@ -1,21 +1,23 @@
 # RequestBin
 
-RequestBin is a tool that allows you to capture, log, and inspect HTTP requests sent to a public API endpoint.
+RequestBin is a web service that allows you to create unique web hooks to capture, log, and inspect HTTP requests via public API or simple user interface.
 
 ## Features
 
-- Create unique request bins.
-- Each bin has two unique URLs:
-  - An endpoint for receiving requests.
-  - A front-end URL for viewing received requests.
-- You can:
-  - view details of captured requests, including:
-    - HTTP method
-    - Path
-    - Headers
-    - Body
-  - See a list of all requests made to a bin.
-  - Click on a request in the list to view its full details.
+- Create a unique bin and endpoint URL for that bin.
+- See a list of all bins created by a user.
+- Capture HTTP requests sent to a bin and the details of each request, including 
+- view details of captured requests, including:
+  - HTTP method
+  - Path
+  - Headers
+  - Body
+- Sort requests sent to a bin in order of most recent or least recent.
+- View recent responses sent to a bin with out the need to refesh the page. 
+- Copy the URL of a bin with a simple mouse click.
+- View the responses sent to a bin in JSON format.
+- Clear out all captured responses in a bin with a simple mouse click.
+- Delete a bin and its contents with a simple mouse click.
 
 ### Implementation Details
 
@@ -66,6 +68,10 @@ Start the application
 npm start
 ```
 
+### API
+
+- [`psql`](https://github.com/dom-and-the-night-owls/requestbin/wiki/API-Documentation)
+  
 ### Dependencies
 
 - [`psql`](https://www.postgresql.org/download/)
