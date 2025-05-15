@@ -48,11 +48,17 @@ In the `backend` directory, create a `.env` file with the following contents:
 
 ## Installation
 
-Navigate to the `backend` directory and build the full project
+Navigate to the `backend` directory
 
   ```bash
-  cd backend && npm run build:full
+  cd backend
   ```
+
+Build the full project
+
+```bash
+  npm run build:full
+```
 
 Start the application
 
