@@ -7,7 +7,7 @@ const API_BASE = "/api";
 
 const getBaskets = async (): Promise<Array<string>> => {
   const response = await axios.get(`${API_BASE}/baskets`);
-  return response.data.baskets;
+  return response.data.basketNames;
 };
 
 const getValidBaskets = async (
