@@ -8,8 +8,8 @@ export default function basketRouter(pg: PostgresClient, mongo: MongoClient) {
 
   router.get("/baskets", async (_req: Request, res: Response) => {
     const response = await pg.getBaskets();
-    const baskets = response.map(({ name }) => name);
-    res.status(200).json({ baskets });
+    const basketNames = response.map(({ name }) => name);
+    res.status(200).json({ basketNames });
   });
 
   router.get("/baskets/generate_name", async (_req: Request, res: Response) => {
