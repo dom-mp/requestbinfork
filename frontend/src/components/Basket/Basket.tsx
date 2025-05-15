@@ -5,6 +5,7 @@ import apiService from "../../services/requestBinAPI";
 import { handleAPIError } from "../../utils";
 import DialogComponent from "../Dialog";
 import RequestList from "../RequestList";
+import Grid from "@mui/material/Grid";
 import Badge from "@mui/material/Badge";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
@@ -19,7 +20,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
 import CodeIcon from "@mui/icons-material/Code";
 import CodeOffIcon from "@mui/icons-material/Code";
-import Grid from "@mui/material/Grid";
+import SwapVertIcon from "@mui/icons-material/SwapVert";
 
 interface BasketProps {
   originURL: string;
@@ -39,6 +40,7 @@ const Basket = ({
   const [requests, setRequests] = useState<Array<RequestType>>([]);
   const [deleteDialogState, setDeleteDialogState] = useState(false);
   const [showJSON, setShowJSON] = useState(false);
+  const [reverse, setReverse] = useState(true);
   const navigate = useNavigate();
 
   const handleCopyLinkButtonClick = async () => {
@@ -69,11 +71,15 @@ const Basket = ({
     alert(`Basket "${basketName}" successfully cleared.`);
   };
 
+  const handleReverseButtonClick = () => {
+    setReverse((val) => !val);
+  };
+
   useEffect(() => {
     const fetchRequests = async () => {
       try {
         const requests = await apiService.getRequests(basketName);
-        setRequests(requests);
+        setRequests(reverse ? requests.toReversed() : requests);
       } catch (error: unknown) {
         handleAPIError(error);
       }
@@ -83,7 +89,7 @@ const Basket = ({
     const intervalId = setInterval(fetchRequests, POLLING_INTERVAL);
 
     return () => clearInterval(intervalId);
-  }, [basketName]);
+  }, [basketName, reverse]);
 
   return (
     <Paper
@@ -132,6 +138,11 @@ const Basket = ({
                 </Button>
               </Tooltip>
 
+              <Tooltip arrow title={`Reverse order`} placement="top">
+                <Button color="success" onClick={handleReverseButtonClick}>
+                  <SwapVertIcon />
+                </Button>
+              </Tooltip>
               <Tooltip arrow title="Format JSON" placement="top">
                 <Button
                   color="info"
