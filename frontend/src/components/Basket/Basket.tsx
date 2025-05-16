@@ -74,8 +74,7 @@ const Basket = ({ originURL, getBaskets }: BasketProps) => {
   };
 
   const handleClearBasketButtonClick = async () => {
-    if (!confirm(`Delete all requests in basket "${basketName}"?`)) return;
-
+    // TODO: add a dialog here after migrating to useDialog hook?
     await apiService.clearBasket(basketName);
     setRequests(await apiService.getRequests(basketName));
 
