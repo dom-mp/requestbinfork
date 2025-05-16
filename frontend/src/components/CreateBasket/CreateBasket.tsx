@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import type { ChangeEvent } from "react";
 import { useNavigate } from "react-router";
-import apiService from "../../services/requestBinAPI";
+import apiService from "../../services/apiService";
 import { handleAPIError } from "../../utils";
 import { Paper, Typography, Stack, TextField, Button } from "@mui/material";
 import { useNotifications } from "@toolpad/core/useNotifications";

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
-import apiService from "./services/requestBinAPI";
+import apiService from "./services/apiService.ts";
 import { handleAPIError, setErrorNotifier } from "./utils.ts";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import Container from "@mui/material/Container";
