@@ -24,32 +24,33 @@ function App() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const originURL = window.location.origin;
 
+  const removeBasketsFromLocalStorage = (
+    validBaskets: Array<string>,
+    localStorageBasketKeys: Array<string>
+  ) => {
+    localStorageBasketKeys.forEach((key) => {
+      if (!validBaskets.includes(key)) {
+        localStorage.removeItem(key);
+      }
+    });
+  };
+
   const getValidBaskets = async () => {
     try {
-      const localStorageBasketKeys = Object.keys({ ...localStorage });
+      const localStorageBasketKeys = Object.keys(localStorage);
       const validBaskets = await apiService.getValidBaskets(
         localStorageBasketKeys
       );
 
-      localStorageBasketKeys.forEach((key) => {
-        if (!validBaskets.includes(key)) {
-          localStorage.removeItem(key);
-        }
-      });
-
+      removeBasketsFromLocalStorage(validBaskets, localStorageBasketKeys);
       setBaskets(validBaskets);
     } catch (error: unknown) {
       handleAPIError(error, "Your baskets could not be found.");
     }
   };
 
-  const setBasketsToLocalStorage = () => {
-    setBaskets(Object.keys({ ...localStorage }));
-  };
-
   // load initial state
   useEffect(() => {
-    setBasketsToLocalStorage();
     getValidBaskets();
   }, []);
 
