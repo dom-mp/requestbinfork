@@ -110,7 +110,7 @@ const Basket = ({
         >
           <Grid size="grow" sx={{ minWidth: "100%" }}>
             <Stack direction="row" spacing={1} alignItems="baseline">
-              <Typography variant="h4">Basket:</Typography>
+              <Typography variant="h5">BASKET:</Typography>
 
               <Tooltip
                 arrow
@@ -119,11 +119,11 @@ const Basket = ({
               >
                 <Badge badgeContent={requests.length} color="primary">
                   <Typography
-                    variant="h4"
+                    variant="h5"
                     color="secondary"
                     sx={{ paddingRight: 1 }}
                   >
-                    <code>/{basketName}</code>
+                    /{basketName}
                   </Typography>
                 </Badge>
               </Tooltip>
