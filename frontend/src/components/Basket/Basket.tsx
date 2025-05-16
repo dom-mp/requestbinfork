@@ -12,7 +12,6 @@ import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Paper from "@mui/material/Paper";
 import Container from "@mui/material/Container";
-import Stack from "@mui/material/Stack";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
@@ -112,7 +111,7 @@ const Basket = ({ originURL, getBaskets }: BasketProps) => {
       elevation={4}
       sx={{
         maxWidth: "1500px",
-        minWidth: "400px",
+        minWidth: "100%",
         flexGrow: 1,
         padding: 2,
       }}
@@ -122,31 +121,33 @@ const Basket = ({ originURL, getBaskets }: BasketProps) => {
           container
           spacing={{ xs: 1, sm: 2 }}
           columns={{ xs: 4, sm: 12 }}
-          sx={{ paddingBottom: 2 }}
+          sx={{ paddingBottom: 2, minWidth: "100%" }}
         >
-          <Grid size="grow" sx={{ minWidth: "280px" }}>
-            <Stack direction="row" spacing={1} alignItems="baseline">
-              <Typography variant="h4">Basket:</Typography>
-
-              <Tooltip
-                arrow
-                title={`${requests.length} requests in basket`}
-                placement="right-start"
-              >
-                <Badge badgeContent={requests.length} color="primary">
-                  <Typography
-                    variant="h4"
-                    color="secondary"
-                    sx={{ paddingRight: 1 }}
-                  >
-                    <code>/{basketName}</code>
-                  </Typography>
-                </Badge>
-              </Tooltip>
-            </Stack>
+          <Grid size="auto" sx={{ minWidth: "40px" }}>
+            <Tooltip
+              arrow
+              title={`${requests.length} requests in basket`}
+              placement="right-start"
+            >
+              <Badge badgeContent={requests.length} color="primary">
+                <Typography variant="h5">Basket:</Typography>
+                <Typography
+                  variant="h5"
+                  color="secondary"
+                  sx={{
+                    paddingLeft: 1,
+                    paddingRight: 1,
+                    fontFamily: "monospace",
+                  }}
+                >
+                  /{basketName}
+                </Typography>
+              </Badge>
+            </Tooltip>
           </Grid>
 
-          <Grid size={4} sx={{ textAlign: "right" }}>
+          <Grid size="grow"></Grid>
+          <Grid size="auto" sx={{ textAlign: "right" }}>
             <ButtonGroup variant="text">
               <Tooltip arrow title="Copy basket link" placement="top">
                 <Button onClick={handleCopyLinkButtonClick}>
@@ -187,6 +188,7 @@ const Basket = ({ originURL, getBaskets }: BasketProps) => {
             </ButtonGroup>
           </Grid>
         </Grid>
+
         <Divider />
         <RequestList
           originURL={originURL}

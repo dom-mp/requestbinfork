@@ -8,7 +8,7 @@ const Nav = () => {
       position="static"
       sx={{
         borderRadius: 1,
-        minWidth: "400px",
+        minWidth: "100%",
       }}
     >
       <Toolbar>

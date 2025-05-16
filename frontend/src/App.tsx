@@ -55,7 +55,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
-        <Container maxWidth="xl" sx={{ minWidth: "350px" }}>
+        <Container maxWidth="xl" sx={{ minWidth: "100%" }}>
           <CssBaseline />
           <Nav />
 

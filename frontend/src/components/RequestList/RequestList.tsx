@@ -21,7 +21,12 @@ const RequestList = ({
   }
 
   return (
-    <Grid container spacing={{ xs: 1, sm: 2 }} columns={{ xs: 4, sm: 12 }}>
+    <Grid
+      container
+      spacing={{ xs: 1, sm: 2 }}
+      columns={{ xs: 4, sm: 12 }}
+      sx={{ paddingTop: 1 }}
+    >
       {requests.map((request, i) => (
         <Request
           key={i}
