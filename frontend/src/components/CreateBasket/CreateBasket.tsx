@@ -4,21 +4,17 @@ import { useNavigate } from "react-router";
 import apiService from "../../services/requestBinAPI";
 import { handleAPIError } from "../../utils";
 import { Paper, Typography, Stack, TextField, Button } from "@mui/material";
+import { useNotifications } from "@toolpad/core/useNotifications";
 
 interface CreateBasketProps {
   originURL: string;
   setBaskets: React.Dispatch<React.SetStateAction<Array<string>>>;
-  setSnackbarMessage: React.Dispatch<React.SetStateAction<string>>;
-  setSnackbarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CreateBasket = ({
-  originURL,
-  setBaskets,
-  setSnackbarMessage,
-  setSnackbarOpen,
-}: CreateBasketProps) => {
+const CreateBasket = ({ originURL, setBaskets }: CreateBasketProps) => {
   const [basketName, setBasketName] = useState<string>("");
+  const notifications = useNotifications();
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,8 +34,10 @@ const CreateBasket = ({
 
       localStorage.setItem(`${verifiedName}`, generatedToken);
       setBaskets((baskets) => baskets.concat(verifiedName));
-      setSnackbarMessage(`${verifiedName} basket was created!`);
-      setSnackbarOpen(true);
+      notifications.show(`${verifiedName} basket was created!`, {
+        severity: "success",
+        autoHideDuration: 3000,
+      });
 
       navigate(`/baskets/${basketName}`);
     } catch (error: unknown) {

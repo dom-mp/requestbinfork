@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
 import apiService from "./services/requestBinAPI";
-import { handleAPIError } from "./utils.ts";
+import { handleAPIError, setErrorNotifier } from "./utils.ts";
+import { useNotifications } from "@toolpad/core/useNotifications";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import Snackbar from "@mui/material/Snackbar";
-import { ThemeProvider, useTheme } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme.ts";
 import CssBaseline from "@mui/material/CssBaseline";
 import Nav from "./components/Nav";
@@ -19,9 +19,8 @@ import MyBasketsFab from "./components/MyBasketsFab";
 function App() {
   const [baskets, setBaskets] = useState<Array<string>>([]);
   const [drawerState, setDrawerState] = useState(false);
-  const isMobile = useMediaQuery(useTheme().breakpoints.down("sm"));
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const notifications = useNotifications();
   const originURL = window.location.origin;
 
   const getBaskets = async () => {
@@ -36,7 +35,10 @@ function App() {
   // load initial state
   useEffect(() => {
     getBaskets();
-  }, []);
+    setErrorNotifier((message) =>
+      notifications.show(message, { key: message, severity: "error" }),
+    );
+  }, [notifications]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -44,14 +46,6 @@ function App() {
         <Container maxWidth="xl" sx={{ minWidth: "100%" }}>
           <CssBaseline />
           <Nav />
-
-          <Snackbar
-            anchorOrigin={{ vertical: "top", horizontal: "center" }}
-            open={snackbarOpen}
-            autoHideDuration={3000}
-            onClose={() => setSnackbarOpen(false)}
-            message={snackbarMessage}
-          />
 
           <Box
             component="main"
@@ -77,8 +71,6 @@ function App() {
                     <CreateBasket
                       originURL={originURL}
                       setBaskets={setBaskets}
-                      setSnackbarMessage={setSnackbarMessage}
-                      setSnackbarOpen={setSnackbarOpen}
                     />
                   }
                 />
@@ -86,12 +78,7 @@ function App() {
                   <Route
                     path=":basketName"
                     element={
-                      <Basket
-                        originURL={originURL}
-                        setSnackbarMessage={setSnackbarMessage}
-                        setSnackbarOpen={setSnackbarOpen}
-                        getBaskets={getBaskets}
-                      />
+                      <Basket originURL={originURL} getBaskets={getBaskets} />
                     }
                   />
                 </Route>
