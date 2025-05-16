@@ -23,7 +23,7 @@ const Nav = () => {
         </Button>
         <Button
           color="inherit"
-          href="https://github.com/dom-and-the-night-owls/requestbin/wiki"
+          href="https://github.com/dom-and-the-night-owls/requestbin/wiki/API-Documentation"
         >
           documentation
         </Button>
