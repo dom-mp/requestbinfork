@@ -13,7 +13,7 @@ const EmptyBasketContent = ({
   <Box p={3}>
     <Typography variant="h5">Empty Basket!</Typography>
     <Typography variant="body1" sx={{ overflowWrap: "break-word" }}>
-      This basket is listening for HTTP requests at: .
+      This basket is listening for HTTP requests at:
     </Typography>
 
     <Typography sx={{ fontFamily: "monospace", overflowWrap: "anywhere" }}>
