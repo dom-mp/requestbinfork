@@ -11,7 +11,7 @@ const getBaskets = async (): Promise<Array<string>> => {
 };
 
 const getValidBaskets = async (
-  basketNames: Array<string>,
+  basketNames: Array<string>
 ): Promise<Array<string>> => {
   const response = await axios.get(`${API_BASE}/baskets/validate`, {
     params: { basketNames: basketNames.join(",") },
@@ -41,7 +41,7 @@ const deleteBasket = async (basketName: string): Promise<void> => {
 
 const getRequests = async (basketName: string): Promise<Array<Request>> => {
   const response = await axios.get(
-    `${API_BASE}/baskets/${basketName}/requests`,
+    `${API_BASE}/baskets/${basketName}/requests`
   );
 
   const requests = response.data.requests;

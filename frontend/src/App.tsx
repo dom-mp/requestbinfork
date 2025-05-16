@@ -23,10 +23,21 @@ function App() {
   const notifications = useNotifications();
   const originURL = window.location.origin;
 
-  const getBaskets = async () => {
+  const getBaskets = () => {
+    const baskets = Object.keys(localStorage);
+    setBaskets(baskets);
+  };
+
+  const validateBaskets = async () => {
     try {
-      const baskets = await apiService.getBaskets();
-      setBaskets(baskets);
+      const localBaskets = Object.keys(localStorage);
+      const validBaskets = await apiService.getValidBaskets(localBaskets);
+
+      localBaskets.forEach((key) => {
+        if (!validBaskets.includes(key)) {
+          localStorage.removeItem(key);
+        }
+      });
     } catch (error: unknown) {
       handleAPIError(error, "Your baskets could not be found.");
     }
@@ -34,6 +45,7 @@ function App() {
 
   // load initial state
   useEffect(() => {
+    validateBaskets();
     getBaskets();
     setErrorNotifier((message) =>
       notifications.show(message, { key: message, severity: "error" }),
