@@ -68,7 +68,13 @@ const MyBaskets = ({ baskets, drawerState, setDrawerState }: BasketsProps) => {
               <ArchiveIcon fontSize="small" />
             </ListItemIcon>
 
-            <Typography variant="inherit" noWrap>
+            <Typography
+              variant="inherit"
+              noWrap
+              sx={{
+                fontFamily: "monospace",
+              }}
+            >
               /{basketName}
             </Typography>
           </MenuItem>

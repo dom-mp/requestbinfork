@@ -46,7 +46,7 @@ const CreateBasket = ({ originURL, setBaskets }: CreateBasketProps) => {
   };
 
   const handleBasketNameChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setBasketName(event.currentTarget.value);
   };
@@ -90,10 +90,14 @@ const CreateBasket = ({ originURL, setBaskets }: CreateBasketProps) => {
                 input: {
                   sx: {
                     color: "text.secondary",
+                    fontFamily: "monospace",
                   },
                 },
                 inputLabel: {
-                  sx: { color: "text.primary" },
+                  sx: {
+                    color: "text.primary",
+                    fontFamily: "monospace",
+                  },
                   required: false, // Hide label "required" asterisk
                 },
               }}
