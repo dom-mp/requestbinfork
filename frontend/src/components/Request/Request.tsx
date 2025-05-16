@@ -43,7 +43,7 @@ const Request = ({
 
   return (
     <Grid container>
-      <Grid size="auto" sx={{ paddingRight: 3 }}>
+      <Grid size="auto" sx={{ padding: 1, paddingRight: 2 }}>
         <Typography variant="h5">{method}</Typography>
         <Typography
           component="time"
@@ -54,7 +54,7 @@ const Request = ({
         </Typography>
       </Grid>
 
-      <Grid size="grow" width="1000px" minWidth="300px">
+      <Grid size="grow" width="1000px" minWidth="250px">
         <Accordion>
           <AccordionDetails>
             <Typography
