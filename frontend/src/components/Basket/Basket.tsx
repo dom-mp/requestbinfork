@@ -96,7 +96,7 @@ const Basket = ({
       elevation={4}
       sx={{
         maxWidth: "1500px",
-        minWidth: "400px",
+        minWidth: "100%",
         flexGrow: 1,
         padding: 2,
       }}
@@ -108,7 +108,7 @@ const Basket = ({
           columns={{ xs: 4, sm: 12 }}
           sx={{ paddingBottom: 2 }}
         >
-          <Grid size="grow" sx={{ minWidth: "280px" }}>
+          <Grid size="grow" sx={{ minWidth: "100%" }}>
             <Stack direction="row" spacing={1} alignItems="baseline">
               <Typography variant="h4">Basket:</Typography>
 
