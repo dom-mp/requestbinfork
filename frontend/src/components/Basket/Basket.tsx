@@ -25,7 +25,7 @@ import SwapVertIcon from "@mui/icons-material/SwapVert";
 
 interface BasketProps {
   originURL: string;
-  getBaskets: () => Promise<void>;
+  getBaskets: () => void;
 }
 
 const Basket = ({ originURL, getBaskets }: BasketProps) => {
@@ -58,10 +58,8 @@ const Basket = ({ originURL, getBaskets }: BasketProps) => {
   const handleDeleteBasketButtonClick = async () => {
     try {
       await apiService.deleteBasket(basketName);
-      // Just rerequesting baskets, prioritise consistency > performance for now
-      await getBaskets();
-
       localStorage.removeItem(basketName);
+      getBaskets();
       navigate("/");
 
       notifications.show(`Deleted basket /${basketName}`, {
