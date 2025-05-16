@@ -9,18 +9,20 @@ const LogoIcon = (props: SvgIconProps) => (
       viewBox="0 0 512 512"
       id="svg1"
       xmlns="http://www.w3.org/2000/svg"
+      {...props}
     >
       <defs id="defs1" />
-      <circle
+      <path
         style={{
           fill: "#000000",
-          fillOpacity: 1,
-          strokeWidth: 0.877665,
+          fillOpacity: 0.843318,
         }}
-        id="path1"
-        cx={256}
-        cy={256}
-        r={256}
+        id="rect1"
+        width={511.99988}
+        height={512}
+        x={0}
+        y={0}
+        d="m 112.63997,0 h 286.71991 a 112.64,112.64 45 0 1 112.64,112.64 l 0,286.72003 A 112.63997,112.63997 135 0 1 399.3599,512 H 112.64 A 112.64,112.64 45 0 1 0,399.36 V 112.63997 A 112.63997,112.63997 135 0 1 112.63997,0 Z"
       />
       <g
         id="layer1"
@@ -38,7 +40,7 @@ const LogoIcon = (props: SvgIconProps) => (
               fontSize: "434.694px",
               fontFamily: "'Bebas Neue'",
               letterSpacing: 0,
-              fill: "#f2f2f2",
+              fill: "#fbfbfb",
               fillOpacity: 1,
               strokeWidth: 1.08674,
             }}
@@ -50,7 +52,7 @@ const LogoIcon = (props: SvgIconProps) => (
           <path
             id="text2"
             style={{
-              fill: "#e3afbe",
+              fill: "#ffb8d6",
               fillOpacity: 1,
               strokeWidth: 1.11175,
             }}
