@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
 import apiService from "./services/requestBinAPI";
-import { handleAPIError } from "./utils.ts";
+import { handleAPIError, setErrorNotifier } from "./utils.ts";
+import { useNotifications } from "@toolpad/core/useNotifications";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import Snackbar from "@mui/material/Snackbar";
-import { ThemeProvider, useTheme } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme.ts";
 import CssBaseline from "@mui/material/CssBaseline";
 import Nav from "./components/Nav";
@@ -19,31 +19,25 @@ import MyBasketsFab from "./components/MyBasketsFab";
 function App() {
   const [baskets, setBaskets] = useState<Array<string>>([]);
   const [drawerState, setDrawerState] = useState(false);
-  const isMobile = useMediaQuery(useTheme().breakpoints.down("sm"));
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const notifications = useNotifications();
   const originURL = window.location.origin;
 
-  const removeBasketsFromLocalStorage = (
-    validBaskets: Array<string>,
-    localStorageBasketKeys: Array<string>
-  ) => {
-    localStorageBasketKeys.forEach((key) => {
-      if (!validBaskets.includes(key)) {
-        localStorage.removeItem(key);
-      }
-    });
+  const getBaskets = () => {
+    const baskets = Object.keys(localStorage);
+    setBaskets(baskets);
   };
 
-  const getValidBaskets = async () => {
+  const validateBaskets = async () => {
     try {
-      const localStorageBasketKeys = Object.keys(localStorage);
-      const validBaskets = await apiService.getValidBaskets(
-        localStorageBasketKeys
-      );
+      const localBaskets = Object.keys(localStorage);
+      const validBaskets = await apiService.getValidBaskets(localBaskets);
 
-      removeBasketsFromLocalStorage(validBaskets, localStorageBasketKeys);
-      setBaskets(validBaskets);
+      localBaskets.forEach((key) => {
+        if (!validBaskets.includes(key)) {
+          localStorage.removeItem(key);
+        }
+      });
     } catch (error: unknown) {
       handleAPIError(error, "Your baskets could not be found.");
     }
@@ -51,8 +45,12 @@ function App() {
 
   // load initial state
   useEffect(() => {
-    getValidBaskets();
-  }, []);
+    validateBaskets();
+    getBaskets();
+    setErrorNotifier((message) =>
+      notifications.show(message, { key: message, severity: "error" }),
+    );
+  }, [notifications]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -60,14 +58,6 @@ function App() {
         <Container maxWidth="xl" sx={{ minWidth: "350px" }}>
           <CssBaseline />
           <Nav />
-
-          <Snackbar
-            anchorOrigin={{ vertical: "top", horizontal: "center" }}
-            open={snackbarOpen}
-            autoHideDuration={3000}
-            onClose={() => setSnackbarOpen(false)}
-            message={snackbarMessage}
-          />
 
           <Box
             component="main"
@@ -93,8 +83,6 @@ function App() {
                     <CreateBasket
                       originURL={originURL}
                       setBaskets={setBaskets}
-                      setSnackbarMessage={setSnackbarMessage}
-                      setSnackbarOpen={setSnackbarOpen}
                     />
                   }
                 />
@@ -102,12 +90,7 @@ function App() {
                   <Route
                     path=":basketName"
                     element={
-                      <Basket
-                        originURL={originURL}
-                        setSnackbarMessage={setSnackbarMessage}
-                        setSnackbarOpen={setSnackbarOpen}
-                        getValidBaskets={getValidBaskets}
-                      />
+                      <Basket originURL={originURL} getBaskets={getBaskets} />
                     }
                   />
                 </Route>
