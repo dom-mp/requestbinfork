@@ -13,7 +13,7 @@ const Nav = () => {
     >
       <Toolbar>
         <Button color="inherit" component={Link} to={"/"}>
-          <LogoIcon sx={{ marginRight: 1 }} /> RequestBin
+          <LogoIcon sx={{ marginRight: 1 }} /> rBasket
         </Button>
         <Button
           color="inherit"
