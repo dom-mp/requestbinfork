@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import type { Request as RequestType } from "../../types";
-import apiService from "../../services/requestBinAPI";
+import apiService from "../../services/apiService";
 import { handleAPIError } from "../../utils";
 import DialogComponent from "../Dialog";
 import RequestList from "../RequestList";
