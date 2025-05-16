@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
+import { useNotifications } from "@toolpad/core/useNotifications";
 import type { Request as RequestType } from "../../types";
 import apiService from "../../services/requestBinAPI";
 import { handleAPIError } from "../../utils";
@@ -24,19 +25,13 @@ import SwapVertIcon from "@mui/icons-material/SwapVert";
 
 interface BasketProps {
   originURL: string;
-  setSnackbarMessage: React.Dispatch<React.SetStateAction<string>>;
-  setSnackbarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   getBaskets: () => Promise<void>;
 }
 
-const Basket = ({
-  originURL,
-  setSnackbarMessage,
-  setSnackbarOpen,
-  getBaskets,
-}: BasketProps) => {
+const Basket = ({ originURL, getBaskets }: BasketProps) => {
   const POLLING_INTERVAL = 1000; // poll every 1 second
   const basketName = useParams().basketName ?? "";
+  const notifications = useNotifications();
   const [requests, setRequests] = useState<Array<RequestType>>([]);
   const [deleteDialogState, setDeleteDialogState] = useState(false);
   const [showJSON, setShowJSON] = useState(false);
@@ -45,8 +40,19 @@ const Basket = ({
 
   const handleCopyLinkButtonClick = async () => {
     await navigator.clipboard.writeText(`${originURL}/hook/${basketName}`);
-    setSnackbarMessage("Basket URL copied to clipboard");
-    setSnackbarOpen(true);
+    notifications.show("Basket URL copied to clipboard", {
+      key: "clipboard",
+      autoHideDuration: 2000,
+    });
+  };
+
+  const handleFormatButtonClick = () => {
+    setShowJSON((val) => !val);
+
+    notifications.show("Formatted JSON", {
+      key: "format",
+      autoHideDuration: 2000,
+    });
   };
 
   const handleDeleteBasketButtonClick = async () => {
@@ -54,10 +60,14 @@ const Basket = ({
       await apiService.deleteBasket(basketName);
       // Just rerequesting baskets, prioritise consistency > performance for now
       await getBaskets();
-      setSnackbarMessage(`Deleted basket /${basketName}`);
-      setSnackbarOpen(true);
+
       localStorage.removeItem(basketName);
       navigate("/");
+
+      notifications.show(`Deleted basket /${basketName}`, {
+        key: "delete",
+        autoHideDuration: 2000,
+      });
     } catch (error: unknown) {
       handleAPIError(error);
     }
@@ -68,11 +78,20 @@ const Basket = ({
 
     await apiService.clearBasket(basketName);
     setRequests(await apiService.getRequests(basketName));
-    alert(`Basket "${basketName}" successfully cleared.`);
+
+    notifications.show(`Basket "${basketName}" successfully cleared.`, {
+      key: "clear",
+      autoHideDuration: 2000,
+    });
   };
 
   const handleReverseButtonClick = () => {
     setReverse((val) => !val);
+
+    notifications.show(`Reversed list order`, {
+      key: "reverse",
+      autoHideDuration: 2000,
+    });
   };
 
   useEffect(() => {
@@ -143,11 +162,12 @@ const Basket = ({
                   <SwapVertIcon />
                 </Button>
               </Tooltip>
+
               <Tooltip arrow title="Format JSON" placement="top">
                 <Button
                   color="info"
                   variant={showJSON ? "contained" : "text"}
-                  onClick={() => setShowJSON((val) => !val)}
+                  onClick={handleFormatButtonClick}
                 >
                   {showJSON ? <CodeOffIcon /> : <CodeIcon />}
                 </Button>
