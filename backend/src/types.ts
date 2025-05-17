@@ -34,7 +34,3 @@ export interface PostgresRequestRow {
   headers: string;
   body_mongo_id: string;
 }
-
-export interface BasketRequest extends Omit<Request, "bodyMongoId"> {
-  requestBody: string | null;
-}
