@@ -2,6 +2,9 @@
 
 RequestBasket is a web service that allows you to create unique web hooks to capture, log, and inspect HTTP requests via public API or simple user interface.
 
+## Preview
+<img src="assets/create_basket.png" alt="Create a Basket" width="32%"/> <img src="assets/my_baskets.png" alt="My Baskets" width="32%"/> <img src="assets/basket_request_json.png" alt="Basket with request" width="32%"/>
+
 ## Features
 
 - Create a unique basket and endpoint URL for that basket.
