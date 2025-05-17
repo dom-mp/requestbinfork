@@ -3,8 +3,9 @@ import * as fs from "node:fs";
 import path from "node:path";
 
 const isDatabaseCreated = async (client: Client): Promise<boolean> => {
-  const query = "SELECT * FROM pg_database WHERE datname = $1";
-  let result = await client.query(query, ["requestbin"]);
+  const result = await client.query(
+    "SELECT * FROM pg_database WHERE datname = 'requestbin'"
+  );
   return result.rowCount !== 0;
 };
 
