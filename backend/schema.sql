@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT Exists baskets (
+CREATE TABLE IF NOT EXISTS baskets (
   name varchar(255) PRIMARY KEY,
   token varchar(255)
 );
