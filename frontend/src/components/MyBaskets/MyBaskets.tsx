@@ -58,8 +58,12 @@ const MyBaskets = ({ baskets, drawerState, setDrawerState }: BasketsProps) => {
                 },
 
                 "&:hover": {
-                  color: "primary.contrastText",
+                  color: "text.primary",
                   backgroundColor: "primary.dark",
+
+                  "& .MuiListItemIcon-root": {
+                    color: "text.primary",
+                  },
                 },
               },
             }}

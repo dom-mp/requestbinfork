@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import mockApiRouter from "./routes/mockApi";
+import path from "path";
 import apiRouter from "./routes/api";
 import hookRouter from "./routes/hook";
 import PostgresClient from "./controllers/postgresql";
@@ -46,9 +47,10 @@ if (useMockAPI) {
   app.use("/hook", hookRouter(pg, mongo));
 }
 
-app.get("/ping", (_req, res) => {
-  console.log("someone pinged here");
-  res.send("pong");
+// Catch-all route enabling react refresh
+// express v5 requires * wildcard to have a name
+app.get("/*path", (_, res) => {
+  res.sendFile(path.join(__dirname, "../dist", "index.html"));
 });
 
 app.listen(PORT, () => {
