@@ -34,7 +34,11 @@ const Request = ({
     <Box>
       <Typography
         component="pre"
-        sx={{ wordBreak: "break-all", textWrap: "wrap" }}
+        sx={{
+          fontFamily: "monospace",
+          wordBreak: "break-all",
+          textWrap: "wrap",
+        }}
       >
         {requestBody}
       </Typography>
