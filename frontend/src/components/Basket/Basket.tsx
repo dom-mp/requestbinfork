@@ -166,6 +166,7 @@ const Basket = ({ originURL, getBaskets }: BasketProps) => {
                   color="info"
                   variant={showJSON ? "contained" : "text"}
                   onClick={handleFormatButtonClick}
+                  sx={{ width: "40px" }}
                 >
                   {showJSON ? <CodeOffIcon /> : <CodeIcon />}
                 </Button>
