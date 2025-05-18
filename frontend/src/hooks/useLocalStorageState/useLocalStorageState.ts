@@ -4,6 +4,7 @@ const useLocalStorageState = () => {
   const snapshotCache = useRef<Array<string>>([]);
 
   const getSnapshot = useCallback(() => {
+    // cannot use Object.keys() if we monkeypatch localStorage
     const keys = Array.from(
       { length: window.localStorage.length },
       (_, i) => window.localStorage.key(i) as string,
@@ -13,7 +14,6 @@ const useLocalStorageState = () => {
       snapshotCache.current = keys;
     }
 
-    console.log(`From getSnapshot: ${snapshotCache.current}`);
     return snapshotCache.current;
   }, []);
 
@@ -27,22 +27,24 @@ const useLocalStorageState = () => {
 
   const keys = useSyncExternalStore(subscribe, getSnapshot);
 
-  // patch methods so localStorage mutations trigger StorageEvent on current tab
-  if (typeof window !== "undefined") {
-    const _setItem = window.localStorage.setItem;
-    window.localStorage.setItem = function setItem(key, newValue) {
-      const result = _setItem.call(this, key, newValue);
-      window.dispatchEvent(new StorageEvent("storage", { key, newValue }));
-      return result;
-    };
+  // Patch methods so localStorage mutations trigger StorageEvent on current tab
+  // - not needed since we are using util methods instead of touching localStorage
+  //   directly, but keeping for reference.
 
-    const _removeItem = window.localStorage.removeItem;
-    window.localStorage.removeItem = function removeItem(key) {
-      const result = _removeItem.call(this, key);
-      window.dispatchEvent(new StorageEvent("storage", { key }));
-      return result;
-    };
-  }
+  // if (typeof window !== "undefined") {
+  //   const _setItem = window.localStorage.setItem;
+  //   window.localStorage.setItem = function setItem(key, newValue) {
+  //     const result = _setItem.call(this, key, newValue);
+  //     window.dispatchEvent(new StorageEvent("storage", { key, newValue }));
+  //     return result;
+  //   };
+  //
+  //   const _removeItem = window.localStorage.removeItem;
+  //   window.localStorage.removeItem = function removeItem(key) {
+  //     const result = _removeItem.call(this, key);
+  //     return result;
+  //   };
+  // }
 
   return keys;
 };

@@ -2,16 +2,15 @@ import { useState, useEffect } from "react";
 import type { ChangeEvent } from "react";
 import { useNavigate } from "react-router";
 import apiService from "../../services/apiService";
-import { handleAPIError } from "../../utils";
+import { handleAPIError, addBasket } from "../../utils";
 import { Paper, Typography, Stack, TextField, Button } from "@mui/material";
 import { useNotifications } from "@toolpad/core/useNotifications";
 
 interface CreateBasketProps {
   originURL: string;
-  setBaskets: React.Dispatch<React.SetStateAction<Array<string>>>;
 }
 
-const CreateBasket = ({ originURL, setBaskets }: CreateBasketProps) => {
+const CreateBasket = ({ originURL }: CreateBasketProps) => {
   const [basketName, setBasketName] = useState<string>("");
   const notifications = useNotifications();
 
@@ -32,8 +31,7 @@ const CreateBasket = ({ originURL, setBaskets }: CreateBasketProps) => {
       const verifiedName = await apiService.createBasket(basketName);
       const generatedToken = await apiService.getToken(basketName);
 
-      localStorage.setItem(`${verifiedName}`, generatedToken);
-      setBaskets((baskets) => baskets.concat(verifiedName));
+      addBasket(`${verifiedName}`, generatedToken);
       notifications.show(`${verifiedName} basket was created!`, {
         severity: "success",
         autoHideDuration: 3000,
