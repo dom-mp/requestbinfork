@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
 import apiService from "./services/apiService.ts";
 import { handleAPIError, setErrorNotifier, removeBasket } from "./utils.ts";
@@ -18,33 +18,41 @@ import CreateBasket from "./components/CreateBasket";
 import MyBasketsFab from "./components/MyBasketsFab";
 
 function App() {
-  const baskets = useLocalStorageState();
+  const localBaskets = useLocalStorageState();
+  const [baskets, setBaskets] = useState<Array<string>>(localBaskets);
   const [drawerState, setDrawerState] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const notifications = useNotifications();
   const originURL = window.location.origin;
 
-  const validateBaskets = useCallback(async () => {
-    try {
-      const validBaskets = await apiService.getValidBaskets(baskets);
-
-      baskets.forEach((key) => {
-        if (!validBaskets.includes(key)) {
-          removeBasket(key);
-        }
-      });
-    } catch (error: unknown) {
-      handleAPIError(error, "Your baskets could not be found.");
-    }
-  }, [baskets]);
-
-  // load initial state
   useEffect(() => {
-    validateBaskets();
     setErrorNotifier((message) =>
       notifications.show(message, { key: message, severity: "error" }),
     );
-  }, [notifications, validateBaskets]);
+  }, [notifications]);
+
+  useEffect(() => {
+    const validateBaskets = async () => {
+      try {
+        const validBaskets = await apiService.getValidBaskets(localBaskets);
+
+        localBaskets.forEach((key) => {
+          if (!validBaskets.includes(key)) {
+            removeBasket(key);
+          }
+        });
+
+        setBaskets(validBaskets);
+      } catch (error: unknown) {
+        handleAPIError(
+          error,
+          "An error occurred while validating your local baskets.",
+        );
+      }
+    };
+
+    validateBaskets();
+  }, [localBaskets]);
 
   return (
     <ThemeProvider theme={theme}>
