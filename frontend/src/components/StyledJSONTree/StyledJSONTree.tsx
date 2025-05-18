@@ -12,23 +12,25 @@ const StyledJSONTree = ({ json }: StyledJSONTreeProps) => {
   const jsonTreeTheme = {
     scheme: "night_owl",
     author: "Daniel Chae, Dominique Morales Perez",
-    // base00: pallete.background.paper, //  Default Background
-    base00: `#00000000`, //  (Full Transparent)
-    base01: pallete.background.default, //  Lighter Background (Used for status bars, line number and folding marks)
-    base02: pallete.action.selected, //  Selection Background
-    base03: pallete.text.disabled, //  Comments, Invisibles, Line Highlighting
-    base04: pallete.text.secondary, //  Dark Foreground (Used for status bars)
-    base05: pallete.text.primary, //  Default Foreground, Caret, Delimiters, Operators
-    base06: pallete.grey[200], //  Light Foreground (Not often used)
-    base07: pallete.grey[400], //  Light Background (Not often used)
-    base08: pallete.error.main, //  Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
-    base09: pallete.warning.main, //  Integers, Boolean, Constants, XML Attributes, Markup Link Url
-    base0A: pallete.warning.light, //  Classes, Markup Bold, Search Text Background
-    base0B: pallete.success.main, //  Strings, Inherited Class, Markup Code, Diff Inserted
-    base0C: pallete.info.light, //  Support, Regular Expressions, Escape Characters, Markup Quotes
-    base0D: pallete.primary.main, //  Functions, Methods, Attribute IDs, Headings
-    base0E: pallete.secondary.dark, //  Keywords, Storage, Selector, Markup Italic, Diff Changed
-    base0F: pallete.warning.dark, //  Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?>
+    base00: `#00000000`, // BACKGROUND_COLOR
+    base01: pallete.background.default,
+    base02: pallete.action.selected,
+    base03: pallete.text.disabled, // ITEM_STRING_EXPANDED_COLOR
+    base04: pallete.text.secondary,
+    base05: pallete.text.primary,
+    base06: pallete.grey[200],
+    base07: pallete.grey[400], // TEXT_COLOR
+    base08: pallete.error.main, // NULL_COLOR, UNDEFINED_COLOR, FUNCTION_COLOR, SYMBOL_COLOR
+    base09: pallete.warning.main, // NUMBER_COLOR, BOOLEAN_COLOR
+    base0A: pallete.warning.light,
+    base0B: pallete.success.main, // STRING_COLOR, DATE_COLOR, ITEM_STRING_COLOR
+    base0C: pallete.info.light,
+    base0D: pallete.primary.main, // LABEL_COLOR, ARROW_COLOR
+    base0E: pallete.secondary.dark,
+    base0F: pallete.warning.dark,
+
+    nestedNodeLabel: { fontFamily: "monospace" },
+    value: { fontFamily: "monospace" },
   };
 
   return (

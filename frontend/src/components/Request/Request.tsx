@@ -34,7 +34,11 @@ const Request = ({
     <Box>
       <Typography
         component="pre"
-        sx={{ wordBreak: "break-all", textWrap: "wrap" }}
+        sx={{
+          fontFamily: "monospace",
+          wordBreak: "break-all",
+          textWrap: "wrap",
+        }}
       >
         {requestBody}
       </Typography>
@@ -72,17 +76,39 @@ const Request = ({
           </AccordionSummary>
 
           <AccordionDetails>
-            {headers.split("\n").map((headerText, i) => {
-              return (
-                <Typography
-                  key={i}
-                  variant="body1"
-                  sx={{ wordBreak: "break-all", textWrap: "wrap" }}
-                >
-                  {headerText}
-                </Typography>
-              );
-            })}
+            {headers
+              .trim()
+              .split("\n")
+              .map((headerText, i) => {
+                const [key, value] = headerText.split(":");
+                return (
+                  <Box key={i}>
+                    <Typography
+                      component="span"
+                      variant="body1"
+                      color="primary.main"
+                      sx={{
+                        fontFamily: "monospace",
+                        wordBreak: "break-all",
+                        textWrap: "wrap",
+                      }}
+                    >
+                      {key}:
+                    </Typography>
+                    <Typography
+                      component="span"
+                      variant="body1"
+                      sx={{
+                        fontFamily: "monospace",
+                        wordBreak: "break-all",
+                        textWrap: "wrap",
+                      }}
+                    >
+                      {value}
+                    </Typography>
+                  </Box>
+                );
+              })}
           </AccordionDetails>
         </Accordion>
 
