@@ -59,7 +59,7 @@ const createDatabaseTables = async () => {
   await client.connect();
 
   try {
-    const schemaPath = path.resolve(__dirname, "schema.sql");
+    const schemaPath = path.resolve(__dirname, "../", "schema.sql");
     const data = await fs.promises.readFile(schemaPath, { encoding: "utf8" });
     const response = await client.query(data);
     console.log("response:", response);
