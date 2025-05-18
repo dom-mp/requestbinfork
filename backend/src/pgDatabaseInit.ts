@@ -73,8 +73,16 @@ const createDatabaseTables = async () => {
 };
 
 const setupSchema = async () => {
-  await initializeDB();
-  await createDatabaseTables();
+  try {
+    await initializeDB();
+    await createDatabaseTables();
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    } else {
+      throw error;
+    }
+  }
 };
 
 setupSchema();
