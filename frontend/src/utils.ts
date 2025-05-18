@@ -45,3 +45,20 @@ export const hasContentTypeJSON = (headers: string) => {
     }
   });
 };
+
+export const addBasket = (basketName: string, token: string) => {
+  window.localStorage.setItem(basketName, token);
+  window.dispatchEvent(
+    new StorageEvent("storage", { key: basketName, newValue: token }),
+  );
+};
+
+export const removeBasket = (basketName: string) => {
+  window.localStorage.removeItem(basketName);
+  window.dispatchEvent(new StorageEvent("storage", { key: basketName }));
+};
+
+export const clearBaskets = () => {
+  window.localStorage.clear();
+  window.dispatchEvent(new StorageEvent("storage"));
+};

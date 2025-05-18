@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS baskets (
   name varchar(255) PRIMARY KEY,
+  created_at timestamp DEFAULT now() NOT NULL,
   token varchar(255)
 );
 

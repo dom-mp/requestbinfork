@@ -118,7 +118,7 @@ class PostgresClient {
           headers,
           bodyMongoId,
         },
-        err
+        err,
       );
       throw new Error("PostgreSQL: Failed to store request");
     }
@@ -135,7 +135,7 @@ class PostgresClient {
       console.error(
         "PostgreSQL: Error getting basket request body IDs for basket: ",
         basketName,
-        error
+        error,
       );
       throw new Error("PostgreSQL: Failed to get basket request body IDs");
     }
@@ -149,13 +149,13 @@ class PostgresClient {
         "PostgreSQL: ",
         result.rowCount,
         " deleted requests for basket",
-        basketName
+        basketName,
       );
       return true;
     } catch (error) {
       console.error(
         `PostgreSQL: Error deleting requests bodies for basket: ${basketName}:`,
-        error
+        error,
       );
       return false;
     }
@@ -181,7 +181,7 @@ class PostgresClient {
   public async getValidBaskets(basketNames: string[]): Promise<string[]> {
     let placeHolder = basketNames.map((_, idx) => `$${idx + 1}`).join(", ");
 
-    const query = `SELECT name FROM baskets WHERE name = ANY(ARRAY[${placeHolder}])`;
+    const query = `SELECT name FROM baskets WHERE name = ANY(ARRAY[${placeHolder}]) ORDER BY created_at DESC;`;
 
     try {
       const result = await this.pool.query(query, basketNames);

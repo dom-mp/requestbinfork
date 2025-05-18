@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
 import apiService from "./services/apiService.ts";
-import { handleAPIError, setErrorNotifier } from "./utils.ts";
+import { handleAPIError, setErrorNotifier, removeBasket } from "./utils.ts";
+import useLocalStorageState from "./hooks/useLocalStorageState";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -17,40 +18,41 @@ import CreateBasket from "./components/CreateBasket";
 import MyBasketsFab from "./components/MyBasketsFab";
 
 function App() {
-  const [baskets, setBaskets] = useState<Array<string>>([]);
+  const localBaskets = useLocalStorageState();
+  const [baskets, setBaskets] = useState<Array<string>>(localBaskets);
   const [drawerState, setDrawerState] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const notifications = useNotifications();
   const originURL = window.location.origin;
 
-  const getBaskets = () => {
-    const baskets = Object.keys(localStorage);
-    setBaskets(baskets);
-  };
-
-  const validateBaskets = async () => {
-    try {
-      const localBaskets = Object.keys(localStorage);
-      const validBaskets = await apiService.getValidBaskets(localBaskets);
-
-      localBaskets.forEach((key) => {
-        if (!validBaskets.includes(key)) {
-          localStorage.removeItem(key);
-        }
-      });
-    } catch (error: unknown) {
-      handleAPIError(error, "Your baskets could not be found.");
-    }
-  };
-
-  // load initial state
   useEffect(() => {
-    validateBaskets();
-    getBaskets();
     setErrorNotifier((message) =>
       notifications.show(message, { key: message, severity: "error" }),
     );
   }, [notifications]);
+
+  useEffect(() => {
+    const validateBaskets = async () => {
+      try {
+        const validBaskets = await apiService.getValidBaskets(localBaskets);
+
+        localBaskets.forEach((key) => {
+          if (!validBaskets.includes(key)) {
+            removeBasket(key);
+          }
+        });
+
+        setBaskets(validBaskets);
+      } catch (error: unknown) {
+        handleAPIError(
+          error,
+          "An error occurred while validating your local baskets.",
+        );
+      }
+    };
+
+    validateBaskets();
+  }, [localBaskets]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -79,19 +81,12 @@ function App() {
               <Routes>
                 <Route
                   path="/"
-                  element={
-                    <CreateBasket
-                      originURL={originURL}
-                      setBaskets={setBaskets}
-                    />
-                  }
+                  element={<CreateBasket originURL={originURL} />}
                 />
                 <Route path="baskets">
                   <Route
                     path=":basketName"
-                    element={
-                      <Basket originURL={originURL} getBaskets={getBaskets} />
-                    }
+                    element={<Basket originURL={originURL} />}
                   />
                 </Route>
               </Routes>

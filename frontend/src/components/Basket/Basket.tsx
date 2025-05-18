@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import type { Request as RequestType } from "../../types";
 import apiService from "../../services/apiService";
-import { handleAPIError } from "../../utils";
+import { handleAPIError, removeBasket } from "../../utils";
 import DialogComponent from "../Dialog";
 import RequestList from "../RequestList";
 import Grid from "@mui/material/Grid";
@@ -24,10 +24,9 @@ import SwapVertIcon from "@mui/icons-material/SwapVert";
 
 interface BasketProps {
   originURL: string;
-  getBaskets: () => void;
 }
 
-const Basket = ({ originURL, getBaskets }: BasketProps) => {
+const Basket = ({ originURL }: BasketProps) => {
   const POLLING_INTERVAL = 1000; // poll every 1 second
   const basketName = useParams().basketName ?? "";
   const notifications = useNotifications();
@@ -57,8 +56,7 @@ const Basket = ({ originURL, getBaskets }: BasketProps) => {
   const handleDeleteBasketButtonClick = async () => {
     try {
       await apiService.deleteBasket(basketName);
-      localStorage.removeItem(basketName);
-      getBaskets();
+      removeBasket(basketName);
       navigate("/");
 
       notifications.show(`Deleted basket /${basketName}`, {

@@ -31,7 +31,7 @@ const MyBaskets = ({ baskets, drawerState, setDrawerState }: BasketsProps) => {
         <ListSubheader>My Baskets</ListSubheader>
         <Divider />
 
-        {baskets.toReversed().map((basketName) => (
+        {baskets.map((basketName) => (
           <MenuItem
             key={basketName}
             component={NavLink}
