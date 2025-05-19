@@ -62,7 +62,7 @@ cd backend
 Build the full project
 
 ```bash
-npm run build:full
+npm run build
 ```
 
 Start the application
