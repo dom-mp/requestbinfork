@@ -11,7 +11,7 @@
     "mock": "USE_MOCK_API=true ts-node-dev ./src/main.ts",
     "build:backend": "npm install && npm run tsc",
     "build:frontend": "rm -rf dist && cd ../frontend && npm install && npm run build && cp -r dist ../backend",
-    "build:full": "npm run build:backend && npm run build:frontend && npm run db-init"
+    "build": "npm run build:backend && npm run build:frontend && npm run db-init"
   },
   "repository": {
     "type": "git",
