@@ -26,7 +26,8 @@ app.use((req, _res, next) => {
 });
 
 app.use(express.json());
-app.use(express.static("dist"));
+//Commenting the following b/c backend isn't serving the index.html in 'dist' anymore
+//app.use(express.static("dist"));
 
 const useMockAPI = process.env.USE_MOCK_API;
 // allows us to run the mock api conditionally with:
@@ -49,9 +50,10 @@ if (useMockAPI) {
 
 // Catch-all route enabling react refresh
 // express v5 requires * wildcard to have a name
-app.get("/*path", (_, res) => {
-  res.sendFile(path.join(__dirname, "../dist", "index.html"));
-});
+// line 29, no more dist if breaking the app into separate servers
+//app.get("/*path", (_, res) => {
+//  res.sendFile(path.join(__dirname, "../dist", "index.html"));
+//});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
